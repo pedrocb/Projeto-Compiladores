@@ -29,10 +29,11 @@ RPAR ")"
 RSQ "]"
 SEMI ";"
 VOID void
+RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"register"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"volatile"|"while"|"double"|"enum"|"extern"|"float"|"for"|"goto"|"--"|"++"
 %%
 
-[" "|"\n"|"\t"]+ {printf("");}
-"/*"."*/" {printf("");}
+[" "|"\n"|"\t"]+ {;}
+"/*"."*/" {;}
 
 {AMP}  {printf("AMP\n");}
 {AND}  {printf("AND\n");}
@@ -64,7 +65,7 @@ VOID void
 {RPAR} {printf("RPAR\n");}
 {RSQ} {printf("RSQ\n");}
 {SEMI} {printf("SEMI\n");}
-
+{RESERVED} {printf("RESERVED\n");}
 . {;}
 
 %%
