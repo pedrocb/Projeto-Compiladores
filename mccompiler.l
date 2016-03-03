@@ -28,12 +28,13 @@ RETURN return
 RPAR ")"
 RSQ "]"
 SEMI ";"
+LETTER [a-zA-Z]
 VOID void
 RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"register"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"volatile"|"while"|"double"|"enum"|"extern"|"float"|"for"|"goto"|"--"|"++"
 %%
 
-[" "|"\n"|"\t"]+ {;}
-"/*"."*/" {;}
+[ \n\t]+ {printf("");}
+"/*"."*/" {printf("");}
 
 {AMP}  {printf("AMP\n");}
 {AND}  {printf("AND\n");}
@@ -65,7 +66,7 @@ RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"registe
 {RPAR} {printf("RPAR\n");}
 {RSQ} {printf("RSQ\n");}
 {SEMI} {printf("SEMI\n");}
-{RESERVED} {printf("RESERVED\n");}
+{RESERVED} {printf("RESERVED(%s)\n",yytext);}
 . {;}
 
 %%
