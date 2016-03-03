@@ -29,9 +29,10 @@ RPAR ")"
 RSQ "]"
 SEMI ";"
 VOID void
+
 %%
 
-[" "|"\n"|"\t"]+ {printf("");}
+[ \n\t]+ {printf("");}
 "/*"."*/" {printf("");}
 
 {AMP}  {printf("AMP\n");}
