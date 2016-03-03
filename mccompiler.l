@@ -8,6 +8,7 @@ DIV "/"
 ELSE else
 
 %%
+[" "|"\n"|"\t"]+ {printf("");}
 {AMP}  {printf("AMP\n");}
 {AND}  {printf("AND\n");}
 {ASSIGN}  {printf("ASSIGN\n");}
@@ -40,6 +41,7 @@ ELSE else
 {SEMI} {printf("SEMI\n");}
 
 . {;}
+
 %%
 int main()
 {
