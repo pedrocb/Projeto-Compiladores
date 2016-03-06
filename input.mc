@@ -1,4 +1,1 @@
-pafdsfx adfadf mekieie
-/*oakofskaofkasofkoaskfoaks*/
-ola. Tudo bem?
-
+'\0000'

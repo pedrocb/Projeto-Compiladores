@@ -29,19 +29,24 @@ RPAR ")"
 RSQ "]"
 SEMI ";"
 VOID void
+
 LETTER [a-zA-Z]
 NUMBER [0-9]
+
 ID ({LETTER}|_)({LETTER}|{NUMBER}|_)*
 INTLIT {NUMBER}+("."({NUMBER}+))?
+STRLIT \"([^(\")]\\\")+\"
+CHRLIT \'({ESCAPE}|.)\'
+ESCAPE \\n|\\t|\\\\|\\'|\\''|\\([0-7]){1,3}
 
 
 RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"register"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"volatile"|"while"|"double"|"enum"|"extern"|"float"|"for"|"goto"|"--"|"++"
 %%
 
 [ \n\t]+ {;}
-"/*"."*/" {;}
 
 {INTLIT} {printf("INTLIT(%s)\n",yytext);}
+{STRLIT} {printf("STRLIT(%s)\n",yytext);}
 
 {AMP}  {printf("AMP\n");}
 {AND}  {printf("AND\n");}
@@ -74,7 +79,7 @@ RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"registe
 {RSQ} {printf("RSQ\n");}
 {SEMI} {printf("SEMI\n");}
 {RESERVED} {printf("RESERVED(%s)\n",yytext);}
-
+{CHRLIT} {printf("CHRLIT(%s)\n",yytext);}
 
 {ID} {printf("ID(%s)\n",yytext);}
 
@@ -83,10 +88,11 @@ RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"registe
 %%
 
 int main(){
-	yylex();
+        yylex();
 	return 0;
 }
 
 int yywrap(){
-	return 1;
+        return 1;
 }
+
