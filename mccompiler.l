@@ -7,6 +7,8 @@
 	int comment_start=1;
 %}
 
+%X COMMENT
+
 AMP "&"
 AND "&&"
 ASSIGN "="
@@ -38,15 +40,17 @@ RPAR ")"
 RSQ "]"
 SEMI ";"
 VOID void
+
 LETTER [a-zA-Z]
 NUMBER [0-9]
+
 ID ({LETTER}|_)({LETTER}|{NUMBER}|_)*
 INTLIT {NUMBER}+("."({NUMBER}+))?
-
+STRLIT \"([^(\")]\\\")+\"
+CHRLIT \'({ESCAPE}|.)\'
+ESCAPE \\n|\\t|\\\\|\\'|\\''|\\([0-7]){1,3}
 
 RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"register"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"volatile"|"while"|"double"|"enum"|"extern"|"float"|"for"|"goto"|"--"|"++"
-
-%X COMMENT
 
 %%
 
@@ -59,8 +63,6 @@ RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"registe
 <COMMENT>.	{COL;}
 <COMMENT><<EOF>>	{BEGIN 0; printf("Line %d, col %d: unterminated comment\n", comment_start, col);}
 
-
-{INTLIT} {printf("INTLIT(%s)\n",yytext); COL;}
 
 {AMP}  {printf("AMP\n"); COL;}
 {AND}  {printf("AND\n"); COL;}
@@ -94,15 +96,16 @@ RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"registe
 {SEMI} {printf("SEMI\n"); COL;}
 {RESERVED} {printf("RESERVED(%s)\n",yytext); COL;}
 
+{INTLIT} {printf("INTLIT(%s)\n",yytext); COL;}
+{STRLIT} {printf("STRLIT(%s)\n",yytext); COL;}
+{CHRLIT} {printf("CHRLIT(%s)\n",yytext); COL;}
+{ID} {printf("ID(%s)\n",yytext); COL;}
 
-{ID} {printf("ID(%s), col: %d\n",yytext, col); COL;}
-
-. { COL;}
+. {COL;}
 
 %%
 
 int main(){
-
 	yylex();
 	return 0;
 }
