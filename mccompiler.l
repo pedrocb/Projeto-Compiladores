@@ -6,11 +6,11 @@
 	int flag = 0;
 	int line=1;
 	int col=1;
-	int comment_line=1;
-	int comment_col=1;
+	int state_line=1;
+	int state_col=1;
 %}
 
-%X COMMENT
+%X COMMENT CHR
 
 AMP "&"
 AND "&&"
@@ -51,7 +51,8 @@ ID ({LETTER}|_)({LETTER}|{NUMBER}|_)*
 INTLIT {NUMBER}+("."({NUMBER}+))?
 STRLIT \"([^(\")]\\\")+\"
 CHRLIT \'({ESCAPE}|[^(\\.*|\n|\')])\'
-ESCAPE \\n|\\t|\\\\|\\\'|\\\"|\\([0-7]){1,3}
+
+ESCAPE \\n|\\t|\\\\|\\\'|\\\"|\\([0-7][0-7][0-7])
 
 
 
@@ -64,11 +65,17 @@ RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"registe
 \n {LINE;}
 [ \t]+ {COL;}
 
-"/*" 					{BEGIN COMMENT; comment_line=line; comment_col=col; COL;}
+"/*" 					{BEGIN COMMENT; state_line=line; state_col=col; COL;}
 <COMMENT>"*/"	{BEGIN 0; COL;}
 <COMMENT>\n	{LINE;}
 <COMMENT>.	{COL;}
-<COMMENT><<EOF>>	{BEGIN 0; printf("Line %d, col %d: unterminated comment\n", comment_line, comment_col); COL;}
+<COMMENT><<EOF>>	{BEGIN 0; printf("Line %d, col %d: unterminated comment\n", state_line, state_col); COL;}
+
+\' 																{BEGIN CHR; state_line=line; state_col=col; COL;}
+<CHR>({ESCAPE}|[^(\\.*|\n)])\'	{PRINT("CHRLIT('%s)\n", yytext); BEGIN 0; COL;}
+<CHR>\n														{printf("Line %d, col %d: unterminated char constant\n", state_line, state_col); BEGIN 0; LINE;}
+<CHR>[^({ESCAPE}|\n)]*\'					{printf("Line %d, col %d: invalid char constant ('%s)\n", state_line, state_col, yytext); BEGIN 0; COL;}
+<CHR>.														{COL;}
 
 
 {AMP}  {PRINT("AMP\n"); COL;}
@@ -105,7 +112,7 @@ RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"registe
 
 {INTLIT} {PRINT("INTLIT(%s)\n",yytext); COL;}
 {STRLIT} {PRINT("STRLIT(%s)\n",yytext); COL;}
-{CHRLIT} {PRINT("CHRLIT(%s)\n",yytext); COL;}
+
 {ID} {PRINT("ID(%s)\n",yytext); COL;}
 
 . {COL;}
