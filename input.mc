@@ -1,7 +1,6 @@
-pafdsfx adfadf mekieie
-
-   /*
-oakofskaofkasofkoaskf
-oaks*/ ola
 ola. Tudo bem?
-'\000'
+'\0000'
+'\
+'00'''
+
+''

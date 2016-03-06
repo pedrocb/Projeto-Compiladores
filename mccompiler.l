@@ -1,10 +1,13 @@
 %{
 	#define COL col += yyleng;
 	#define LINE line++; col=1;
+	#define PRINT if(flag == 1) printf
 
+	int flag = 0;
 	int line=1;
 	int col=1;
-	int comment_start=1;
+	int comment_line=1;
+	int comment_col=1;
 %}
 
 %X COMMENT
@@ -47,8 +50,12 @@ NUMBER [0-9]
 ID ({LETTER}|_)({LETTER}|{NUMBER}|_)*
 INTLIT {NUMBER}+("."({NUMBER}+))?
 STRLIT \"([^(\")]\\\")+\"
-CHRLIT \'({ESCAPE}|.)\'
-ESCAPE \\n|\\t|\\\\|\\'|\\''|\\([0-7]){1,3}
+CHRLIT \'({ESCAPE}|[^(\\.*|\n|\')])\'
+ESCAPE \\n|\\t|\\\\|\\\'|\\\"|\\([0-7]){1,3}
+
+
+
+
 
 RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"register"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"volatile"|"while"|"double"|"enum"|"extern"|"float"|"for"|"goto"|"--"|"++"
 
@@ -57,55 +64,60 @@ RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"registe
 \n {LINE;}
 [ \t]+ {COL;}
 
-"/*" 					{BEGIN COMMENT; comment_start=line;}
-<COMMENT>"*/"	{COL; BEGIN 0;}
+"/*" 					{BEGIN COMMENT; comment_line=line; comment_col=col; COL;}
+<COMMENT>"*/"	{BEGIN 0; COL;}
 <COMMENT>\n	{LINE;}
 <COMMENT>.	{COL;}
-<COMMENT><<EOF>>	{BEGIN 0; printf("Line %d, col %d: unterminated comment\n", comment_start, col);}
+<COMMENT><<EOF>>	{BEGIN 0; printf("Line %d, col %d: unterminated comment\n", comment_line, comment_col); COL;}
 
 
-{AMP}  {printf("AMP\n"); COL;}
-{AND}  {printf("AND\n"); COL;}
-{ASSIGN}  {printf("ASSIGN\n"); COL;}
-{AST}  {printf("AST\n"); COL;}
-{CHAR} {printf("CHAR\n"); COL;}
-{COMMA} {printf("COMMA\n"); COL;}
-{DIV} {printf("DIV\n"); COL;}
-{ELSE} {printf("ELSE\n"); COL;}
-{EQ} {printf("EQ\n"); COL;}
-{FOR} {printf("FOR\n"); COL;}
-{GE} {printf("GE\n"); COL;}
-{GT} {printf("GT\n"); COL;}
-{IF} {printf("IF\n"); COL;}
-{INT} {printf("INT\n"); COL;}
-{LBRACE} {printf("LBRACE\n"); COL;}
-{LE} {printf("LE\n"); COL;}
-{LPAR} {printf("LPAR\n"); COL;}
-{LSQ} {printf("LSQ\n"); COL;}
-{LT} {printf("LT\n"); COL;}
-{MINUS} {printf("MINUS\n"); COL;}
-{MOD} {printf("MOD\n"); COL;}
-{NE} {printf("NE\n"); COL;}
-{NOT} {printf("NOT\n"); COL;}
-{OR} {printf("OR\n"); COL;}
-{PLUS} {printf("PLUS\n"); COL;}
-{RBRACE} {printf("RBRACE\n"); COL;}
-{RETURN} {printf("RETURN\n"); COL;}
-{RPAR} {printf("RPAR\n"); COL;}
-{RSQ} {printf("RSQ\n"); COL;}
-{SEMI} {printf("SEMI\n"); COL;}
-{RESERVED} {printf("RESERVED(%s)\n",yytext); COL;}
+{AMP}  {PRINT("AMP\n"); COL;}
+{AND}  {PRINT("AND\n"); COL;}
+{ASSIGN}  {PRINT("ASSIGN\n"); COL;}
+{AST}  {PRINT("AST\n"); COL;}
+{CHAR} {PRINT("CHAR\n"); COL;}
+{COMMA} {PRINT("COMMA\n"); COL;}
+{DIV} {PRINT("DIV\n"); COL;}
+{ELSE} {PRINT("ELSE\n"); COL;}
+{EQ} {PRINT("EQ\n"); COL;}
+{FOR} {PRINT("FOR\n"); COL;}
+{GE} {PRINT("GE\n"); COL;}
+{GT} {PRINT("GT\n"); COL;}
+{IF} {PRINT("IF\n"); COL;}
+{INT} {PRINT("INT\n"); COL;}
+{LBRACE} {PRINT("LBRACE\n"); COL;}
+{LE} {PRINT("LE\n"); COL;}
+{LPAR} {PRINT("LPAR\n"); COL;}
+{LSQ} {PRINT("LSQ\n"); COL;}
+{LT} {PRINT("LT\n"); COL;}
+{MINUS} {PRINT("MINUS\n"); COL;}
+{MOD} {PRINT("MOD\n"); COL;}
+{NE} {PRINT("NE\n"); COL;}
+{NOT} {PRINT("NOT\n"); COL;}
+{OR} {PRINT("OR\n"); COL;}
+{PLUS} {PRINT("PLUS\n"); COL;}
+{RBRACE} {PRINT("RBRACE\n"); COL;}
+{RETURN} {PRINT("RETURN\n"); COL;}
+{RPAR} {PRINT("RPAR\n"); COL;}
+{RSQ} {PRINT("RSQ\n"); COL;}
+{SEMI} {PRINT("SEMI\n"); COL;}
+{RESERVED} {PRINT("RESERVED(%s)\n",yytext); COL;}
 
-{INTLIT} {printf("INTLIT(%s)\n",yytext); COL;}
-{STRLIT} {printf("STRLIT(%s)\n",yytext); COL;}
-{CHRLIT} {printf("CHRLIT(%s)\n",yytext); COL;}
-{ID} {printf("ID(%s)\n",yytext); COL;}
+{INTLIT} {PRINT("INTLIT(%s)\n",yytext); COL;}
+{STRLIT} {PRINT("STRLIT(%s)\n",yytext); COL;}
+{CHRLIT} {PRINT("CHRLIT(%s)\n",yytext); COL;}
+{ID} {PRINT("ID(%s)\n",yytext); COL;}
 
 . {COL;}
 
 %%
 
-int main(){
+int main(int argc, char *argv[]){
+
+	if(argc == 2 && strcmp(argv[1],"-l") == 0)
+			flag = 1;
+
+
 	yylex();
 	return 0;
 }
