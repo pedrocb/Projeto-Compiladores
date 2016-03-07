@@ -22,23 +22,20 @@ Line 21, col 1: unterminated char constant
 Line 22, col 1: unterminated char constant
 Line 23, col 1: unterminated char constant
 Line 24, col 1: unterminated char constant
-ID(a)
-ID(a)
-ID(a)
-ID(t)
-ID(a)
-INTLIT(8)
-INTLIT(08)
-INTLIT(008)
-INTLIT(0008)
-ID(bla)
-ID(bla)
-ID(t)
-NOT
-Line 37, col 12: unterminated char constant
-ID(bla)
-INTLIT(000)
-INTLIT(8)
+Line 25, col 1: invalid string constant ("\a")
+Line 26, col 1: invalid string constant (" \a")
+Line 27, col 1: invalid string constant ("\a ")
+Line 28, col 1: invalid string constant ("\t \\\a")
+Line 29, col 1: invalid string constant ("\8")
+Line 30, col 1: invalid string constant ("\08")
+Line 31, col 1: invalid string constant ("\008")
+Line 32, col 1: invalid string constant ("\0008")
+Line 33, col 1: invalid string constant ("\ ")
+Line 34, col 1: unterminated string constant
+Line 35, col 2: unterminated string constant
+Line 36, col 1: unterminated string constant
+Line 37, col 1: invalid string constant ("bla \t ! \' \\\")
+Line 38, col 1: unterminated string constant
 CHRLIT('\\')
 CHRLIT('\n')
 CHRLIT('\t')
@@ -80,38 +77,32 @@ Line 74, col 1: unterminated char constant
 Line 75, col 1: unterminated char constant
 Line 76, col 1: unterminated char constant
 Line 77, col 1: unterminated char constant
-ID(t)
-ID(n)
-INTLIT(123)
-INTLIT(777)
-INTLIT(123)
-INTLIT(1)
-ID(t1)
-ID(n)
-ID(a)
+STRLIT("\t")
+STRLIT("\n")
+STRLIT("\\")
+STRLIT("\"")
+STRLIT("\123")
+STRLIT("\777")
+STRLIT("\123")
+STRLIT("\1")
+Line 86, col 1: invalid string constant ("\t1")
+Line 87, col 1: invalid string constant ("\n\")
+Line 87, col 7: unterminated string constant
+Line 88, col 1: invalid string constant ("\\\a")
+Line 89, col 1: invalid string constant ("\9\9\"")
+Line 90, col 1: invalid string constant ("\"\9")
+Line 91, col 1: invalid string constant ("\123\912")
+Line 92, col 1: invalid string constant ("\777\x")
+Line 93, col 1: invalid string constant ("\123\zz")
+Line 94, col 1: invalid string constant ("\1 \8")
+Line 95, col 1: invalid string constant ("\9\9\")
+STRLIT("\")
 INTLIT(9)
-INTLIT(9)
-INTLIT(9)
-INTLIT(123)
-INTLIT(912)
-INTLIT(777)
-ID(x)
-INTLIT(123)
-ID(zz)
-INTLIT(1)
-INTLIT(8)
-INTLIT(9)
-INTLIT(9)
-INTLIT(9)
-INTLIT(123)
-INTLIT(912)
-INTLIT(777)
-ID(x)
-INTLIT(123)
-ID(zz)
-INTLIT(1)
-INTLIT(8)
-INTLIT(123)
-INTLIT(777)
-INTLIT(123)
-INTLIT(1)
+Line 97, col 1: unterminated string constant
+Line 98, col 1: unterminated string constant
+Line 99, col 1: unterminated string constant
+Line 100, col 1: unterminated string constant
+Line 101, col 1: unterminated string constant
+Line 102, col 1: unterminated string constant
+Line 103, col 1: unterminated string constant
+Line 104, col 1: unterminated string constant

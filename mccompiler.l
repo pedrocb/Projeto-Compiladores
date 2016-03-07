@@ -10,7 +10,7 @@
 	int state_col=1;
 %}
 
-%X COMMENT CHR
+%X COMMENT CHR STR
 
 AMP "&"
 AND "&&"
@@ -53,8 +53,8 @@ INVALID [^({ESCAPE}|\n)]
 
 ID ({LETTER}|_)({LETTER}|{NUMBER}|_)*
 INTLIT {NUMBER}+("."({NUMBER}+))?
-STRLIT \"([^(\")]\\\")+\"
 CHRLIT ({ESCAPE}|[^(\'|\n)])
+STRLIT ({ESCAPE}|[^(\"|\n)])
 
 
 
@@ -69,12 +69,21 @@ CHRLIT ({ESCAPE}|[^(\'|\n)])
 <COMMENT>.	{COL;}
 <COMMENT><<EOF>>	{BEGIN 0; printf("Line %d, col %d: unterminated comment\n", state_line, state_col); COL;}
 
+
 \'\' 															{printf("Line %d, col %d: invalid char constant (%s)\n", line, col, yytext); BEGIN 0; COL;}
 \' 																{BEGIN CHR; state_line=line; state_col=col; COL;}
 <CHR>{CHRLIT}\'										{PRINT("CHRLIT('%s)\n", yytext); BEGIN 0; COL;}
 <CHR>((\\\\)*\\\'|[^(\'|\n|\\\\)])*\n					{printf("Line %d, col %d: unterminated char constant\n", state_line, state_col); BEGIN 0; LINE;}
 <CHR>{INVALID}+\'									{printf("Line %d, col %d: invalid char constant ('%s)\n", state_line, state_col, yytext); BEGIN 0; COL;}
 <CHR>.														{COL;}
+
+
+\"\" 															{printf("Line %d, col %d: invalid string constant (%s)\n", line, col, yytext); BEGIN 0; COL;}
+\" 																{BEGIN STR; state_line=line; state_col=col; COL;}
+<STR>{STRLIT}\"										{PRINT("STRLIT(\"%s)\n", yytext); BEGIN 0; COL;}
+<STR>((\\\\)*\\\"|[^(\"|\n|\\\\)])*\n					{printf("Line %d, col %d: unterminated string constant\n", state_line, state_col); BEGIN 0; LINE;}
+<STR>{INVALID}+\"									{printf("Line %d, col %d: invalid string constant (\"%s)\n", state_line, state_col, yytext); BEGIN 0; COL;}
+<STR>.														{COL;}
 
 
 {AMP}  {PRINT("AMP\n"); COL;}
@@ -110,7 +119,6 @@ CHRLIT ({ESCAPE}|[^(\'|\n)])
 {RESERVED} {PRINT("RESERVED(%s)\n",yytext); COL;}
 
 {INTLIT} {PRINT("INTLIT(%s)\n",yytext); COL;}
-{STRLIT} {PRINT("STRLIT(%s)\n",yytext); COL;}
 
 {ID} {PRINT("ID(%s)\n",yytext); COL;}
 
