@@ -48,14 +48,13 @@ RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"registe
 LETTER [a-zA-Z]
 NUMBER [0-9]
 ESCAPE \\n|\\t|\\\\|\\\'|\\\"|\\([0-7]{1,3})
-ESCAPE2 (ESCAPE)
 
-INVALID [^({ESCAPE}|\n|\')]
+INVALID [^({ESCAPE}|\n)]
 
 ID ({LETTER}|_)({LETTER}|{NUMBER}|_)*
 INTLIT {NUMBER}+("."({NUMBER}+))?
 STRLIT \"([^(\")]\\\")+\"
-CHRLIT ({ESCAPE}|[^(\\.|\n)])
+CHRLIT ({ESCAPE}|[^(\'|\n)])
 
 
 
@@ -70,12 +69,12 @@ CHRLIT ({ESCAPE}|[^(\\.|\n)])
 <COMMENT>.	{COL;}
 <COMMENT><<EOF>>	{BEGIN 0; printf("Line %d, col %d: unterminated comment\n", state_line, state_col); COL;}
 
+\'\' 															{printf("Line %d, col %d: invalid char constant (%s)\n", line, col, yytext); BEGIN 0; COL;}
 \' 																{BEGIN CHR; state_line=line; state_col=col; COL;}
 <CHR>{CHRLIT}\'										{PRINT("CHRLIT('%s)\n", yytext); BEGIN 0; COL;}
-
-<CHR>[^(\'|\n)]*(\\\')*[^(\'|\n)]*\n					{printf("Line %d, col %d: unterminated char constant\n", state_line, state_col); BEGIN 0; LINE;}
-<CHR>{INVALID}*\'					{printf("Line %d, col %d: invalid char constant ('%s)\n", state_line, state_col, yytext); BEGIN 0; COL;}
-<CHR>.														{PRINT("DROPPED('%s)\n", yytext); COL;}
+<CHR>(\\\'|[^(\'|\n)])*\n					{printf("Line %d, col %d: unterminated char constant\n", state_line, state_col); BEGIN 0; LINE;}
+<CHR>{INVALID}+\'									{printf("Line %d, col %d: invalid char constant ('%s)\n", state_line, state_col, yytext); BEGIN 0; COL;}
+<CHR>.														{COL;}
 
 
 {AMP}  {PRINT("AMP\n"); COL;}
