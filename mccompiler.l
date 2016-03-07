@@ -55,12 +55,12 @@ ESCAPE \\(n|t|\\|\'|\"|([0-7]{1,3}))
 
 CHRANY [^\\\'\n]
 CHRLIT ({ESCAPE}|{CHRANY})
-CHRUNT {ESCAPE}*\\*[^\n\']*
+CHRUNT {CHRLIT}*\\*[^\n\']*
 CHRINV (\\.|{CHRANY})*
 
 STRANY [^\\\"\n]
 STRLIT ({ESCAPE}|{STRANY})*
-STRUNT ({ESCAPE}|(\\*[^\n\"\\]))*
+STRUNT ({ESCAPE}|(\\*[^\n\"\\]*))*
 STRINV (\\.|{STRANY})*
 
 

@@ -79,7 +79,7 @@ Line 76, col 1: unterminated char constant
 Line 77, col 1: unterminated char constant
 STRLIT("\t")
 STRLIT("\n")
-STRLIT("\\")
+Line 80, col 1: unterminated string constant
 STRLIT("\"")
 STRLIT("\123")
 STRLIT("\777")
