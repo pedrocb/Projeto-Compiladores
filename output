@@ -39,7 +39,7 @@ Line 37, col 12: unterminated char constant
 ID(bla)
 INTLIT(000)
 INTLIT(8)
-Line 39, col 1: unterminated char constant
+CHRLIT('\\')
 CHRLIT('\n')
 CHRLIT('\t')
 CHRLIT('\'')
@@ -49,7 +49,8 @@ CHRLIT('\11')
 CHRLIT('\111')
 CHRLIT('a')
 CHRLIT('"')
-Line 49, col 2: unterminated char constant
+CHRLIT('\\')
+SEMI
 Line 50, col 1: invalid char constant ('')
 Line 51, col 1: invalid char constant ('')
 Line 51, col 3: invalid char constant ('')
