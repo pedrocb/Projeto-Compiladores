@@ -10,7 +10,7 @@
 	int state_col=1;
 %}
 
-%X COMMENT CHR STR
+%X COMMENT
 
 AMP "&"
 AND "&&"
@@ -49,80 +49,80 @@ LETTER [a-zA-Z]
 NUMBER [0-9]
 
 ID ({LETTER}|_)({LETTER}|{NUMBER}|_)*
-INTLIT {NUMBER}+("."({NUMBER}+))?
+INTLIT {NUMBER}+
 
 ESCAPE \\(n|t|\\|\'|\"|([0-7]{1,3}))
 
-CHRANY [^(\\\'\n)]
+CHRANY [^\\\'\n]
 CHRLIT ({ESCAPE}|{CHRANY})
-CHRINV (\\.|{CHRANY})
 CHRUNT {ESCAPE}*\\*[^\n\']*
+CHRINV (\\.|{CHRANY})*
 
-STRANY [^(\\\"\n)]
+STRANY [^\\\"\n]
 STRLIT ({ESCAPE}|{STRANY})*
-STRINV (\\.|{STRANY})
 STRUNT ({ESCAPE}|(\\*[^\n\"\\]))*
+STRINV (\\.|{STRANY})*
 
 
 %%
 
+{AMP}  			{PRINT("AMP\n"); COL;}
+{AND}  			{PRINT("AND\n"); COL;}
+{ASSIGN}		{PRINT("ASSIGN\n"); COL;}
+{AST}  			{PRINT("AST\n"); COL;}
+{CHAR} 			{PRINT("CHAR\n"); COL;}
+{COMMA} 		{PRINT("COMMA\n"); COL;}
+{DIV} 			{PRINT("DIV\n"); COL;}
+{ELSE} 			{PRINT("ELSE\n"); COL;}
+{EQ} 				{PRINT("EQ\n"); COL;}
+{FOR} 			{PRINT("FOR\n"); COL;}
+{GE} 				{PRINT("GE\n"); COL;}
+{GT} 				{PRINT("GT\n"); COL;}
+{IF} 				{PRINT("IF\n"); COL;}
+{INT} 			{PRINT("INT\n"); COL;}
+{LBRACE}		{PRINT("LBRACE\n"); COL;}
+{LE} 				{PRINT("LE\n"); COL;}
+{LPAR} 			{PRINT("LPAR\n"); COL;}
+{LSQ} 			{PRINT("LSQ\n"); COL;}
+{LT} 				{PRINT("LT\n"); COL;}
+{MINUS} 		{PRINT("MINUS\n"); COL;}
+{MOD} 			{PRINT("MOD\n"); COL;}
+{NE} 				{PRINT("NE\n"); COL;}
+{NOT} 			{PRINT("NOT\n"); COL;}
+{OR} 				{PRINT("OR\n"); COL;}
+{PLUS} 			{PRINT("PLUS\n"); COL;}
+{RBRACE}		{PRINT("RBRACE\n"); COL;}
+{RETURN}		{PRINT("RETURN\n"); COL;}
+{RPAR} 			{PRINT("RPAR\n"); COL;}
+{RSQ} 			{PRINT("RSQ\n"); COL;}
+{SEMI} 			{PRINT("SEMI\n"); COL;}
+{RESERVED} {PRINT("RESERVED(%s)\n",yytext); COL;}
+{VOID} 			{PRINT("VOID\n"); COL;}
+
 \n {LINE;}
+\r {;}
 [ \t]+ {COL;}
 
-"/*" 					{BEGIN COMMENT; state_line=line; state_col=col; COL;}
-<COMMENT>"*/"	{BEGIN 0; COL;}
-<COMMENT>\n	{LINE;}
-<COMMENT>.	{COL;}
+
+{ID} 							{PRINT("ID(%s)\n",yytext); COL;}
+{INTLIT} 					{PRINT("INTLIT(%s)\n",yytext); COL;}
+
+"/*" 							{BEGIN COMMENT; state_line=line; state_col=col; COL;}
+<COMMENT>"*/"			{BEGIN 0; COL;}
+<COMMENT>\n				{LINE;}
+<COMMENT>.				{COL;}
 <COMMENT><<EOF>>	{BEGIN 0; printf("Line %d, col %d: unterminated comment\n", state_line, state_col); COL;}
 
 
 \'{CHRLIT}\'			{PRINT("CHRLIT(%s)\n", yytext); COL;}
 \'{CHRUNT}				{printf("Line %d, col %d: unterminated char constant\n", line, col); COL;}
-\'{CHRINV}*\'			{printf("Line %d, col %d: invalid char constant (%s)\n", line, col, yytext); COL;}
+\'{CHRINV}\'			{printf("Line %d, col %d: invalid char constant (%s)\n", line, col, yytext); COL;}
 
 \"{STRLIT}\"			{PRINT("STRLIT(%s)\n", yytext); COL;}
 \"{STRUNT}				{printf("Line %d, col %d: unterminated string constant\n", line, col); COL;}
-\"{STRINV}*\"			{printf("Line %d, col %d: invalid string constant (%s)\n", line, col, yytext); COL;}
+\"{STRINV}\"			{printf("Line %d, col %d: invalid string constant (%s)\n", line, col, yytext); COL;}
 
-
-{AMP}  {PRINT("AMP\n"); COL;}
-{AND}  {PRINT("AND\n"); COL;}
-{ASSIGN}  {PRINT("ASSIGN\n"); COL;}
-{AST}  {PRINT("AST\n"); COL;}
-{CHAR} {PRINT("CHAR\n"); COL;}
-{COMMA} {PRINT("COMMA\n"); COL;}
-{DIV} {PRINT("DIV\n"); COL;}
-{ELSE} {PRINT("ELSE\n"); COL;}
-{EQ} {PRINT("EQ\n"); COL;}
-{FOR} {PRINT("FOR\n"); COL;}
-{GE} {PRINT("GE\n"); COL;}
-{GT} {PRINT("GT\n"); COL;}
-{IF} {PRINT("IF\n"); COL;}
-{INT} {PRINT("INT\n"); COL;}
-{LBRACE} {PRINT("LBRACE\n"); COL;}
-{LE} {PRINT("LE\n"); COL;}
-{LPAR} {PRINT("LPAR\n"); COL;}
-{LSQ} {PRINT("LSQ\n"); COL;}
-{LT} {PRINT("LT\n"); COL;}
-{MINUS} {PRINT("MINUS\n"); COL;}
-{MOD} {PRINT("MOD\n"); COL;}
-{NE} {PRINT("NE\n"); COL;}
-{NOT} {PRINT("NOT\n"); COL;}
-{OR} {PRINT("OR\n"); COL;}
-{PLUS} {PRINT("PLUS\n"); COL;}
-{RBRACE} {PRINT("RBRACE\n"); COL;}
-{RETURN} {PRINT("RETURN\n"); COL;}
-{RPAR} {PRINT("RPAR\n"); COL;}
-{RSQ} {PRINT("RSQ\n"); COL;}
-{SEMI} {PRINT("SEMI\n"); COL;}
-{RESERVED} {PRINT("RESERVED(%s)\n",yytext); COL;}
-{VOID} {PRINT("VOID\n"); COL;}
-
-{INTLIT} {PRINT("INTLIT(%s)\n",yytext); COL;}
-
-{ID} {PRINT("ID(%s)\n",yytext); COL;}
-
-. {/*printf("Line %d, col %d: illegal character (%s)\n", line, col, yytext);*/COL;}
+. 								{printf("Line %d, col %d: illegal character (%s)\n", line, col, yytext); COL;}
 
 %%
 
@@ -130,7 +130,6 @@ int main(int argc, char *argv[]){
 
 	if(argc == 2 && strcmp(argv[1],"-l") == 0)
 			flag = 1;
-
 
 	yylex();
 	return 0;
