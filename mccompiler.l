@@ -74,7 +74,7 @@ CHRLIT ({ESCAPE}|[^(\\.|\n)])
 <CHR>{CHRLIT}\'										{PRINT("CHRLIT('%s)\n", yytext); BEGIN 0; COL;}
 
 <CHR>[^(\'|\n)]*(\\\')*[^(\'|\n)]*\n					{printf("Line %d, col %d: unterminated char constant\n", state_line, state_col); BEGIN 0; LINE;}
-<CHR>{INVALID}*([^\\]\')					{printf("Line %d, col %d: invalid char constant ('%s)\n", state_line, state_col, yytext); BEGIN 0; COL;}
+<CHR>{INVALID}*\'					{printf("Line %d, col %d: invalid char constant ('%s)\n", state_line, state_col, yytext); BEGIN 0; COL;}
 <CHR>.														{PRINT("DROPPED('%s)\n", yytext); COL;}
 
 
