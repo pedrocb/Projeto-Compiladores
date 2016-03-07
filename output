@@ -1,31 +1,60 @@
-Line 1, col 1: invalid char constant ('')
-Line 2, col 1: invalid char constant ('\a')
-Line 3, col 1: invalid char constant (' \a')
-Line 4, col 1: invalid char constant ('\a ')
-Line 5, col 1: invalid char constant ('\t ')
-Line 6, col 1: invalid char constant (' \t')
-Line 7, col 1: invalid char constant ('\8')
-Line 8, col 1: invalid char constant ('\08')
-Line 9, col 1: invalid char constant ('\008')
-Line 10, col 1: invalid char constant ('\0008')
-Line 11, col 1: invalid char constant ('\ ')
-Line 12, col 1: invalid char constant ('\\t')
-Line 13, col 1: invalid char constant (' \0')
-Line 14, col 1: invalid char constant ('ab')
-Line 15, col 1: invalid char constant (' ab')
-Line 16, col 1: unterminated char constant
-Line 17, col 2: unterminated char constant
-Line 18, col 1: invalid char constant ('\')
-Line 19, col 1: invalid char constant ('\\\')
-Line 20, col 1: unterminated char constant
-Line 21, col 1: unterminated char constant
-Line 22, col 1: unterminated char constant
-Line 23, col 1: unterminated char constant
-Line 24, col 1: invalid char constant ('\')
-ID(nao)
-ID(pode)
-ID(imprimir)
-ID(isto)
+DROPPED('')
+Line 1, col 1: invalid char constant ('
+')
+ID(a)
+Line 1, col 8: invalid char constant ('
+')
+ID(a)
+Line 1, col 15: invalid char constant ('
+')
+ID(a)
+Line 1, col 22: invalid char constant ('
+')
+ID(t)
+Line 1, col 29: invalid char constant ('
+')
+ID(t)
+Line 1, col 36: invalid char constant ('
+')
+INTLIT(8)
+Line 1, col 42: invalid char constant ('
+')
+INTLIT(08)
+Line 1, col 49: invalid char constant ('
+')
+INTLIT(008)
+Line 1, col 57: invalid char constant ('
+')
+INTLIT(0008)
+Line 1, col 66: invalid char constant ('
+')
+Line 1, col 72: invalid char constant ('
+')
+ID(t)
+Line 1, col 79: invalid char constant ('
+')
+INTLIT(0)
+Line 1, col 86: invalid char constant ('
+')
+ID(ab)
+Line 1, col 92: invalid char constant ('
+')
+ID(ab)
+Line 1, col 99: invalid char constant ('
+')
+Line 2, col 2: invalid char constant ('
+')
+Line 2, col 7: invalid char constant ('
+')
+Line 2, col 14: invalid char constant ('
+')
+ID(t)
+Line 3, col 1: invalid char constant ('\000
+')
+ID(a)
+Line 4, col 1: invalid char constant (' \t
+')
+Line 4, col 9: unterminated char constant
 ID(a)
 ID(a)
 ID(a)
@@ -39,50 +68,57 @@ ID(bla)
 ID(bla)
 ID(t)
 NOT
-Line 37, col 12: unterminated char constant
+Line 17, col 12: unterminated char constant
 ID(bla)
 INTLIT(000)
 INTLIT(8)
-CHRLIT('\\')
+Line 19, col 1: unterminated char constant
 CHRLIT('\n')
 CHRLIT('\t')
 CHRLIT('\'')
 CHRLIT('\"')
-Line 44, col 1: invalid char constant ('\1')
-Line 45, col 1: invalid char constant ('\11')
+CHRLIT('\1')
+CHRLIT('\11')
 CHRLIT('\111')
 CHRLIT('a')
 CHRLIT('"')
-CHRLIT('\\')
-SEMI
-Line 50, col 1: invalid char constant ('')
-Line 51, col 1: invalid char constant ('''')
-Line 52, col 1: invalid char constant ('\\a')
-Line 53, col 1: invalid char constant ('\\\a')
-Line 54, col 1: invalid char constant ('\'\'')
-Line 55, col 1: invalid char constant ('\9\9\"')
-Line 56, col 1: invalid char constant ('\"\9')
-Line 57, col 1: invalid char constant ('\123\912')
-Line 58, col 1: invalid char constant ('\777\x')
-Line 59, col 1: invalid char constant ('\123\zz')
-Line 60, col 1: invalid char constant ('\1 \8')
-Line 61, col 1: invalid char constant ('\q')
-Line 62, col 1: invalid char constant ('\1234')
-Line 63, col 1: invalid char constant ('\8')
-Line 64, col 1: invalid char constant ('\9')
-Line 65, col 1: invalid char constant ('\0000')
-Line 66, col 1: invalid char constant ('\tbla')
-Line 67, col 1: unterminated char constant
-Line 68, col 1: unterminated char constant
-Line 69, col 1: unterminated char constant
-Line 70, col 1: unterminated char constant
-Line 71, col 1: unterminated char constant
-Line 72, col 1: invalid char constant ('\')
-Line 73, col 1: unterminated char constant
-Line 74, col 1: unterminated char constant
-Line 75, col 1: unterminated char constant
-Line 76, col 1: unterminated char constant
-Line 77, col 1: unterminated char constant
+Line 29, col 2: unterminated char constant
+DROPPED('')
+Line 30, col 1: invalid char constant ('
+')
+CHRLIT(''')
+Line 31, col 1: invalid char constant ('\\a')
+Line 32, col 1: invalid char constant ('\\\a')
+DROPPED('\)
+DROPPED('')
+CHRLIT('\'')
+Line 34, col 1: invalid char constant ('\9\9\"')
+Line 35, col 1: invalid char constant ('\"\9')
+Line 36, col 1: invalid char constant ('\123\912')
+Line 37, col 1: invalid char constant ('\777\x')
+Line 38, col 1: invalid char constant ('\123\zz')
+Line 39, col 1: invalid char constant ('\1 \8')
+Line 40, col 1: invalid char constant ('\q')
+Line 41, col 1: invalid char constant ('\1234')
+Line 42, col 1: invalid char constant ('\8')
+Line 43, col 1: invalid char constant ('\9')
+Line 44, col 1: invalid char constant ('\0000')
+Line 45, col 1: invalid char constant ('\tbla')
+Line 46, col 1: invalid char constant ('
+')
+Line 47, col 1: invalid char constant ('\t
+')
+ID(n)
+Line 48, col 1: invalid char constant ('\\
+')
+Line 48, col 8: invalid char constant ('
+')
+Line 49, col 1: invalid char constant ('\123
+')
+INTLIT(777)
+Line 50, col 1: invalid char constant ('\1299
+')
+INTLIT(1)
 ID(t)
 ID(n)
 INTLIT(123)

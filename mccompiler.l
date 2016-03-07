@@ -43,22 +43,21 @@ RPAR ")"
 RSQ "]"
 SEMI ";"
 VOID void
+RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"register"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"volatile"|"while"|"double"|"enum"|"extern"|"float"|"for"|"goto"|"--"|"++"
 
 LETTER [a-zA-Z]
 NUMBER [0-9]
+ESCAPE \\n|\\t|\\\\|\\\'|\\\"|\\([0-7]{1,3})
+ESCAPE2 (ESCAPE)
+
+INVALID [^({ESCAPE}|\n|\')]
 
 ID ({LETTER}|_)({LETTER}|{NUMBER}|_)*
 INTLIT {NUMBER}+("."({NUMBER}+))?
 STRLIT \"([^(\")]\\\")+\"
-CHRLIT \'({ESCAPE}|[^(\\.*|\n|\')])\'
-
-ESCAPE \\n|\\t|\\\\|\\\'|\\\"|\\([0-7][0-7][0-7])
+CHRLIT ({ESCAPE}|[^(\\.|\n)])
 
 
-
-
-
-RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"register"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"volatile"|"while"|"double"|"enum"|"extern"|"float"|"for"|"goto"|"--"|"++"
 
 %%
 
@@ -72,10 +71,11 @@ RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"registe
 <COMMENT><<EOF>>	{BEGIN 0; printf("Line %d, col %d: unterminated comment\n", state_line, state_col); COL;}
 
 \' 																{BEGIN CHR; state_line=line; state_col=col; COL;}
-<CHR>({ESCAPE}|[^(\\.*|\n)])\'	{PRINT("CHRLIT('%s)\n", yytext); BEGIN 0; COL;}
-<CHR>\n														{printf("Line %d, col %d: unterminated char constant\n", state_line, state_col); BEGIN 0; LINE;}
-<CHR>[^({ESCAPE}|\n)]*\'					{printf("Line %d, col %d: invalid char constant ('%s)\n", state_line, state_col, yytext); BEGIN 0; COL;}
-<CHR>.														{COL;}
+<CHR>{CHRLIT}\'										{PRINT("CHRLIT('%s)\n", yytext); BEGIN 0; COL;}
+
+<CHR>[^(\'|\n)]*(\\\')*[^(\'|\n)]*\n					{printf("Line %d, col %d: unterminated char constant\n", state_line, state_col); BEGIN 0; LINE;}
+<CHR>{INVALID}*([^\\]\')					{printf("Line %d, col %d: invalid char constant ('%s)\n", state_line, state_col, yytext); BEGIN 0; COL;}
+<CHR>.														{PRINT("DROPPED('%s)\n", yytext); COL;}
 
 
 {AMP}  {PRINT("AMP\n"); COL;}
