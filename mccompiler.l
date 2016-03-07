@@ -51,16 +51,17 @@ NUMBER [0-9]
 ID ({LETTER}|_)({LETTER}|{NUMBER}|_)*
 INTLIT {NUMBER}+("."({NUMBER}+))?
 
-ESCAPECHARS (n|t|\\|\'|\"|([0-7]{1,3}))
-ESCAPE \\({ESCAPECHARS})
+ESCAPE \\(n|t|\\|\'|\"|([0-7]{1,3}))
 
-CHRANY [^\'\n]
+CHRANY [^(\\\'\n)]
 CHRLIT ({ESCAPE}|{CHRANY})
-CHRCAM (\\\')
+CHRINV (\\.|{CHRANY})
+CHRUNT {ESCAPE}*\\*[^\n\']*
 
-
-STRLIT ({ESCAPE}|[^(\"|\n)])
-
+STRANY [^(\\\"\n)]
+STRLIT ({ESCAPE}|{STRANY})*
+STRINV (\\.|{STRANY})
+STRUNT ({ESCAPE}|(\\*[^\n\"\\]))*
 
 
 %%
@@ -76,8 +77,12 @@ STRLIT ({ESCAPE}|[^(\"|\n)])
 
 
 \'{CHRLIT}\'			{PRINT("CHRLIT(%s)\n", yytext); COL;}
-\'({CHRLIT}|{CHRCAM})*\'			{printf("Line %d, col %d: invalid char constant (%s)\n", line, col, yytext); COL;}
-\'({CHRLIT}|{CHRCAM})*\n			{printf("Line %d, col %d: unterminated char constant\n", line, col); LINE;}
+\'{CHRUNT}				{printf("Line %d, col %d: unterminated char constant\n", line, col); COL;}
+\'{CHRINV}*\'			{printf("Line %d, col %d: invalid char constant (%s)\n", line, col, yytext); COL;}
+
+\"{STRLIT}\"			{PRINT("STRLIT(%s)\n", yytext); COL;}
+\"{STRUNT}				{printf("Line %d, col %d: unterminated string constant\n", line, col); COL;}
+\"{STRINV}*\"			{printf("Line %d, col %d: invalid string constant (%s)\n", line, col, yytext); COL;}
 
 
 {AMP}  {PRINT("AMP\n"); COL;}
@@ -115,7 +120,7 @@ STRLIT ({ESCAPE}|[^(\"|\n)])
 {INTLIT} {PRINT("INTLIT(%s)\n",yytext); COL;}
 {ID} {PRINT("ID(%s)\n",yytext); COL;}
 
-. {printf("Line %d, col %d: illegal character (%s)\n", line, col, yytext); COL;}
+. {/*printf("Line %d, col %d: illegal character (%s)\n", line, col, yytext);*/ COL;}
 
 %%
 

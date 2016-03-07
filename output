@@ -1,18 +1,33 @@
 Line 1, col 1: invalid char constant ('')
+Line 1, col 3: illegal character ()
 Line 2, col 1: invalid char constant ('\a')
+Line 2, col 5: illegal character ()
 Line 3, col 1: invalid char constant (' \a')
+Line 3, col 6: illegal character ()
 Line 4, col 1: invalid char constant ('\a ')
+Line 4, col 6: illegal character ()
 Line 5, col 1: invalid char constant ('\t ')
+Line 5, col 6: illegal character ()
 Line 6, col 1: invalid char constant (' \t')
+Line 6, col 6: illegal character ()
 Line 7, col 1: invalid char constant ('\8')
+Line 7, col 5: illegal character ()
 Line 8, col 1: invalid char constant ('\08')
+Line 8, col 6: illegal character ()
 Line 9, col 1: invalid char constant ('\008')
+Line 9, col 7: illegal character ()
 Line 10, col 1: invalid char constant ('\0008')
+Line 10, col 8: illegal character ()
 Line 11, col 1: invalid char constant ('\ ')
+Line 11, col 5: illegal character ()
 Line 12, col 1: invalid char constant ('\\t')
+Line 12, col 6: illegal character ()
 Line 13, col 1: invalid char constant (' \0')
+Line 13, col 6: illegal character ()
 Line 14, col 1: invalid char constant ('ab')
+Line 14, col 5: illegal character ()
 Line 15, col 1: invalid char constant (' ab')
+Line 15, col 6: illegal character ()
 Line 16, col 1: unterminated char constant
 Line 17, col 2: unterminated char constant
 Line 18, col 1: unterminated char constant
@@ -22,52 +37,87 @@ Line 21, col 1: unterminated char constant
 Line 22, col 1: unterminated char constant
 Line 23, col 1: unterminated char constant
 Line 24, col 1: unterminated char constant
-ID(a)
-ID(a)
-ID(a)
-ID(t)
-ID(a)
-INTLIT(8)
-INTLIT(08)
-INTLIT(008)
-INTLIT(0008)
-ID(bla)
-ID(bla)
-ID(t)
-NOT
-Line 37, col 9: unterminated char constant
-ID(bla)
-INTLIT(000)
-INTLIT(8)
-Line 39, col 1: unterminated char constant
+Line 25, col 1: invalid string constant ("\a")
+Line 25, col 5: illegal character ()
+Line 26, col 1: invalid string constant (" \a")
+Line 26, col 6: illegal character ()
+Line 27, col 1: invalid string constant ("\a ")
+Line 27, col 6: illegal character ()
+Line 28, col 1: invalid string constant ("\t \\\a")
+Line 28, col 10: illegal character ()
+Line 29, col 1: invalid string constant ("\8")
+Line 29, col 5: illegal character ()
+STRLIT("\08")
+Line 30, col 6: illegal character ()
+STRLIT("\008")
+Line 31, col 7: illegal character ()
+STRLIT("\0008")
+Line 32, col 8: illegal character ()
+Line 33, col 1: invalid string constant ("\ ")
+Line 33, col 5: illegal character ()
+Line 34, col 1: unterminated string constant
+Line 35, col 2: unterminated string constant
+Line 36, col 1: unterminated string constant
+Line 37, col 1: unterminated string constant
+Line 38, col 1: unterminated string constant
+CHRLIT('\\')
+Line 39, col 5: illegal character ()
 CHRLIT('\n')
+Line 40, col 5: illegal character ()
 CHRLIT('\t')
+Line 41, col 5: illegal character ()
 CHRLIT('\'')
+Line 42, col 5: illegal character ()
 CHRLIT('\"')
+Line 43, col 5: illegal character ()
 CHRLIT('\1')
+Line 44, col 5: illegal character ()
 CHRLIT('\11')
+Line 45, col 6: illegal character ()
 CHRLIT('\111')
+Line 46, col 7: illegal character ()
 CHRLIT('a')
+Line 47, col 4: illegal character ()
 CHRLIT('"')
-Line 49, col 2: unterminated char constant
+Line 48, col 4: illegal character ()
+CHRLIT('\\')
+SEMI
+Line 49, col 7: illegal character ()
 Line 50, col 1: invalid char constant ('')
+Line 50, col 3: illegal character ()
 Line 51, col 1: invalid char constant ('')
 Line 51, col 3: invalid char constant ('')
+Line 51, col 5: illegal character ()
 Line 52, col 1: invalid char constant ('\\a')
+Line 52, col 6: illegal character ()
 Line 53, col 1: invalid char constant ('\\\a')
+Line 53, col 7: illegal character ()
 Line 54, col 1: invalid char constant ('\'\'')
+Line 54, col 7: illegal character ()
 Line 55, col 1: invalid char constant ('\9\9\"')
+Line 55, col 9: illegal character ()
 Line 56, col 1: invalid char constant ('\"\9')
+Line 56, col 7: illegal character ()
 Line 57, col 1: invalid char constant ('\123\912')
+Line 57, col 11: illegal character ()
 Line 58, col 1: invalid char constant ('\777\x')
+Line 58, col 9: illegal character ()
 Line 59, col 1: invalid char constant ('\123\zz')
+Line 59, col 10: illegal character ()
 Line 60, col 1: invalid char constant ('\1 \8')
+Line 60, col 8: illegal character ()
 Line 61, col 1: invalid char constant ('\q')
+Line 61, col 5: illegal character ()
 Line 62, col 1: invalid char constant ('\1234')
+Line 62, col 8: illegal character ()
 Line 63, col 1: invalid char constant ('\8')
+Line 63, col 5: illegal character ()
 Line 64, col 1: invalid char constant ('\9')
+Line 64, col 5: illegal character ()
 Line 65, col 1: invalid char constant ('\0000')
+Line 65, col 8: illegal character ()
 Line 66, col 1: invalid char constant ('\tbla')
+Line 66, col 8: illegal character ()
 Line 67, col 1: unterminated char constant
 Line 68, col 1: unterminated char constant
 Line 69, col 1: unterminated char constant
@@ -79,38 +129,47 @@ Line 74, col 1: unterminated char constant
 Line 75, col 1: unterminated char constant
 Line 76, col 1: unterminated char constant
 Line 77, col 1: unterminated char constant
-ID(t)
-ID(n)
-INTLIT(123)
-INTLIT(777)
-INTLIT(123)
-INTLIT(1)
-ID(t1)
-ID(n)
-ID(a)
-INTLIT(9)
-INTLIT(9)
-INTLIT(9)
-INTLIT(123)
-INTLIT(912)
-INTLIT(777)
-ID(x)
-INTLIT(123)
-ID(zz)
-INTLIT(1)
-INTLIT(8)
-INTLIT(9)
-INTLIT(9)
-INTLIT(9)
-INTLIT(123)
-INTLIT(912)
-INTLIT(777)
-ID(x)
-INTLIT(123)
-ID(zz)
-INTLIT(1)
-INTLIT(8)
-INTLIT(123)
-INTLIT(777)
-INTLIT(123)
-INTLIT(1)
+STRLIT("\t")
+Line 78, col 5: illegal character ()
+STRLIT("\n")
+Line 79, col 5: illegal character ()
+STRLIT("\\")
+Line 80, col 5: illegal character ()
+STRLIT("\"")
+Line 81, col 5: illegal character ()
+STRLIT("\123")
+Line 82, col 7: illegal character ()
+STRLIT("\777")
+Line 83, col 7: illegal character ()
+STRLIT("\123")
+Line 84, col 7: illegal character ()
+STRLIT("\1")
+Line 85, col 5: illegal character ()
+STRLIT("\t1")
+Line 86, col 6: illegal character ()
+STRLIT("\n\"|")
+Line 87, col 8: illegal character ()
+Line 88, col 1: invalid string constant ("\\\a")
+Line 88, col 7: illegal character ()
+Line 89, col 1: invalid string constant ("\9\9\"")
+Line 89, col 9: illegal character ()
+Line 90, col 1: invalid string constant ("\"\9")
+Line 90, col 7: illegal character ()
+Line 91, col 1: invalid string constant ("\123\912")
+Line 91, col 11: illegal character ()
+Line 92, col 1: invalid string constant ("\777\x")
+Line 92, col 9: illegal character ()
+Line 93, col 1: invalid string constant ("\123\zz")
+Line 93, col 10: illegal character ()
+Line 94, col 1: invalid string constant ("\1 \8")
+Line 94, col 8: illegal character ()
+Line 95, col 1: unterminated string constant
+Line 96, col 1: unterminated string constant
+Line 97, col 1: unterminated string constant
+Line 98, col 1: unterminated string constant
+Line 99, col 1: unterminated string constant
+Line 100, col 1: unterminated string constant
+Line 101, col 1: unterminated string constant
+Line 102, col 1: unterminated string constant
+Line 103, col 1: unterminated string constant
+Line 104, col 1: unterminated string constant
