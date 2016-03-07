@@ -37,75 +37,30 @@ Line 21, col 1: unterminated char constant
 Line 22, col 1: unterminated char constant
 Line 23, col 1: unterminated char constant
 Line 24, col 1: unterminated char constant
-Line 25, col 1: illegal character (")
-Line 25, col 2: illegal character (\)
-ID(a)
-Line 25, col 4: illegal character (")
+STRLIT("\a")
 Line 25, col 5: illegal character ()
-Line 26, col 1: illegal character (")
-Line 26, col 3: illegal character (\)
-ID(a)
-Line 26, col 5: illegal character (")
+STRLIT(" \a")
 Line 26, col 6: illegal character ()
-Line 27, col 1: illegal character (")
-Line 27, col 2: illegal character (\)
-ID(a)
-Line 27, col 5: illegal character (")
+STRLIT("\a ")
 Line 27, col 6: illegal character ()
-Line 28, col 1: illegal character (")
-Line 28, col 2: illegal character (\)
-ID(t)
-Line 28, col 5: illegal character (\)
-Line 28, col 6: illegal character (\)
-Line 28, col 7: illegal character (\)
-ID(a)
-Line 28, col 9: illegal character (")
+STRLIT("\t \\\a")
 Line 28, col 10: illegal character ()
-Line 29, col 1: illegal character (")
-Line 29, col 2: illegal character (\)
-INTLIT(8)
-Line 29, col 4: illegal character (")
+STRLIT("\8")
 Line 29, col 5: illegal character ()
-Line 30, col 1: illegal character (")
-Line 30, col 2: illegal character (\)
-INTLIT(08)
-Line 30, col 5: illegal character (")
+STRLIT("\08")
 Line 30, col 6: illegal character ()
-Line 31, col 1: illegal character (")
-Line 31, col 2: illegal character (\)
-INTLIT(008)
-Line 31, col 6: illegal character (")
+STRLIT("\008")
 Line 31, col 7: illegal character ()
-Line 32, col 1: illegal character (")
-Line 32, col 2: illegal character (\)
-INTLIT(0008)
-Line 32, col 7: illegal character (")
+STRLIT("\0008")
 Line 32, col 8: illegal character ()
-Line 33, col 1: illegal character (")
-Line 33, col 2: illegal character (\)
-Line 33, col 4: illegal character (")
+STRLIT("\ ")
 Line 33, col 5: illegal character ()
-Line 34, col 1: illegal character (")
-Line 34, col 2: illegal character ()
-Line 35, col 2: illegal character (")
-Line 35, col 3: illegal character ()
-Line 36, col 1: illegal character (")
-ID(bla)
-Line 36, col 5: illegal character ()
-Line 37, col 1: illegal character (")
-ID(bla)
-Line 37, col 6: illegal character (\)
-ID(t)
-NOT
-Line 37, col 11: illegal character (\)
-Line 37, col 12: unterminated char constant
-Line 38, col 1: illegal character (")
-ID(bla)
-Line 38, col 7: illegal character (\)
-INTLIT(000)
-Line 38, col 11: illegal character (\)
-INTLIT(8)
-Line 38, col 13: illegal character ()
+Line 34, col 1: unterminated string constant
+Line 35, col 2: unterminated string constant
+Line 36, col 1: unterminated string constant
+STRLIT("bla \t ! \' \\\")
+Line 37, col 18: illegal character ()
+Line 38, col 1: unterminated string constant
 CHRLIT('\\')
 Line 39, col 5: illegal character ()
 CHRLIT('\n')
@@ -175,161 +130,52 @@ Line 74, col 1: unterminated char constant
 Line 75, col 1: unterminated char constant
 Line 76, col 1: unterminated char constant
 Line 77, col 1: unterminated char constant
-Line 78, col 1: illegal character (")
-Line 78, col 2: illegal character (\)
-ID(t)
-Line 78, col 4: illegal character (")
+STRLIT("\t")
 Line 78, col 5: illegal character ()
-Line 79, col 1: illegal character (")
-Line 79, col 2: illegal character (\)
-ID(n)
-Line 79, col 4: illegal character (")
+STRLIT("\n")
 Line 79, col 5: illegal character ()
-Line 80, col 1: illegal character (")
-Line 80, col 2: illegal character (\)
-Line 80, col 3: illegal character (\)
-Line 80, col 4: illegal character (")
+STRLIT("\\")
 Line 80, col 5: illegal character ()
-Line 81, col 1: illegal character (")
-Line 81, col 2: illegal character (\)
-Line 81, col 3: illegal character (")
-Line 81, col 4: illegal character (")
+STRLIT("\"")
 Line 81, col 5: illegal character ()
-Line 82, col 1: illegal character (")
-Line 82, col 2: illegal character (\)
-INTLIT(123)
-Line 82, col 6: illegal character (")
+STRLIT("\123")
 Line 82, col 7: illegal character ()
-Line 83, col 1: illegal character (")
-Line 83, col 2: illegal character (\)
-INTLIT(777)
-Line 83, col 6: illegal character (")
+STRLIT("\777")
 Line 83, col 7: illegal character ()
-Line 84, col 1: illegal character (")
-Line 84, col 2: illegal character (\)
-INTLIT(123)
-Line 84, col 6: illegal character (")
+STRLIT("\123")
 Line 84, col 7: illegal character ()
-Line 85, col 1: illegal character (")
-Line 85, col 2: illegal character (\)
-INTLIT(1)
-Line 85, col 4: illegal character (")
+STRLIT("\1")
 Line 85, col 5: illegal character ()
-Line 86, col 1: illegal character (")
-Line 86, col 2: illegal character (\)
-ID(t1)
-Line 86, col 5: illegal character (")
+STRLIT("\t1")
 Line 86, col 6: illegal character ()
-Line 87, col 1: illegal character (")
-Line 87, col 2: illegal character (\)
-ID(n)
-Line 87, col 4: illegal character (\)
-Line 87, col 5: illegal character (")
+STRLIT("\n\")
 Line 87, col 6: illegal character (|)
-Line 87, col 7: illegal character (")
-Line 87, col 8: illegal character ()
-Line 88, col 1: illegal character (")
-Line 88, col 2: illegal character (\)
-Line 88, col 3: illegal character (\)
-Line 88, col 4: illegal character (\)
-ID(a)
-Line 88, col 6: illegal character (")
+Line 87, col 7: unterminated string constant
+STRLIT("\\\a")
 Line 88, col 7: illegal character ()
-Line 89, col 1: illegal character (")
-Line 89, col 2: illegal character (\)
-INTLIT(9)
-Line 89, col 4: illegal character (\)
-INTLIT(9)
-Line 89, col 6: illegal character (\)
-Line 89, col 7: illegal character (")
-Line 89, col 8: illegal character (")
+STRLIT("\9\9\"")
 Line 89, col 9: illegal character ()
-Line 90, col 1: illegal character (")
-Line 90, col 2: illegal character (\)
-Line 90, col 3: illegal character (")
-Line 90, col 4: illegal character (\)
-INTLIT(9)
-Line 90, col 6: illegal character (")
+STRLIT("\"\9")
 Line 90, col 7: illegal character ()
-Line 91, col 1: illegal character (")
-Line 91, col 2: illegal character (\)
-INTLIT(123)
-Line 91, col 6: illegal character (\)
-INTLIT(912)
-Line 91, col 10: illegal character (")
+STRLIT("\123\912")
 Line 91, col 11: illegal character ()
-Line 92, col 1: illegal character (")
-Line 92, col 2: illegal character (\)
-INTLIT(777)
-Line 92, col 6: illegal character (\)
-ID(x)
-Line 92, col 8: illegal character (")
+STRLIT("\777\x")
 Line 92, col 9: illegal character ()
-Line 93, col 1: illegal character (")
-Line 93, col 2: illegal character (\)
-INTLIT(123)
-Line 93, col 6: illegal character (\)
-ID(zz)
-Line 93, col 9: illegal character (")
+STRLIT("\123\zz")
 Line 93, col 10: illegal character ()
-Line 94, col 1: illegal character (")
-Line 94, col 2: illegal character (\)
-INTLIT(1)
-Line 94, col 5: illegal character (\)
-INTLIT(8)
-Line 94, col 7: illegal character (")
+STRLIT("\1 \8")
 Line 94, col 8: illegal character ()
-Line 95, col 1: illegal character (")
-Line 95, col 2: illegal character (\)
-INTLIT(9)
-Line 95, col 4: illegal character (\)
-INTLIT(9)
-Line 95, col 6: illegal character (\)
-Line 95, col 7: illegal character (")
+STRLIT("\9\9\")
 Line 95, col 8: illegal character ()
-Line 96, col 1: illegal character (")
-Line 96, col 2: illegal character (\)
-Line 96, col 3: illegal character (")
+STRLIT("\")
 Line 96, col 4: illegal character (\)
 INTLIT(9)
 Line 96, col 6: illegal character ()
-Line 97, col 1: illegal character (")
-Line 97, col 2: illegal character (\)
-INTLIT(123)
-Line 97, col 6: illegal character (\)
-INTLIT(912)
-Line 97, col 10: illegal character ()
-Line 98, col 1: illegal character (")
-Line 98, col 2: illegal character (\)
-INTLIT(777)
-Line 98, col 6: illegal character (\)
-ID(x)
-Line 98, col 8: illegal character ()
-Line 99, col 1: illegal character (")
-Line 99, col 2: illegal character (\)
-INTLIT(123)
-Line 99, col 6: illegal character (\)
-ID(zz)
-Line 99, col 9: illegal character ()
-Line 100, col 1: illegal character (")
-Line 100, col 2: illegal character (\)
-INTLIT(1)
-Line 100, col 5: illegal character (\)
-INTLIT(8)
-Line 100, col 7: illegal character ()
-Line 101, col 1: illegal character (")
-Line 101, col 2: illegal character (\)
-INTLIT(123)
-Line 101, col 6: illegal character ()
-Line 102, col 1: illegal character (")
-Line 102, col 2: illegal character (\)
-INTLIT(777)
-Line 102, col 6: illegal character ()
-Line 103, col 1: illegal character (")
-Line 103, col 2: illegal character (\)
-INTLIT(123)
-Line 103, col 6: illegal character ()
-Line 104, col 1: illegal character (")
-Line 104, col 2: illegal character (\)
-INTLIT(1)
-Line 104, col 4: illegal character ()
+Line 97, col 1: unterminated string constant
+Line 98, col 1: unterminated string constant
+Line 99, col 1: unterminated string constant
+Line 100, col 1: unterminated string constant
+Line 101, col 1: unterminated string constant
+Line 102, col 1: unterminated string constant
+Line 103, col 1: unterminated string constant
+Line 104, col 1: unterminated string constant
