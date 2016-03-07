@@ -114,7 +114,7 @@ CHRLIT ({ESCAPE}|[^(\'|\n)])
 
 {ID} {PRINT("ID(%s)\n",yytext); COL;}
 
-. {COL;}
+. {printf("Line %d, col %d: illegal character (%s)\n", line, col, yytext); COL;}
 
 %%
 

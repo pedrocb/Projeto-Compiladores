@@ -1,18 +1,33 @@
 Line 1, col 1: invalid char constant ('')
+Line 1, col 3: illegal character (')
 Line 2, col 1: invalid char constant ('\a')
+Line 2, col 5: illegal character (')
 Line 3, col 1: invalid char constant (' \a')
+Line 3, col 6: illegal character (')
 Line 4, col 1: invalid char constant ('\a ')
+Line 4, col 6: illegal character (')
 Line 5, col 1: invalid char constant ('\t ')
+Line 5, col 6: illegal character (')
 Line 6, col 1: invalid char constant (' \t')
+Line 6, col 6: illegal character (')
 Line 7, col 1: invalid char constant ('\8')
+Line 7, col 5: illegal character (')
 Line 8, col 1: invalid char constant ('\08')
+Line 8, col 6: illegal character (')
 Line 9, col 1: invalid char constant ('\008')
+Line 9, col 7: illegal character (')
 Line 10, col 1: invalid char constant ('\0008')
+Line 10, col 8: illegal character (')
 Line 11, col 1: invalid char constant ('\ ')
+Line 11, col 5: illegal character (')
 Line 12, col 1: invalid char constant ('\\t')
+Line 12, col 6: illegal character (')
 Line 13, col 1: invalid char constant (' \0')
+Line 13, col 6: illegal character (')
 Line 14, col 1: invalid char constant ('ab')
+Line 14, col 5: illegal character (')
 Line 15, col 1: invalid char constant (' ab')
+Line 15, col 6: illegal character (')
 Line 16, col 1: unterminated char constant
 Line 17, col 2: unterminated char constant
 Line 18, col 1: unterminated char constant
@@ -22,52 +37,130 @@ Line 21, col 1: unterminated char constant
 Line 22, col 1: unterminated char constant
 Line 23, col 1: unterminated char constant
 Line 24, col 1: unterminated char constant
+Line 25, col 1: illegal character ('")
+Line 25, col 2: illegal character ('\)
 ID(a)
+Line 25, col 4: illegal character ('")
+Line 25, col 5: illegal character (')
+Line 26, col 1: illegal character ('")
+Line 26, col 3: illegal character ('\)
 ID(a)
+Line 26, col 5: illegal character ('")
+Line 26, col 6: illegal character (')
+Line 27, col 1: illegal character ('")
+Line 27, col 2: illegal character ('\)
 ID(a)
+Line 27, col 5: illegal character ('")
+Line 27, col 6: illegal character (')
+Line 28, col 1: illegal character ('")
+Line 28, col 2: illegal character ('\)
 ID(t)
+Line 28, col 5: illegal character ('\)
+Line 28, col 6: illegal character ('\)
+Line 28, col 7: illegal character ('\)
 ID(a)
+Line 28, col 9: illegal character ('")
+Line 28, col 10: illegal character (')
+Line 29, col 1: illegal character ('")
+Line 29, col 2: illegal character ('\)
 INTLIT(8)
+Line 29, col 4: illegal character ('")
+Line 29, col 5: illegal character (')
+Line 30, col 1: illegal character ('")
+Line 30, col 2: illegal character ('\)
 INTLIT(08)
+Line 30, col 5: illegal character ('")
+Line 30, col 6: illegal character (')
+Line 31, col 1: illegal character ('")
+Line 31, col 2: illegal character ('\)
 INTLIT(008)
+Line 31, col 6: illegal character ('")
+Line 31, col 7: illegal character (')
+Line 32, col 1: illegal character ('")
+Line 32, col 2: illegal character ('\)
 INTLIT(0008)
+Line 32, col 7: illegal character ('")
+Line 32, col 8: illegal character (')
+Line 33, col 1: illegal character ('")
+Line 33, col 2: illegal character ('\)
+Line 33, col 4: illegal character ('")
+Line 33, col 5: illegal character (')
+Line 34, col 1: illegal character ('")
+Line 34, col 2: illegal character (')
+Line 35, col 2: illegal character ('")
+Line 35, col 3: illegal character (')
+Line 36, col 1: illegal character ('")
 ID(bla)
+Line 36, col 5: illegal character (')
+Line 37, col 1: illegal character ('")
 ID(bla)
+Line 37, col 6: illegal character ('\)
 ID(t)
 NOT
+Line 37, col 11: illegal character ('\)
 Line 37, col 12: unterminated char constant
+Line 38, col 1: illegal character ('")
 ID(bla)
+Line 38, col 7: illegal character ('\)
 INTLIT(000)
+Line 38, col 11: illegal character ('\)
 INTLIT(8)
+Line 38, col 13: illegal character (')
 Line 39, col 1: unterminated char constant
 CHRLIT('\n')
+Line 40, col 5: illegal character (')
 CHRLIT('\t')
+Line 41, col 5: illegal character (')
 CHRLIT('\'')
+Line 42, col 5: illegal character (')
 CHRLIT('\"')
+Line 43, col 5: illegal character (')
 CHRLIT('\1')
+Line 44, col 5: illegal character (')
 CHRLIT('\11')
+Line 45, col 6: illegal character (')
 CHRLIT('\111')
+Line 46, col 7: illegal character (')
 CHRLIT('a')
+Line 47, col 4: illegal character (')
 CHRLIT('"')
+Line 48, col 4: illegal character (')
 Line 49, col 2: unterminated char constant
 Line 50, col 1: invalid char constant ('')
+Line 50, col 3: illegal character (')
 Line 51, col 1: invalid char constant ('')
 Line 51, col 3: invalid char constant ('')
+Line 51, col 5: illegal character (')
 Line 52, col 1: invalid char constant ('\\a')
+Line 52, col 6: illegal character (')
 Line 53, col 1: invalid char constant ('\\\a')
+Line 53, col 7: illegal character (')
 Line 54, col 1: invalid char constant ('\'\'')
+Line 54, col 7: illegal character (')
 Line 55, col 1: invalid char constant ('\9\9\"')
+Line 55, col 9: illegal character (')
 Line 56, col 1: invalid char constant ('\"\9')
+Line 56, col 7: illegal character (')
 Line 57, col 1: invalid char constant ('\123\912')
+Line 57, col 11: illegal character (')
 Line 58, col 1: invalid char constant ('\777\x')
+Line 58, col 9: illegal character (')
 Line 59, col 1: invalid char constant ('\123\zz')
+Line 59, col 10: illegal character (')
 Line 60, col 1: invalid char constant ('\1 \8')
+Line 60, col 8: illegal character (')
 Line 61, col 1: invalid char constant ('\q')
+Line 61, col 5: illegal character (')
 Line 62, col 1: invalid char constant ('\1234')
+Line 62, col 8: illegal character (')
 Line 63, col 1: invalid char constant ('\8')
+Line 63, col 5: illegal character (')
 Line 64, col 1: invalid char constant ('\9')
+Line 64, col 5: illegal character (')
 Line 65, col 1: invalid char constant ('\0000')
+Line 65, col 8: illegal character (')
 Line 66, col 1: invalid char constant ('\tbla')
+Line 66, col 8: illegal character (')
 Line 67, col 1: unterminated char constant
 Line 68, col 1: unterminated char constant
 Line 69, col 1: unterminated char constant
@@ -79,38 +172,161 @@ Line 74, col 1: unterminated char constant
 Line 75, col 1: unterminated char constant
 Line 76, col 1: unterminated char constant
 Line 77, col 1: unterminated char constant
+Line 78, col 1: illegal character ('")
+Line 78, col 2: illegal character ('\)
 ID(t)
+Line 78, col 4: illegal character ('")
+Line 78, col 5: illegal character (')
+Line 79, col 1: illegal character ('")
+Line 79, col 2: illegal character ('\)
 ID(n)
+Line 79, col 4: illegal character ('")
+Line 79, col 5: illegal character (')
+Line 80, col 1: illegal character ('")
+Line 80, col 2: illegal character ('\)
+Line 80, col 3: illegal character ('\)
+Line 80, col 4: illegal character ('")
+Line 80, col 5: illegal character (')
+Line 81, col 1: illegal character ('")
+Line 81, col 2: illegal character ('\)
+Line 81, col 3: illegal character ('")
+Line 81, col 4: illegal character ('")
+Line 81, col 5: illegal character (')
+Line 82, col 1: illegal character ('")
+Line 82, col 2: illegal character ('\)
 INTLIT(123)
+Line 82, col 6: illegal character ('")
+Line 82, col 7: illegal character (')
+Line 83, col 1: illegal character ('")
+Line 83, col 2: illegal character ('\)
 INTLIT(777)
+Line 83, col 6: illegal character ('")
+Line 83, col 7: illegal character (')
+Line 84, col 1: illegal character ('")
+Line 84, col 2: illegal character ('\)
 INTLIT(123)
+Line 84, col 6: illegal character ('")
+Line 84, col 7: illegal character (')
+Line 85, col 1: illegal character ('")
+Line 85, col 2: illegal character ('\)
 INTLIT(1)
+Line 85, col 4: illegal character ('")
+Line 85, col 5: illegal character (')
+Line 86, col 1: illegal character ('")
+Line 86, col 2: illegal character ('\)
 ID(t1)
+Line 86, col 5: illegal character ('")
+Line 86, col 6: illegal character (')
+Line 87, col 1: illegal character ('")
+Line 87, col 2: illegal character ('\)
 ID(n)
+Line 87, col 4: illegal character ('\)
+Line 87, col 5: illegal character ('")
+Line 87, col 6: illegal character ('|)
+Line 87, col 7: illegal character ('")
+Line 87, col 8: illegal character (')
+Line 88, col 1: illegal character ('")
+Line 88, col 2: illegal character ('\)
+Line 88, col 3: illegal character ('\)
+Line 88, col 4: illegal character ('\)
 ID(a)
+Line 88, col 6: illegal character ('")
+Line 88, col 7: illegal character (')
+Line 89, col 1: illegal character ('")
+Line 89, col 2: illegal character ('\)
 INTLIT(9)
+Line 89, col 4: illegal character ('\)
 INTLIT(9)
+Line 89, col 6: illegal character ('\)
+Line 89, col 7: illegal character ('")
+Line 89, col 8: illegal character ('")
+Line 89, col 9: illegal character (')
+Line 90, col 1: illegal character ('")
+Line 90, col 2: illegal character ('\)
+Line 90, col 3: illegal character ('")
+Line 90, col 4: illegal character ('\)
 INTLIT(9)
+Line 90, col 6: illegal character ('")
+Line 90, col 7: illegal character (')
+Line 91, col 1: illegal character ('")
+Line 91, col 2: illegal character ('\)
 INTLIT(123)
+Line 91, col 6: illegal character ('\)
 INTLIT(912)
+Line 91, col 10: illegal character ('")
+Line 91, col 11: illegal character (')
+Line 92, col 1: illegal character ('")
+Line 92, col 2: illegal character ('\)
 INTLIT(777)
+Line 92, col 6: illegal character ('\)
 ID(x)
+Line 92, col 8: illegal character ('")
+Line 92, col 9: illegal character (')
+Line 93, col 1: illegal character ('")
+Line 93, col 2: illegal character ('\)
 INTLIT(123)
+Line 93, col 6: illegal character ('\)
 ID(zz)
+Line 93, col 9: illegal character ('")
+Line 93, col 10: illegal character (')
+Line 94, col 1: illegal character ('")
+Line 94, col 2: illegal character ('\)
 INTLIT(1)
+Line 94, col 5: illegal character ('\)
 INTLIT(8)
+Line 94, col 7: illegal character ('")
+Line 94, col 8: illegal character (')
+Line 95, col 1: illegal character ('")
+Line 95, col 2: illegal character ('\)
 INTLIT(9)
+Line 95, col 4: illegal character ('\)
 INTLIT(9)
+Line 95, col 6: illegal character ('\)
+Line 95, col 7: illegal character ('")
+Line 95, col 8: illegal character (')
+Line 96, col 1: illegal character ('")
+Line 96, col 2: illegal character ('\)
+Line 96, col 3: illegal character ('")
+Line 96, col 4: illegal character ('\)
 INTLIT(9)
+Line 96, col 6: illegal character (')
+Line 97, col 1: illegal character ('")
+Line 97, col 2: illegal character ('\)
 INTLIT(123)
+Line 97, col 6: illegal character ('\)
 INTLIT(912)
+Line 97, col 10: illegal character (')
+Line 98, col 1: illegal character ('")
+Line 98, col 2: illegal character ('\)
 INTLIT(777)
+Line 98, col 6: illegal character ('\)
 ID(x)
+Line 98, col 8: illegal character (')
+Line 99, col 1: illegal character ('")
+Line 99, col 2: illegal character ('\)
 INTLIT(123)
+Line 99, col 6: illegal character ('\)
 ID(zz)
+Line 99, col 9: illegal character (')
+Line 100, col 1: illegal character ('")
+Line 100, col 2: illegal character ('\)
 INTLIT(1)
+Line 100, col 5: illegal character ('\)
 INTLIT(8)
+Line 100, col 7: illegal character (')
+Line 101, col 1: illegal character ('")
+Line 101, col 2: illegal character ('\)
 INTLIT(123)
+Line 101, col 6: illegal character (')
+Line 102, col 1: illegal character ('")
+Line 102, col 2: illegal character ('\)
 INTLIT(777)
+Line 102, col 6: illegal character (')
+Line 103, col 1: illegal character ('")
+Line 103, col 2: illegal character ('\)
 INTLIT(123)
+Line 103, col 6: illegal character (')
+Line 104, col 1: illegal character ('")
+Line 104, col 2: illegal character ('\)
 INTLIT(1)
+Line 104, col 4: illegal character (')
