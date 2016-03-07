@@ -1,5 +1,4 @@
-Line 1, col 1: invalid char constant ('')
-Line 1, col 3: illegal character ()
+Line 1, col 1: unterminated char constant
 Line 2, col 1: invalid char constant ('\a')
 Line 2, col 5: illegal character ()
 Line 3, col 1: invalid char constant (' \a')
@@ -84,10 +83,8 @@ Line 48, col 4: illegal character ()
 CHRLIT('\\')
 SEMI
 Line 49, col 7: illegal character ()
-Line 50, col 1: invalid char constant ('')
-Line 50, col 3: illegal character ()
-Line 51, col 1: invalid char constant ('')
-Line 51, col 3: invalid char constant ('')
+Line 50, col 1: unterminated char constant
+Line 51, col 1: invalid char constant ('''')
 Line 51, col 5: illegal character ()
 Line 52, col 1: invalid char constant ('\\a')
 Line 52, col 6: illegal character ()
