@@ -105,8 +105,12 @@ Line 38, col 7: illegal character ('\)
 INTLIT(000)
 Line 38, col 11: illegal character ('\)
 INTLIT(8)
+<<<<<<< HEAD
 Line 38, col 13: illegal character (')
 Line 39, col 1: unterminated char constant
+=======
+CHRLIT('\\')
+>>>>>>> 75b65e0470c4d4d75a6f677a4e17f9d709cef691
 CHRLIT('\n')
 Line 40, col 5: illegal character (')
 CHRLIT('\t')
@@ -124,8 +128,13 @@ Line 46, col 7: illegal character (')
 CHRLIT('a')
 Line 47, col 4: illegal character (')
 CHRLIT('"')
+<<<<<<< HEAD
 Line 48, col 4: illegal character (')
 Line 49, col 2: unterminated char constant
+=======
+CHRLIT('\\')
+SEMI
+>>>>>>> 75b65e0470c4d4d75a6f677a4e17f9d709cef691
 Line 50, col 1: invalid char constant ('')
 Line 50, col 3: illegal character (')
 Line 51, col 1: invalid char constant ('')
