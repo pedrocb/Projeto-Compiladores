@@ -47,13 +47,18 @@ RESERVED "auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"long"|"registe
 
 LETTER [a-zA-Z]
 NUMBER [0-9]
-ESCAPE \\n|\\t|\\\\|\\\'|\\\"|\\([0-7]{1,3})
-
-INVALID [^({ESCAPE}|\n)]
 
 ID ({LETTER}|_)({LETTER}|{NUMBER}|_)*
 INTLIT {NUMBER}+("."({NUMBER}+))?
-CHRLIT ({ESCAPE}|[^(\'|\n)])
+
+ESCAPECHARS (n|t|\\|\'|\"|([0-7]{1,3}))
+ESCAPE \\({ESCAPECHARS})
+
+CHRANY [^\'\n]
+CHRLIT ({ESCAPE}|{CHRANY})
+CHRCAM (\\\')
+
+
 STRLIT ({ESCAPE}|[^(\"|\n)])
 
 
@@ -70,20 +75,9 @@ STRLIT ({ESCAPE}|[^(\"|\n)])
 <COMMENT><<EOF>>	{BEGIN 0; printf("Line %d, col %d: unterminated comment\n", state_line, state_col); COL;}
 
 
-\'\' 															{printf("Line %d, col %d: invalid char constant (%s)\n", line, col, yytext); BEGIN 0; COL;}
-\' 																{BEGIN CHR; state_line=line; state_col=col; COL;}
-<CHR>{CHRLIT}\'										{PRINT("CHRLIT('%s)\n", yytext); BEGIN 0; COL;}
-<CHR>((\\\\)*\\\'|[^(\'|\n|\\\\)])*\n					{printf("Line %d, col %d: unterminated char constant\n", state_line, state_col); BEGIN 0; LINE;}
-<CHR>{INVALID}+\'									{printf("Line %d, col %d: invalid char constant ('%s)\n", state_line, state_col, yytext); BEGIN 0; COL;}
-<CHR>.														{COL;}
-
-
-\"\" 															{printf("Line %d, col %d: invalid string constant (%s)\n", line, col, yytext); BEGIN 0; COL;}
-\" 																{BEGIN STR; state_line=line; state_col=col; COL;}
-<STR>{STRLIT}\"										{PRINT("STRLIT(\"%s)\n", yytext); BEGIN 0; COL;}
-<STR>((\\\\)*\\\"|[^(\"|\n|\\\\)])*\n					{printf("Line %d, col %d: unterminated string constant\n", state_line, state_col); BEGIN 0; LINE;}
-<STR>{INVALID}+\"									{printf("Line %d, col %d: invalid string constant (\"%s)\n", state_line, state_col, yytext); BEGIN 0; COL;}
-<STR>.														{COL;}
+\'{CHRLIT}\'			{PRINT("CHRLIT(%s)\n", yytext); COL;}
+\'({CHRLIT}|{CHRCAM})*\'			{printf("Line %d, col %d: invalid char constant (%s)\n", line, col, yytext); COL;}
+\'({CHRLIT}|{CHRCAM})*\n			{printf("Line %d, col %d: unterminated char constant\n", line, col); LINE;}
 
 
 {AMP}  {PRINT("AMP\n"); COL;}
@@ -119,7 +113,6 @@ STRLIT ({ESCAPE}|[^(\"|\n)])
 {RESERVED} {PRINT("RESERVED(%s)\n",yytext); COL;}
 
 {INTLIT} {PRINT("INTLIT(%s)\n",yytext); COL;}
-
 {ID} {PRINT("ID(%s)\n",yytext); COL;}
 
 . {printf("Line %d, col %d: illegal character (%s)\n", line, col, yytext); COL;}
