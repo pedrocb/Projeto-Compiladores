@@ -1,4 +1,8 @@
 %{
+	#include <string.h>
+	#include <stdio.h>
+	#include "y.tab.h"
+
 	#define COL col += yyleng;
 	#define LINE line++; col=1;
 	#define PRINT if(flag == 1) printf
@@ -66,46 +70,46 @@ STRINV (\\.|{STRANY})*
 
 %%
 
-{AMP}  			{PRINT("AMP\n"); COL;}
-{AND}  			{PRINT("AND\n"); COL;}
-{ASSIGN}		{PRINT("ASSIGN\n"); COL;}
-{AST}  			{PRINT("AST\n"); COL;}
-{CHAR} 			{PRINT("CHAR\n"); COL;}
-{COMMA} 		{PRINT("COMMA\n"); COL;}
-{DIV} 			{PRINT("DIV\n"); COL;}
-{ELSE} 			{PRINT("ELSE\n"); COL;}
-{EQ} 				{PRINT("EQ\n"); COL;}
-{FOR} 			{PRINT("FOR\n"); COL;}
-{GE} 				{PRINT("GE\n"); COL;}
-{GT} 				{PRINT("GT\n"); COL;}
-{IF} 				{PRINT("IF\n"); COL;}
-{INT} 			{PRINT("INT\n"); COL;}
-{LBRACE}		{PRINT("LBRACE\n"); COL;}
-{LE} 				{PRINT("LE\n"); COL;}
-{LPAR} 			{PRINT("LPAR\n"); COL;}
-{LSQ} 			{PRINT("LSQ\n"); COL;}
-{LT} 				{PRINT("LT\n"); COL;}
-{MINUS} 		{PRINT("MINUS\n"); COL;}
-{MOD} 			{PRINT("MOD\n"); COL;}
-{NE} 				{PRINT("NE\n"); COL;}
-{NOT} 			{PRINT("NOT\n"); COL;}
-{OR} 				{PRINT("OR\n"); COL;}
-{PLUS} 			{PRINT("PLUS\n"); COL;}
-{RBRACE}		{PRINT("RBRACE\n"); COL;}
-{RETURN}		{PRINT("RETURN\n"); COL;}
-{RPAR} 			{PRINT("RPAR\n"); COL;}
-{RSQ} 			{PRINT("RSQ\n"); COL;}
-{SEMI} 			{PRINT("SEMI\n"); COL;}
-{RESERVED} {PRINT("RESERVED(%s)\n",yytext); COL;}
-{VOID} 			{PRINT("VOID\n"); COL;}
+{AMP}  			{PRINT("AMP\n"); COL; return AMP;}
+{AND}  			{PRINT("AND\n"); COL; return AND;}
+{ASSIGN}		{PRINT("ASSIGN\n"); COL; return ASSIGN;}
+{AST}  			{PRINT("AST\n"); COL; return AST;}
+{CHAR} 			{PRINT("CHAR\n"); COL; return CHAR;}
+{COMMA} 		{PRINT("COMMA\n"); COL; return COMMA;}
+{DIV} 			{PRINT("DIV\n"); COL; return DIV;}
+{ELSE} 			{PRINT("ELSE\n"); COL; return ELSE;}
+{EQ} 				{PRINT("EQ\n"); COL; return EQ;}
+{FOR} 			{PRINT("FOR\n"); COL; return FOR;}
+{GE} 				{PRINT("GE\n"); COL; return GE;}
+{GT} 				{PRINT("GT\n"); COL; return GT;}
+{IF} 				{PRINT("IF\n"); COL; return IF;}
+{INT} 			{PRINT("INT\n"); COL; return INT;}
+{LBRACE}		{PRINT("LBRACE\n"); COL; return LBRACE;}
+{LE} 				{PRINT("LE\n"); COL; return LE;}
+{LPAR} 			{PRINT("LPAR\n"); COL; return LPAR;}
+{LSQ} 			{PRINT("LSQ\n"); COL; return LSQ;}
+{LT} 				{PRINT("LT\n"); COL; return LT;}
+{MINUS} 		{PRINT("MINUS\n"); COL; return MINUS;}
+{MOD} 			{PRINT("MOD\n"); COL; return MOD;}
+{NE} 				{PRINT("NE\n"); COL; return NE;}
+{NOT} 			{PRINT("NOT\n"); COL; return NOT;}
+{OR} 				{PRINT("OR\n"); COL; return OR;}
+{PLUS} 			{PRINT("PLUS\n"); COL; return PLUS;}
+{RBRACE}		{PRINT("RBRACE\n"); COL; return RBRACE;}
+{RETURN}		{PRINT("RETURN\n"); COL; return RETURN;}
+{RPAR} 			{PRINT("RPAR\n"); COL; return RPAR;}
+{RSQ} 			{PRINT("RSQ\n"); COL; return RSQ;}
+{SEMI} 			{PRINT("SEMI\n"); COL; yylval.character = yytext[0]; return SEMI;}
+{RESERVED} 	{PRINT("RESERVED(%s)\n",yytext); COL; return RESERVED;}
+{VOID} 			{PRINT("VOID\n"); COL; return VOID;}
 
 \n {LINE;}
 \r {;}
 [ \t]+ {COL;}
 
 
-{ID} 							{PRINT("ID(%s)\n",yytext); COL;}
-{INTLIT} 					{PRINT("INTLIT(%s)\n",yytext); COL;}
+{ID} 							{PRINT("ID(%s)\n",yytext); COL; yylval.string = strdup(yytext); return ID;}
+{INTLIT} 					{PRINT("INTLIT(%s)\n",yytext); COL; yylval.number = atoi(yytext); return INTLIT;}
 
 "/*" 							{BEGIN COMMENT; state_line=line; state_col=col; COL;}
 <COMMENT>"*/"			{BEGIN 0; COL;}
@@ -131,10 +135,14 @@ int main(int argc, char *argv[]){
 	if(argc == 2 && strcmp(argv[1],"-l") == 0)
 			flag = 1;
 
-	yylex();
+	yyparse();
 	return 0;
 }
 
 int yywrap(){
 	return 1;
+}
+
+void yyerror (const char *s) {
+     printf ("%s: %s\n", s, yytext);
 }

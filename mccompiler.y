@@ -3,11 +3,30 @@
 #include <stdlib.h>
 %}
 
-%token ID INTLIT CHRLIT STRLIT AMP AND ASSIGN AST CHAR COMMA DIV ELSE EQ FOR GE GT IF
+%token AMP AND ASSIGN AST CHAR COMMA DIV ELSE EQ FOR GE GT IF
 %token INT LBRACE LE LPAR LSQ LT MINUS MOD NE NOT OR PLUS RBRACE RETURN RPAR RSQ SEMI
 %token VOID RESERVED
 
+
+
+%union{
+    int number;
+    char character;
+    char *string;
+}
+
+%token <string> ID STRLIT
+%token <number> INTLIT
+%token <character> CHRLIT SEMI //O semi esta so para teste, depois nao queremos o valor para nada
+
 %%
+
+
+
+Test: INTLIT ID SEMI {printf("%d - %s - %c\n", $1, $2, $3);}
+    ;
+
+ /*
 Start: Block Block_ {printf("Hello");}
     ;
 
@@ -26,7 +45,7 @@ FunctionDefinition: TypeSpec FunctionDeclarator FunctionBody {}
     ;
 
 FunctionBody: LBRACE Declaration_ Statement_ RBRACE {}
-    ;	      
+    ;
 
 FunctionDeclaration: TypeSpec FunctionDeclarator SEMI {}
     ;
@@ -55,7 +74,7 @@ TypeSpec: CHAR {}
     |     INT  {}
     | 	  VOID {}
     ;
-    
+ /*
 Declarator: Ast_ ID ArrayOptional {}
     ;
 
@@ -87,11 +106,11 @@ Expr: Expr Operator Expr {}
 ExpressionsOptional: Epsilon {}
     | Expr Expr_
     ;
-    
+
 Expr_: Epsilon {}
     | Expr_ COMMA Expr {}
     ;
-    
+
 Operator: ASSIGN
     | COMMA
     | AND
@@ -120,7 +139,7 @@ ExprOptional: Epsilon {}
 IdOptional: Epsilon {}
     | ID {}
     ;
-    
+
 Ast_: Epsilon {}
     | Ast_ AST {}
     ;
@@ -128,6 +147,5 @@ Ast_: Epsilon {}
 Statement_: Epsilon {}
     | Statement_ Statement {}
     ;
+ */
 %%
-
-
