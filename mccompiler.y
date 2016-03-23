@@ -22,12 +22,12 @@
 %%
 
 
-
+ /*
 Test: INTLIT ID SEMI {printf("%d - %s - %c\n", $1, $2, $3);}
     ;
+ */
 
- /*
-Start: Block Block_ {printf("Hello");}
+Start: Block Block_ {printf("Yup\n");}
     ;
 
 Epsilon: {};
@@ -35,7 +35,7 @@ Epsilon: {};
 Block: FunctionDefinition {}
     |  FunctionDeclaration {}
     |  Declaration {}
-    ;
+;
 
 Block_: Epsilon {}
     |  Block_ Block {}
@@ -74,7 +74,7 @@ TypeSpec: CHAR {}
     |     INT  {}
     | 	  VOID {}
     ;
- /*
+
 Declarator: Ast_ ID ArrayOptional {}
     ;
 
@@ -90,12 +90,52 @@ Statement: ExprOptional SEMI {}
     | LBRACE Statement_ RBRACE {}
     | IF LPAR Expr RPAR Statement ElseOptional {}
     | FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement {}
-    | RETURN ExprOptional SEMI;
+    | RETURN ExprOptional SEMI {}
     ;
 
-Expr: Expr Operator Expr {}
-    | Expr LSQ Expr RSQ {}
-    | ID LPAR ExpressionsOptional RPAR
+Expr: SingleExpr ASSIGN Expr {}
+    | Expr COMMA SingleExpr {}
+    | SingleExpr {}
+    ;
+
+SingleExpr: SingleExpr AND BinaryExpr {}
+    | SingleExpr OR BinaryExpr {}
+    | BinaryExpr {}
+    ;
+
+BinaryExpr: BinaryExpr EQ ComparationExpr {}
+    | BinaryExpr NE ComparationExpr {}
+    | BinaryExpr LT ComparationExpr {}
+    | BinaryExpr GT ComparationExpr {}
+    | BinaryExpr LE ComparationExpr {}
+    | BinaryExpr GE ComparationExpr {}
+    | ComparationExpr {}
+    ;
+
+ComparationExpr : ComparationExpr PLUS Term {}
+    | ComparationExpr MINUS Term {}
+    | Term {}
+    ;
+
+Term: Factor AST Term {}
+    | Factor DIV Term {}
+    | Factor MOD Term {}
+    | Factor {}
+    ;
+
+Operator: AMP
+    |  AST
+    |  PLUS
+    |  MINUS
+    |  NOT
+    ;
+
+Factor: Operator Factor
+    | Factor LSQ Subfactor RSQ
+    | Subfactor
+    ;
+
+Subfactor: ID LPAR ExpressionsOptional RPAR
     | ID
     | INTLIT
     | CHRLIT
@@ -103,29 +143,13 @@ Expr: Expr Operator Expr {}
     | LPAR Expr RPAR
     ;
 
+
 ExpressionsOptional: Epsilon {}
     | Expr Expr_
     ;
 
 Expr_: Epsilon {}
     | Expr_ COMMA Expr {}
-    ;
-
-Operator: ASSIGN
-    | COMMA
-    | AND
-    | OR
-    | EQ
-    | NE
-    | LT
-    | GT
-    | LE
-    | GE
-    | PLUS
-    | MINUS
-    | AST
-    | DIV
-    | MOD
     ;
 
 ElseOptional: Epsilon {}
@@ -147,5 +171,5 @@ Ast_: Epsilon {}
 Statement_: Epsilon {}
     | Statement_ Statement {}
     ;
- */
+
 %%

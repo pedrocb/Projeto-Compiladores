@@ -1,1 +1,4 @@
-10 oi ;
+int main(void){
+   int a;
+   a > 1;
+}
