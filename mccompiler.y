@@ -1,21 +1,24 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-    %}
+%}
+
+%token ID INTLIT CHRLIT STRLIT AMP AND ASSIGN AST CHAR COMMA DIV ELSE EQ FOR GE GT IF
+%token INT LBRACE LE LPAR LSQ LT MINUS MOD NE NOT OR PLUS RBRACE RETURN RPAR RSQ SEMI
+%token VOID RESERVED
 
 %%
+Start: Block Block_ {printf("Hello");}
+    ;
 
 Epsilon: {};
-
-Start: Block Block_ {}
-    ;
 
 Block: FunctionDefinition {}
     |  FunctionDeclaration {}
     |  Declaration {}
     ;
 
-Block_: epsilon {}
+Block_: Epsilon {}
     |  Block_ Block {}
     ;
 
@@ -28,7 +31,7 @@ FunctionBody: LBRACE Declaration_ Statement_ RBRACE {}
 FunctionDeclaration: TypeSpec FunctionDeclarator SEMI {}
     ;
 
-FunctionDeclarator: AST_ ID LPAR ParameterList RPAR {}
+FunctionDeclarator: Ast_ ID LPAR ParameterList RPAR {}
     ;
 
 ParameterList: ParameterDeclaration ParameterDeclaration_ {}
@@ -37,14 +40,14 @@ ParameterList: ParameterDeclaration ParameterDeclaration_ {}
 ParameterDeclaration: TypeSpec Ast_ IdOptional {}
     ;
 
-ParameterDeclaration_: epsilon {}
+ParameterDeclaration_: Epsilon {}
     | ParameterDeclaration_ COMMA ParameterDeclaration {}
     ;
 
 Declaration: TypeSpec Declarator Declarator_ SEMI {}
     ;
 
-Declaration_: epsilon {}
+Declaration_: Epsilon {}
     | Declaration_ Declaration {}
     ;
 
@@ -56,11 +59,11 @@ TypeSpec: CHAR {}
 Declarator: Ast_ ID ArrayOptional {}
     ;
 
-ArrayOptional: epsilon {}
+ArrayOptional: Epsilon {}
     | LSQ INTLIT RSQ {}
     ;
 
-Declarator_: epsilon {}
+Declarator_: Epsilon {}
     | Declarator_ COMMA Declarator {}
     ;
 
@@ -81,11 +84,11 @@ Expr: Expr Operator Expr {}
     | LPAR Expr RPAR
     ;
 
-ExpressionsOptional: epsilon {}
+ExpressionsOptional: Epsilon {}
     | Expr Expr_
     ;
     
-Expr_: epsilon {}
+Expr_: Epsilon {}
     | Expr_ COMMA Expr {}
     ;
     
@@ -106,23 +109,23 @@ Operator: ASSIGN
     | MOD
     ;
 
-ElseOptional: epsilon {}
-    | ElSE Statement {}
+ElseOptional: Epsilon {}
+    | ELSE Statement {}
     ;
 
-ExprOptional: epsilon {}
+ExprOptional: Epsilon {}
     | Expr {}
     ;
 
-IdOptional: epsilon {}
+IdOptional: Epsilon {}
     | ID {}
     ;
     
-Ast_: epsilon {}
+Ast_: Epsilon {}
     | Ast_ AST {}
     ;
 
-Statement_: epsilon {}
+Statement_: Epsilon {}
     | Statement_ Statement {}
     ;
 %%
