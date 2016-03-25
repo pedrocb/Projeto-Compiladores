@@ -130,12 +130,12 @@ Operator: AMP
     |  NOT
     ;
 
-Factor: Operator Factor
-    | Factor LSQ Subfactor RSQ
+Factor: Operator Factor {}
     | Subfactor
     ;
 
-Subfactor: ID LPAR ExpressionsOptional RPAR
+Subfactor:Subfactor LSQ Expr RSQ {printf("mekie\n");}
+    | ID LPAR ExpressionsOptional RPAR  
     | ID
     | INTLIT
     | CHRLIT
@@ -145,12 +145,14 @@ Subfactor: ID LPAR ExpressionsOptional RPAR
 
 
 ExpressionsOptional: Epsilon {}
-    | Expr Expr_
+    | Expr
+      //    | Expr Expr_ Not sure if this rule is needed over the above
     ;
 
-Expr_: Epsilon {}
+/*Expr_: Epsilon {}
     | Expr_ COMMA Expr {}
     ;
+*/
 
 ElseOptional: Epsilon {}
     | ELSE Statement {}
