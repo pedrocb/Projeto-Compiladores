@@ -1,6 +1,7 @@
 %{
 	#include <string.h>
 	#include <stdio.h>
+	#include "tree.h"
 	#include "y.tab.h"
 
 	#define COL col += yyleng;

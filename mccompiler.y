@@ -1,6 +1,7 @@
 %{
-#include <stdio.h>
-#include <stdlib.h>
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include "tree.h"
 %}
 
 %token AMP AND ASSIGN AST CHAR COMMA DIV ELSE EQ FOR GE GT IF
@@ -13,11 +14,14 @@
     int number;
     char character;
     char *string;
+    node n;
 }
 
 %token <string> ID STRLIT
 %token <number> INTLIT
-%token <character> CHRLIT SEMI //O semi esta so para teste, depois nao queremos o valor para nada
+%token <character> CHRLIT
+
+%type <n> TypeSpec Declaration
 
 %%
 
@@ -63,16 +67,16 @@ ParameterDeclaration_: Epsilon {}
     | ParameterDeclaration_ COMMA ParameterDeclaration {}
     ;
 
-Declaration: TypeSpec Declarator Declarator_ SEMI {}
+Declaration: TypeSpec Declarator Declarator_ SEMI {$$ = create_node("Declaration"); add_child($$, $1); print_tree($$, 0);}
     ;
 
 Declaration_: Epsilon {}
     | Declaration_ Declaration {}
     ;
 
-TypeSpec: CHAR {}
-    |     INT  {}
-    | 	  VOID {}
+TypeSpec: CHAR {$$ = create_node("Char");}
+    |     INT  {$$ = create_node("Int");}
+    | 	  VOID {$$ = create_node("Void");}
     ;
 
 Declarator: Ast_ ID ArrayOptional {}
@@ -135,7 +139,7 @@ Factor: Operator Factor {}
     ;
 
 Subfactor:Subfactor LSQ Expr RSQ {printf("mekie\n");}
-    | ID LPAR ExpressionsOptional RPAR  
+    | ID LPAR ExpressionsOptional RPAR
     | ID
     | INTLIT
     | CHRLIT
