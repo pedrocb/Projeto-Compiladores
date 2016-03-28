@@ -1,41 +1,13 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include "tree.h"
-
-node create_node(char *name){
-  node n;
-
-  n = (node)malloc(sizeof(struct node_));
-  n->name = strdup(name);
-
-  n->child = NULL;
-  n->brother = NULL;
-
-  return n;
-}
-
-void add_child(node a, node b){
-	if(a->child == NULL){
-		a->child = b;
-	}else{
-
-		node t = a->child;
-		while(t->brother != NULL)
-			t = t->brother;
-
-		t->brother = b;
-	}
-}
-
-void add_brother(node a, node b){
-	a->brother = b;
-}
 
 void print_tree(node n, int depth){
 	for(int i = 0; i < depth; i++)
 		printf("..");
-	printf("%s\n", n->name);
+	printf("%s\n", n->label);
 
 	if(n->child != NULL)
 		print_tree(n->child, depth + 1);
@@ -43,37 +15,30 @@ void print_tree(node n, int depth){
 		print_tree(n->brother, depth);
 }
 
-/*
-int main(){
-	node a = create_node("Program");
-	node b = create_node("ArrayDeclaration");
-	node c = create_node("Char");
-	node d = create_node("Id(buffer)");
-	node e = create_node("IntLit(20)");
-	node f = create_node("FuncDeclaration");
-	node g = create_node("Int");
-	node h = create_node("Id(main)");
-	node i = create_node("ParamList");
-	node j = create_node("ParamDeclaration");
+node add_to_tree(char *label, int n_children, ...){
+  va_list args;
+  va_start(args, n_children);
 
-	add_child(a, b);
-	add_child(b, c);
-	add_child(b, d);
-	add_child(b, e);
-	add_child(a, f);
-	add_child(f, g);
-	add_child(f, h);
-	add_child(f, i);
-	add_child(i, j);
+  //create_node
+  node n;
+  n = (node)malloc(sizeof(struct node_));
+  n->label = strdup(label);
 
 
-	print_tree(a, 0);
+  //add first child
+  if(n_children < 1)
+    return n;
+  n->child = va_arg(args, node);
 
-	return 1;
+  //add brothers
+  if(n_children > 1){
+    node t = n->child;
+    for(int i = 1; i < n_children; i++){
+      t->brother = va_arg(args, node);
+      t = t->brother;
+    }
+  }
+
+  va_end(args);
+  return n;
 }
-*/
-
-/*
-gcc -o main main.c
-./main
-*/

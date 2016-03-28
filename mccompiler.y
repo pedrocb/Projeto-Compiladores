@@ -1,10 +1,14 @@
 %{
   #include <stdio.h>
   #include <stdlib.h>
+  #include <string.h>
+  #include <stdarg.h>
   #include "tree.h"
 
   int yylex(void);
   void yyerror(const char *s);
+
+
 %}
 
 %token AMP AND ASSIGN AST CHAR COMMA DIV ELSE EQ FOR GE GT IF
@@ -27,12 +31,6 @@
 %type <n> TypeSpec Declaration
 
 %%
-
-
- /*
-Test: INTLIT ID SEMI {printf("%d - %s - %c\n", $1, $2, $3);}
-    ;
- */
 
 Start: Block Block_ {printf("Yup\n");}
     ;
@@ -70,16 +68,16 @@ ParameterDeclaration_: Epsilon {}
     | ParameterDeclaration_ COMMA ParameterDeclaration {}
     ;
 
-Declaration: TypeSpec Declarator Declarator_ SEMI {$$ = create_node("Declaration"); add_child($$, $1); print_tree($$, 0);}
+Declaration: TypeSpec Declarator Declarator_ SEMI {$$ = add_to_tree("Declaration", 1, $1); print_tree($$, 0);}
     ;
 
 Declaration_: Epsilon {}
     | Declaration_ Declaration {}
     ;
 
-TypeSpec: CHAR {$$ = create_node("Char");}
-    |     INT  {$$ = create_node("Int");}
-    | 	  VOID {$$ = create_node("Void");}
+TypeSpec: CHAR {$$ = add_to_tree("Char", 0);}
+    |     INT  {$$ = add_to_tree("Int", 0);}
+    | 	  VOID {$$ = add_to_tree("Void", 0);}
     ;
 
 Declarator: Ast_ ID ArrayOptional {}
