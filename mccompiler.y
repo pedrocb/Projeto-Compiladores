@@ -2,6 +2,9 @@
   #include <stdio.h>
   #include <stdlib.h>
   #include "tree.h"
+
+  int yylex(void);
+  void yyerror(const char *s);
 %}
 
 %token AMP AND ASSIGN AST CHAR COMMA DIV ELSE EQ FOR GE GT IF
