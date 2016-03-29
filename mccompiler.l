@@ -100,7 +100,7 @@ STRINV (\\.|{STRANY})*
 {RETURN}		{PRINT("RETURN\n"); COL; return RETURN;}
 {RPAR} 			{PRINT("RPAR\n"); COL; return RPAR;}
 {RSQ} 			{PRINT("RSQ\n"); COL; return RSQ;}
-{SEMI} 			{PRINT("SEMI\n"); COL; yylval.character = yytext[0]; return SEMI;}
+{SEMI} 			{PRINT("SEMI\n"); COL; return SEMI;}
 {RESERVED} 	{PRINT("RESERVED(%s)\n",yytext); COL; return RESERVED;}
 {VOID} 			{PRINT("VOID\n"); COL; return VOID;}
 
@@ -119,11 +119,11 @@ STRINV (\\.|{STRANY})*
 <COMMENT><<EOF>>	{BEGIN 0; printf("Line %d, col %d: unterminated comment\n", state_line, state_col); COL;}
 
 
-\'{CHRLIT}\'			{PRINT("CHRLIT(%s)\n", yytext); COL;}
+\'{CHRLIT}\'			{PRINT("CHRLIT(%s)\n", yytext); COL; yylval.string = strdup(yytext); return CHRLIT;}
 \'{CHRUNT}				{printf("Line %d, col %d: unterminated char constant\n", line, col); COL;}
 \'{CHRINV}\'			{printf("Line %d, col %d: invalid char constant (%s)\n", line, col, yytext); COL;}
 
-\"{STRLIT}\"			{PRINT("STRLIT(%s)\n", yytext); COL;}
+\"{STRLIT}\"			{PRINT("STRLIT(%s)\n", yytext); COL; yylval.string = strdup(yytext); return STRLIT;}
 \"{STRUNT}				{printf("Line %d, col %d: unterminated string constant\n", line, col); COL;}
 \"{STRINV}\"			{printf("Line %d, col %d: invalid string constant (%s)\n", line, col, yytext); COL;}
 
@@ -145,5 +145,5 @@ int yywrap(){
 }
 
 void yyerror (const char *s) {
-     printf ("%s: %s\n", s, yytext);
+	printf ("Line %d, col %d: %s: %s\n", line, col, s, yytext);
 }

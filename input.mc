@@ -1,5 +1,6 @@
 int main(void){
-  int a;
-  a = 20;
+  char a;
+  a "yo"
+  a = '\\';
   return 1;
 }

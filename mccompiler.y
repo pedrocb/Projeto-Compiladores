@@ -19,20 +19,20 @@
 
 %union{
     int number;
-    char character;
     char *string;
     node n;
 }
 
-%token <string> ID STRLIT
+%token <string> ID STRLIT CHRLIT
 %token <number> INTLIT
-%token <character> CHRLIT
 
 %type <n> TypeSpec Declaration
 
+%expect 1
+
 %%
 
-Start: Block Block_ {printf("Yup\n");}
+Start: Block Block_ {}
     ;
 
 Epsilon: {};
@@ -68,16 +68,16 @@ ParameterDeclaration_: Epsilon {}
     | ParameterDeclaration_ COMMA ParameterDeclaration {}
     ;
 
-Declaration: TypeSpec Declarator Declarator_ SEMI {$$ = add_to_tree("Declaration", 1, $1); print_tree($$, 0);}
+Declaration: TypeSpec Declarator Declarator_ SEMI {}
     ;
 
 Declaration_: Epsilon {}
     | Declaration_ Declaration {}
     ;
 
-TypeSpec: CHAR {$$ = add_to_tree("Char", 0);}
-    |     INT  {$$ = add_to_tree("Int", 0);}
-    | 	  VOID {$$ = add_to_tree("Void", 0);}
+TypeSpec: CHAR {}
+    |     INT  {}
+    | 	  VOID {}
     ;
 
 Declarator: Ast_ ID ArrayOptional {}
@@ -98,8 +98,11 @@ Statement: ExprOptional SEMI {}
     | RETURN ExprOptional SEMI {}
     ;
 
-Expr: SingleExpr ASSIGN Expr {}
-    | Expr COMMA SingleExpr {}
+Expr: CommaExpr ASSIGN Expr {}
+    | CommaExpr {}
+    ;
+
+CommaExpr: CommaExpr COMMA SingleExpr {}
     | SingleExpr {}
     ;
 
@@ -139,12 +142,12 @@ Factor: Operator Factor {}
     | Subfactor
     ;
 
-Subfactor:Subfactor LSQ Expr RSQ {printf("mekie\n");}
+Subfactor:Subfactor LSQ Expr RSQ {}
     | ID LPAR ExpressionsOptional RPAR
     | ID
     | INTLIT
-    | CHRLIT
-    | STRLIT
+    | CHRLIT {printf("%s\n", $1);}
+    | STRLIT {printf("%s\n", $1);}
     | LPAR Expr RPAR
     ;
 
