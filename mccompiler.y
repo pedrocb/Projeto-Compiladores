@@ -50,6 +50,7 @@ FunctionDefinition: TypeSpec FunctionDeclarator FunctionBody {}
     ;
 
 FunctionBody: LBRACE Declaration_ Statement_ RBRACE {}
+    | LBRACE error RBRACE {}
     ;
 
 FunctionDeclaration: TypeSpec FunctionDeclarator SEMI {}
@@ -69,6 +70,7 @@ ParameterDeclaration_: Epsilon {}
     ;
 
 Declaration: TypeSpec Declarator Declarator_ SEMI {}
+    | error SEMI {}
     ;
 
 Declaration_: Epsilon {}
@@ -91,15 +93,22 @@ Declarator_: Epsilon {}
     | Declarator_ COMMA Declarator {}
     ;
 
-Statement: ExprOptional SEMI {}
-    | LBRACE Statement_ RBRACE {}
-    | IF LPAR Expr RPAR Statement ElseOptional {}
-    | FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement {}
-    | RETURN ExprOptional SEMI {}
+Statement: error SEMI {}
+    | LBRACE error RBRACE {}
+    | GoodStatement {}
     ;
+
+GoodStatement: ExprOptional SEMI {}
+    | LBRACE Statement_ RBRACE {}
+    | IF LPAR Expr RPAR GoodStatement ElseOptional {}
+    | FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR GoodStatement {}
+    | RETURN ExprOptional SEMI {}
+
 
 Expr: CommaExpr ASSIGN Expr {}
     | CommaExpr {}
+    | ID LPAR error RPAR {}
+    | LPAR error RPAR {}
     ;
 
 CommaExpr: CommaExpr COMMA SingleExpr {}
@@ -179,7 +188,7 @@ Ast_: Epsilon {}
     ;
 
 Statement_: Epsilon {}
-    | Statement_ Statement {}
+    | Statement_ GoodStatement {}
     ;
 
 %%
