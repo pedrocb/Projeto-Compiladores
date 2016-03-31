@@ -28,7 +28,8 @@
 
 %type <n> TypeSpec Declaration
 
-%expect 1
+%nonassoc IFCENAS
+%nonassoc ELSE
 
 %%
 
@@ -100,10 +101,14 @@ Statement: error SEMI {}
 
 GoodStatement: ExprOptional SEMI {}
     | LBRACE Statement_ RBRACE {}
-    | IF LPAR Expr RPAR GoodStatement ElseOptional {}
+    | IfElseStatement {}
     | FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR GoodStatement {}
     | RETURN ExprOptional SEMI {}
+    ;
 
+IfElseStatement: IF LPAR Expr RPAR GoodStatement %prec IFCENAS {}
+    | IF LPAR Expr RPAR GoodStatement ELSE GoodStatement {}
+    ;
 
 Expr: CommaExpr ASSIGN Expr {}
     | CommaExpr {}
@@ -171,10 +176,6 @@ ExpressionsOptional: Epsilon {}
     ;
 */
 
-ElseOptional: Epsilon {}
-    | ELSE Statement {}
-    ;
-
 ExprOptional: Epsilon {}
     | Expr {}
     ;
@@ -188,7 +189,7 @@ Ast_: Epsilon {}
     ;
 
 Statement_: Epsilon {}
-    | Statement_ GoodStatement {}
+    | Statement_ Statement {}
     ;
 
 %%
