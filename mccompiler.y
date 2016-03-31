@@ -41,7 +41,7 @@ Epsilon: {};
 Block: FunctionDefinition {}
     |  FunctionDeclaration {}
     |  Declaration {}
-;
+    ;
 
 Block_: Epsilon {}
     |  Block_ Block {}
@@ -50,7 +50,10 @@ Block_: Epsilon {}
 FunctionDefinition: TypeSpec FunctionDeclarator FunctionBody {}
     ;
 
-FunctionBody: LBRACE Declaration_ Statement_ RBRACE {}
+FunctionBody: LBRACE Declaration Declaration_ GoodStatement Statement_ RBRACE {}
+    | LBRACE GoodStatement Statement_ RBRACE {}
+    | LBRACE Declaration Declaration_ RBRACE {}
+    | LBRACE RBRACE {}
     | LBRACE error RBRACE {}
     ;
 
@@ -94,20 +97,28 @@ Declarator_: Epsilon {}
     | Declarator_ COMMA Declarator {}
     ;
 
-Statement: error SEMI {}
-    | LBRACE error RBRACE {}
+Statement_: Epsilon {}
+    | Statement_ Statement {}
+    ;
+
+Statement: BadStatement {}
     | GoodStatement {}
     ;
 
 GoodStatement: ExprOptional SEMI {}
     | LBRACE Statement_ RBRACE {}
     | IfElseStatement {}
-    | FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR GoodStatement {}
+    | FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement {}
     | RETURN ExprOptional SEMI {}
+    | LBRACE error RBRACE {}
     ;
 
-IfElseStatement: IF LPAR Expr RPAR GoodStatement %prec IFCENAS {}
-    | IF LPAR Expr RPAR GoodStatement ELSE GoodStatement {}
+BadStatement: error SEMI {}
+    ;
+
+
+IfElseStatement: IF LPAR Expr RPAR Statement %prec IFCENAS {}
+    | IF LPAR Expr RPAR Statement ELSE Statement {}
     ;
 
 Expr: CommaExpr ASSIGN Expr {}
@@ -186,10 +197,6 @@ IdOptional: Epsilon {}
 
 Ast_: Epsilon {}
     | Ast_ AST {}
-    ;
-
-Statement_: Epsilon {}
-    | Statement_ Statement {}
     ;
 
 %%
