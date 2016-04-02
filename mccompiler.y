@@ -24,7 +24,9 @@
 
 %token <string> ID STRLIT CHRLIT INTLIT
 
-%type <n> TypeSpec Declaration AMP AST PLUS MINUS NOT Operator Subfactor Expr Start Block Block_ CommaExpr Factor Term ComparationExpr BinaryExpr SingleExpr ExprOptional GoodStatement
+%type <n> TypeSpec Operator Subfactor Expr Start Block Block_ CommaExpr Factor Term ComparationExpr BinaryExpr SingleExpr ExprOptional
+%type <n> Declaration Declaration_
+%type <n> Statement GoodStatement Statement_
 
 %nonassoc IFCENAS
 %nonassoc ELSE
@@ -32,7 +34,7 @@
 %%
 
 
-Start: Block Block_ {print_tree(add_to_tree("Program",2,$1,$2),0);}
+Start: Block Block_ {}
     ;
 
 Epsilon: {};
@@ -42,7 +44,7 @@ Block: FunctionDefinition {}
     |  Declaration {$$ = add_to_tree("Declaration",NULL,0);}
     ;
 
-Block_: Epsilon {$$ = NULL}
+Block_: Epsilon {$$ = NULL;}
     | Block Block_ {$$ = add_brother($1, $2);}
     ;
 
@@ -76,13 +78,13 @@ Declaration: TypeSpec Declarator Declarator_ SEMI {}
     | error SEMI {}
     ;
 
-Declaration_: Epsilon {$$ = NULL}
+Declaration_: Epsilon {$$ = NULL;}
     | Declaration Declaration_ {$$ = add_brother($1, $2);}
     ;
 
 TypeSpec: CHAR {$$ = add_to_tree("Char",NULL,0);}
     |     INT  {$$ = add_to_tree("Int",NULL,0);}
-| 	  VOID {$$ = add_to_tree("Void",NULL,0);}
+    | 	  VOID {$$ = add_to_tree("Void",NULL,0);}
     ;
 
 Declarator: Ast_ ID ArrayOptional {}
@@ -96,7 +98,7 @@ Declarator_: Epsilon {}
     | Declarator_ COMMA Declarator {}
     ;
 
-Statement_: Epsilon {$$ = NULL}
+Statement_: Epsilon {$$ = NULL;}
     | Statement Statement_ {$$ = add_brother($1, $2);}
     ;
 
