@@ -117,8 +117,8 @@ IfElseStatement: IF LPAR Expr RPAR Statement %prec IFCENAS {}
     | IF LPAR Expr RPAR Statement ELSE Statement {}
     ;
 
-Expr: CommaExpr ASSIGN Expr {$$ = add_to_tree("Store",NULL,2,$1,$3);}
-    | CommaExpr {$$ = $1;print_tree($$,0);}
+Expr: CommaExpr ASSIGN Expr {$$ = add_to_tree("Store",NULL,2,$1,$3);print_tree($$,0);}
+    | CommaExpr {$$ = $1;}
     | ID LPAR error RPAR {}
     | LPAR error RPAR {}
     ;
@@ -139,7 +139,7 @@ CommaExpr: CommaExpr COMMA SingleExpr {$$ = add_to_tree("Comma",NULL,2,$1,$3);}
     ;
 
 SingleExpr: SingleExpr AND BinaryExpr {$$ = add_to_tree("And",NULL,2,$1,$3);}
-| SingleExpr OR BinaryExpr {$$ = add_to_tree("Or",NULL,2,$1,$3);}
+    | SingleExpr OR BinaryExpr {$$ = add_to_tree("Or",NULL,2,$1,$3);}
     | BinaryExpr {$$ = $1;}
     ;
 
@@ -153,7 +153,7 @@ BinaryExpr: BinaryExpr EQ ComparationExpr {$$ = add_to_tree("Eq",NULL,2,$1,$3);}
     ;
 
 ComparationExpr : ComparationExpr PLUS Term {$$ = add_to_tree("Add",NULL,2,$1,$3);}
-| ComparationExpr MINUS Term {$$ = add_to_tree("Sub",NULL,2,$1,$3);}
+    | ComparationExpr MINUS Term {$$ = add_to_tree("Sub",NULL,2,$1,$3);}
     | Term {$$ = $1;}
     ;
 
@@ -170,11 +170,11 @@ Operator: AMP {$$ = add_to_tree("Addr",NULL,0);}
     |  NOT {$$ = add_to_tree("Not",NULL,0);}
     ;
 
-Factor: Operator Factor {}
+Factor: Operator Factor {$$ = $1;}
     | Subfactor {$$ = $1;}
     ;
 
-Subfactor:Subfactor LSQ Expr RSQ {}
+Subfactor:Subfactor LSQ Expr RSQ {$$ = add_to_tree("Add",NULL,2,$1,$3);}
     | ID LPAR ListExprOptional RPAR {}
     | ID {$$ = add_to_tree("Id",$1,0);}
     | INTLIT {$$ = add_to_tree("IntLit",$1,0);}

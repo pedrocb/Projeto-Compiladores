@@ -1750,13 +1750,13 @@ yyreduce:
 
   case 46:
 #line 120 "mccompiler.y" /* yacc.c:1646  */
-    {(yyval.n) = add_to_tree("Store",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));}
+    {(yyval.n) = add_to_tree("Store",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));print_tree((yyval.n),0);}
 #line 1755 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
 #line 121 "mccompiler.y" /* yacc.c:1646  */
-    {(yyval.n) = (yyvsp[0].n);print_tree((yyval.n),0);}
+    {(yyval.n) = (yyvsp[0].n);}
 #line 1761 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1954,7 +1954,7 @@ yyreduce:
 
   case 80:
 #line 173 "mccompiler.y" /* yacc.c:1646  */
-    {}
+    {(yyval.n) = (yyvsp[-1].n);}
 #line 1959 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1966,7 +1966,7 @@ yyreduce:
 
   case 82:
 #line 177 "mccompiler.y" /* yacc.c:1646  */
-    {}
+    {(yyval.n) = add_to_tree("Add",NULL,2,(yyvsp[-3].n),(yyvsp[-1].n));}
 #line 1971 "y.tab.c" /* yacc.c:1646  */
     break;
 
