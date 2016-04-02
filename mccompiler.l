@@ -111,7 +111,7 @@ STRINV (\\.|{STRANY})*
 
 
 {ID} 							{PRINT("ID(%s)\n",yytext); COL; yylval.string = strdup(yytext); return ID;}
-{INTLIT} 					{PRINT("INTLIT(%s)\n",yytext); COL; yylval.number = atoi(yytext); return INTLIT;}
+{INTLIT} 					{PRINT("INTLIT(%s)\n",yytext); COL; yylval.string = yytext; return INTLIT;}
 
 "/*" 							{BEGIN COMMENT; state_line=line; state_col=col; COL;}
 <COMMENT>"*/"			{BEGIN 0; COL;}

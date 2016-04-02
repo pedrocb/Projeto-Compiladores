@@ -18,14 +18,13 @@
 
 
 %union{
-    int number;
     char *string;
     node n;
 }
 
 %token <string> ID STRLIT CHRLIT INTLIT 
 
-%type <n> TypeSpec Declaration AMP AST PLUS MINUS NOT Operator Subfactor Expr Start Block Block_
+%type <n> TypeSpec Declaration AMP AST PLUS MINUS NOT Operator Subfactor Expr Start Block Block_ CommaExpr Factor Term ComparationExpr BinaryExpr SingleExpr ExprOptional GoodStatement
 
 %nonassoc IFCENAS
 %nonassoc ELSE
@@ -33,7 +32,7 @@
 %%
 
 
-Start: Block Block_ {print_tree(add_to_tree("Program",1,$1),0);}
+Start: Block Block_ {/*print_tree(add_to_tree("Program",1,$1),0);*/}
     ;
 
 Epsilon: {};
@@ -105,7 +104,7 @@ Statement: error SEMI {}
     | GoodStatement {}
     ;
 
-GoodStatement: ExprOptional SEMI {}
+GoodStatement: ExprOptional SEMI {$$ = $1;}
     | LBRACE GoodStatement Statement_ RBRACE {}
     | IfElseStatement {}
     | FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement {}
@@ -119,7 +118,7 @@ IfElseStatement: IF LPAR Expr RPAR Statement %prec IFCENAS {}
     ;
 
 Expr: CommaExpr ASSIGN Expr {$$ = add_to_tree("Store",2,$1,$3);}
-    | CommaExpr {$$ = $1;}
+    | CommaExpr {$$ = $1;print_tree($$,0);}
     | ID LPAR error RPAR {}
     | LPAR error RPAR {}
     ;
@@ -135,8 +134,8 @@ Expr_without_comma_: Epsilon {}
     ;
 
 
-CommaExpr: CommaExpr COMMA SingleExpr {}
-    | SingleExpr {}
+CommaExpr: CommaExpr COMMA SingleExpr {$$ = add_to_tree("Comma",2,$1,$3);}
+    | SingleExpr {$$ = $1;}
     ;
 
 SingleExpr: SingleExpr AND BinaryExpr {$$ = add_to_tree("And",2,$1,$3);}
@@ -153,15 +152,15 @@ BinaryExpr: BinaryExpr EQ ComparationExpr {$$ = add_to_tree("Eq",2,$1,$3);}
     | ComparationExpr {$$ = $1;}
     ;
 
-ComparationExpr : ComparationExpr PLUS Term {}
-    | ComparationExpr MINUS Term {}
-    | Term {}
+ComparationExpr : ComparationExpr PLUS Term {$$ = add_to_tree("Add",2,$1,$3);}
+    | ComparationExpr MINUS Term {$$ = add_to_tree("Sub",2,$1,$3);}
+    | Term {$$ = $1;}
     ;
 
-Term: Factor AST Term {}
-    | Factor DIV Term {}
-    | Factor MOD Term {}
-    | Factor {}
+Term: Factor AST Term {$$ = add_to_tree("Mul",2,$1,$3);}
+    | Factor DIV Term {$$ = add_to_tree("Div",2,$1,$3);}
+    | Factor MOD Term {$$ = add_to_tree("Mod",2,$1,$3);}
+    | Factor {$$ = $1;}
     ;
 
 Operator: AMP {$$ = add_to_tree("Addr",0);}
@@ -172,24 +171,24 @@ Operator: AMP {$$ = add_to_tree("Addr",0);}
     ;
 
 Factor: Operator Factor {}
-    | Subfactor {}
+    | Subfactor {$$ = $1;}
     ;
 
 Subfactor:Subfactor LSQ Expr RSQ {}
     | ID LPAR ListExprOptional RPAR {}
     | ID {$$ = add_to_tree(strcat(strcat("Id(",$1),")"),0);}
-    | INTLIT {$$ = add_to_tree(strcat(strcat("IntLit(",$1),")"),0);}
+| INTLIT {$$ = add_to_tree($1,0);}
     | CHRLIT {$$ = add_to_tree(strcat(strcat("ChrLit(",$1),")"),0);}
     | STRLIT {$$ = add_to_tree(strcat(strcat("StrLit(",$1),")"),0);}
-    | LPAR Expr RPAR {}
+    | LPAR Expr RPAR {$$ = $2;}
     ;
 
 ListExprOptional: Epsilon {}
     | Expr_without_comma Expr_without_comma_ {}
 
 
-ExprOptional: Epsilon {}
-    | Expr {}
+ExprOptional: Epsilon {$$ = add_to_tree("Null",0);}
+    | Expr {$$ = $1;}
     ;
 
 IdOptional: Epsilon {}
