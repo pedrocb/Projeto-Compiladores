@@ -161,5 +161,5 @@ int yywrap(){
 }
 
 void yyerror (const char *s) {
-	printf ("Line %d, col %d: %s: %s\n", line, col, s, yytext);
+	printf ("Line %d, col %d: %s: %s\n", line, col - (int)yyleng, s, yytext);
 }
