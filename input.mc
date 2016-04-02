@@ -1,4 +1,3 @@
-int main(int argc, char **argv){
-   a++;
-    
+int main(void){
+  2+2*3+1;
 }
