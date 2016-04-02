@@ -6,7 +6,7 @@
 
 void print_tree(node n, int depth){
 	for(int i = 0; i < depth; i++)
-		printf("..");
+	     printf("..");
 	printf("%s\n", n->label);
 
 	if(n->child != NULL)
