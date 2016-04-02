@@ -1,5 +1,3 @@
 int main(void){
-  a = a[*b + 2];
+  a = atoi(argv[1]);
 }
-
-a = *(a + (*b +2))

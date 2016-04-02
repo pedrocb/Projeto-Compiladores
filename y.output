@@ -83,7 +83,7 @@ Grammar
    52                   | SingleExpr ASSIGN Expr_without_comma
 
    53 Expr_without_comma_: Epsilon
-   54                    | Expr_without_comma_ COMMA Expr_without_comma
+   54                    | COMMA Expr_without_comma
 
    55 CommaExpr: CommaExpr COMMA SingleExpr
    56          | SingleExpr
@@ -231,7 +231,7 @@ Expr (62)
 Expr_without_comma (63)
     on left: 49 50 51 52, on right: 52 54 88
 Expr_without_comma_ (64)
-    on left: 53 54, on right: 54 88
+    on left: 53 54, on right: 88
 CommaExpr (65)
     on left: 55 56, on right: 45 46 55
 SingleExpr (66)
@@ -1972,10 +1972,12 @@ State 124
 
    88 ListExprOptional: Expr_without_comma . Expr_without_comma_
 
+    COMMA  shift, and go to state 161
+
     $default  reduce using rule 2 (Epsilon)
 
-    Epsilon              go to state 161
-    Expr_without_comma_  go to state 162
+    Epsilon              go to state 162
+    Expr_without_comma_  go to state 163
 
 
 State 125
@@ -1986,7 +1988,7 @@ State 125
    58           | SingleExpr . OR BinaryExpr
 
     AND     shift, and go to state 92
-    ASSIGN  shift, and go to state 163
+    ASSIGN  shift, and go to state 164
     OR      shift, and go to state 93
 
     $default  reduce using rule 51 (Expr_without_comma)
@@ -1996,7 +1998,7 @@ State 126
 
    81 Subfactor: ID LPAR ListExprOptional . RPAR
 
-    RPAR  shift, and go to state 164
+    RPAR  shift, and go to state 165
 
 
 State 127
@@ -2037,7 +2039,7 @@ State 129
     SEMI    reduce using rule 2 (Epsilon)
 
     Epsilon          go to state 86
-    Statement_       go to state 165
+    Statement_       go to state 166
     Statement        go to state 88
     GoodStatement    go to state 89
     IfElseStatement  go to state 48
@@ -2255,7 +2257,7 @@ State 149
 
    80 Subfactor: Subfactor LSQ Expr . RSQ
 
-    RSQ  shift, and go to state 166
+    RSQ  shift, and go to state 167
 
 
 State 150
@@ -2277,7 +2279,7 @@ State 152
    16 ParameterList: ParameterDeclaration ParameterDeclaration_ .
    19 ParameterDeclaration_: ParameterDeclaration_ . COMMA ParameterDeclaration
 
-    COMMA  shift, and go to state 167
+    COMMA  shift, and go to state 168
 
     $default  reduce using rule 16 (ParameterList)
 
@@ -2288,12 +2290,12 @@ State 153
    94 Ast_: Ast_ . AST
 
     AST  shift, and go to state 26
-    ID   shift, and go to state 168
+    ID   shift, and go to state 169
 
     $default  reduce using rule 2 (Epsilon)
 
-    Epsilon     go to state 169
-    IdOptional  go to state 170
+    Epsilon     go to state 170
+    IdOptional  go to state 171
 
 
 State 154
@@ -2329,7 +2331,7 @@ State 155
     Term             go to state 54
     Factor           go to state 55
     Subfactor        go to state 56
-    ExprOptional     go to state 171
+    ExprOptional     go to state 172
 
 
 State 156
@@ -2356,7 +2358,7 @@ State 156
     SEMI  reduce using rule 2 (Epsilon)
 
     Epsilon          go to state 44
-    Statement        go to state 172
+    Statement        go to state 173
     GoodStatement    go to state 89
     IfElseStatement  go to state 48
     Expr             go to state 49
@@ -2388,7 +2390,7 @@ State 159
 
    50 Expr_without_comma: LPAR error . RPAR
 
-    RPAR  shift, and go to state 173
+    RPAR  shift, and go to state 174
 
 
 State 160
@@ -2396,7 +2398,7 @@ State 160
    49 Expr_without_comma: ID LPAR . error RPAR
    81 Subfactor: ID LPAR . ListExprOptional RPAR
 
-    error   shift, and go to state 174
+    error   shift, and go to state 175
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
     LPAR    shift, and go to state 121
@@ -2423,24 +2425,7 @@ State 160
 
 State 161
 
-   53 Expr_without_comma_: Epsilon .
-
-    $default  reduce using rule 53 (Expr_without_comma_)
-
-
-State 162
-
-   54 Expr_without_comma_: Expr_without_comma_ . COMMA Expr_without_comma
-   88 ListExprOptional: Expr_without_comma Expr_without_comma_ .
-
-    COMMA  shift, and go to state 175
-
-    $default  reduce using rule 88 (ListExprOptional)
-
-
-State 163
-
-   52 Expr_without_comma: SingleExpr ASSIGN . Expr_without_comma
+   54 Expr_without_comma_: COMMA . Expr_without_comma
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -2462,94 +2447,23 @@ State 163
     Subfactor           go to state 56
 
 
+State 162
+
+   53 Expr_without_comma_: Epsilon .
+
+    $default  reduce using rule 53 (Expr_without_comma_)
+
+
+State 163
+
+   88 ListExprOptional: Expr_without_comma Expr_without_comma_ .
+
+    $default  reduce using rule 88 (ListExprOptional)
+
+
 State 164
 
-   81 Subfactor: ID LPAR ListExprOptional RPAR .
-
-    $default  reduce using rule 81 (Subfactor)
-
-
-State 165
-
-    9 FunctionBody: LBRACE Declaration Declaration_ GoodStatement Statement_ . RBRACE
-
-    RBRACE  shift, and go to state 177
-
-
-State 166
-
-   80 Subfactor: Subfactor LSQ Expr RSQ .
-
-    $default  reduce using rule 80 (Subfactor)
-
-
-State 167
-
-   19 ParameterDeclaration_: ParameterDeclaration_ COMMA . ParameterDeclaration
-
-    CHAR  shift, and go to state 2
-    INT   shift, and go to state 3
-    VOID  shift, and go to state 4
-
-    ParameterDeclaration  go to state 178
-    TypeSpec              go to state 110
-
-
-State 168
-
-   92 IdOptional: ID .
-
-    $default  reduce using rule 92 (IdOptional)
-
-
-State 169
-
-   91 IdOptional: Epsilon .
-
-    $default  reduce using rule 91 (IdOptional)
-
-
-State 170
-
-   17 ParameterDeclaration: TypeSpec Ast_ IdOptional .
-
-    $default  reduce using rule 17 (ParameterDeclaration)
-
-
-State 171
-
-   39 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional . SEMI ExprOptional RPAR Statement
-
-    SEMI  shift, and go to state 179
-
-
-State 172
-
-   43 IfElseStatement: IF LPAR Expr RPAR Statement .
-   44                | IF LPAR Expr RPAR Statement . ELSE Statement
-
-    ELSE  shift, and go to state 180
-
-    $default  reduce using rule 43 (IfElseStatement)
-
-
-State 173
-
-   50 Expr_without_comma: LPAR error RPAR .
-
-    $default  reduce using rule 50 (Expr_without_comma)
-
-
-State 174
-
-   49 Expr_without_comma: ID LPAR error . RPAR
-
-    RPAR  shift, and go to state 181
-
-
-State 175
-
-   54 Expr_without_comma_: Expr_without_comma_ COMMA . Expr_without_comma
+   52 Expr_without_comma: SingleExpr ASSIGN . Expr_without_comma
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -2562,7 +2476,7 @@ State 175
     CHRLIT  shift, and go to state 42
     INTLIT  shift, and go to state 43
 
-    Expr_without_comma  go to state 182
+    Expr_without_comma  go to state 177
     SingleExpr          go to state 125
     BinaryExpr          go to state 52
     ComparationExpr     go to state 53
@@ -2571,28 +2485,120 @@ State 175
     Subfactor           go to state 56
 
 
+State 165
+
+   81 Subfactor: ID LPAR ListExprOptional RPAR .
+
+    $default  reduce using rule 81 (Subfactor)
+
+
+State 166
+
+    9 FunctionBody: LBRACE Declaration Declaration_ GoodStatement Statement_ . RBRACE
+
+    RBRACE  shift, and go to state 178
+
+
+State 167
+
+   80 Subfactor: Subfactor LSQ Expr RSQ .
+
+    $default  reduce using rule 80 (Subfactor)
+
+
+State 168
+
+   19 ParameterDeclaration_: ParameterDeclaration_ COMMA . ParameterDeclaration
+
+    CHAR  shift, and go to state 2
+    INT   shift, and go to state 3
+    VOID  shift, and go to state 4
+
+    ParameterDeclaration  go to state 179
+    TypeSpec              go to state 110
+
+
+State 169
+
+   92 IdOptional: ID .
+
+    $default  reduce using rule 92 (IdOptional)
+
+
+State 170
+
+   91 IdOptional: Epsilon .
+
+    $default  reduce using rule 91 (IdOptional)
+
+
+State 171
+
+   17 ParameterDeclaration: TypeSpec Ast_ IdOptional .
+
+    $default  reduce using rule 17 (ParameterDeclaration)
+
+
+State 172
+
+   39 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional . SEMI ExprOptional RPAR Statement
+
+    SEMI  shift, and go to state 180
+
+
+State 173
+
+   43 IfElseStatement: IF LPAR Expr RPAR Statement .
+   44                | IF LPAR Expr RPAR Statement . ELSE Statement
+
+    ELSE  shift, and go to state 181
+
+    $default  reduce using rule 43 (IfElseStatement)
+
+
+State 174
+
+   50 Expr_without_comma: LPAR error RPAR .
+
+    $default  reduce using rule 50 (Expr_without_comma)
+
+
+State 175
+
+   49 Expr_without_comma: ID LPAR error . RPAR
+
+    RPAR  shift, and go to state 182
+
+
 State 176
+
+   54 Expr_without_comma_: COMMA Expr_without_comma .
+
+    $default  reduce using rule 54 (Expr_without_comma_)
+
+
+State 177
 
    52 Expr_without_comma: SingleExpr ASSIGN Expr_without_comma .
 
     $default  reduce using rule 52 (Expr_without_comma)
 
 
-State 177
+State 178
 
     9 FunctionBody: LBRACE Declaration Declaration_ GoodStatement Statement_ RBRACE .
 
     $default  reduce using rule 9 (FunctionBody)
 
 
-State 178
+State 179
 
    19 ParameterDeclaration_: ParameterDeclaration_ COMMA ParameterDeclaration .
 
     $default  reduce using rule 19 (ParameterDeclaration_)
 
 
-State 179
+State 180
 
    39 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional SEMI . ExprOptional RPAR Statement
 
@@ -2621,7 +2627,7 @@ State 179
     ExprOptional     go to state 183
 
 
-State 180
+State 181
 
    44 IfElseStatement: IF LPAR Expr RPAR Statement ELSE . Statement
 
@@ -2658,18 +2664,11 @@ State 180
     ExprOptional     go to state 57
 
 
-State 181
+State 182
 
    49 Expr_without_comma: ID LPAR error RPAR .
 
     $default  reduce using rule 49 (Expr_without_comma)
-
-
-State 182
-
-   54 Expr_without_comma_: Expr_without_comma_ COMMA Expr_without_comma .
-
-    $default  reduce using rule 54 (Expr_without_comma_)
 
 
 State 183

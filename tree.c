@@ -55,7 +55,12 @@ node add_to_tree(char *label, char *value, int n_children, ...){
 node add_brother(node a, node b){
 	printf("Brothering:\n");
 	if(a != NULL)
+	    if(a->value != NULL){
+		printf("----A: %s(%s)\n",a->label,a->value);
+	    }
+	    else{
 		printf("----A: %s\n",a->label);
+	    }
 	else
 		printf("----A: NULL\n");
 

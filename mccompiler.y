@@ -24,9 +24,9 @@
 
 %token <string> ID STRLIT CHRLIT INTLIT
 
-%type <n> TypeSpec Subfactor Expr Start Block Block_ CommaExpr Factor Term ComparationExpr BinaryExpr SingleExpr ExprOptional
+%type <n> TypeSpec Subfactor Expr Start Block Block_ CommaExpr Factor Term ComparationExpr BinaryExpr SingleExpr ExprOptional ListExprOptional Expr_without_comma Expr_without_comma_
 %type <n> Declaration Declaration_
-%type <n> Statement GoodStatement Statement_
+%type <n> Statement GoodStatement Statement_ 
 
 %nonassoc IFCENAS
 %nonassoc ELSE
@@ -127,12 +127,12 @@ Expr: CommaExpr ASSIGN Expr {$$ = add_to_tree("Store",NULL,2,$1,$3);print_tree($
 
 Expr_without_comma: ID LPAR error RPAR {}
     | LPAR error RPAR {}
-    | SingleExpr {}
-    | SingleExpr ASSIGN Expr_without_comma {}
+    | SingleExpr {$$ = $1;}
+    | SingleExpr ASSIGN Expr_without_comma {$$ = add_to_tree("Store",NULL,2,$1,$3);print_tree($$,0);}
     ;
 
-Expr_without_comma_: Epsilon {}
-    | Expr_without_comma_ COMMA Expr_without_comma {}
+Expr_without_comma_: Epsilon {$$ = NULL;}
+    | COMMA Expr_without_comma {$$ = $2;}
     ;
 
 
@@ -174,7 +174,7 @@ Factor: AMP Factor {$$ = add_to_tree("Addr",NULL,1,$2);}
     ;
 
 Subfactor:Subfactor LSQ Expr RSQ {node no = add_to_tree("Add",NULL,2,$1,$3); $$ = add_to_tree("Deref",NULL,1,no);}
-    | ID LPAR ListExprOptional RPAR {}
+| ID LPAR ListExprOptional RPAR {node no = add_to_tree("Id",$1,0);$$ = add_to_tree("Call",NULL,2,no,$3);}
     | ID {$$ = add_to_tree("Id",$1,0);}
     | INTLIT {$$ = add_to_tree("IntLit",$1,0);}
     | CHRLIT {$$ = add_to_tree("ChrLit",$1,0);}
@@ -182,11 +182,11 @@ Subfactor:Subfactor LSQ Expr RSQ {node no = add_to_tree("Add",NULL,2,$1,$3); $$ 
     | LPAR Expr RPAR {$$ = $2;}
     ;
 
-ListExprOptional: Epsilon {}
-    | Expr_without_comma Expr_without_comma_ {}
+ListExprOptional: Epsilon {$$ = NULL;}
+    |  Expr_without_comma Expr_without_comma_ {$$ = add_brother($1,$2);}
 
 
-ExprOptional: Epsilon {$$ = add_to_tree("Null",NULL,0);}
+ExprOptional: Epsilon {}
     | Expr {$$ = $1;}
     ;
 
