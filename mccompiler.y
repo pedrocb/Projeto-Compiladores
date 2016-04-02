@@ -23,7 +23,7 @@
     node n;
 }
 
-%token <string> ID STRLIT CHRLIT INTLIT 
+%token <string> ID STRLIT CHRLIT INTLIT
 
 %type <n> TypeSpec Declaration AMP AST PLUS MINUS NOT Operator Subfactor Expr Start Block Block_
 
@@ -33,7 +33,7 @@
 %%
 
 
-Start: Block Block_ {print_tree(add_to_tree("Program",1,$1),0);}
+Start: Block Block_ {print_tree(add_to_tree("Program",2,$1,$2),0);}
     ;
 
 Epsilon: {};
@@ -43,8 +43,8 @@ Block: FunctionDefinition {}
     |  Declaration {$$ = add_to_tree("Declaration",0);}
     ;
 
-Block_: Epsilon {}
-    |  Block_ Block {}
+Block_: Epsilon {$$ = NULL}
+    | Block Block_ {$$ = add_brother($1, $2);}
     ;
 
 FunctionDefinition: TypeSpec FunctionDeclarator FunctionBody {}
@@ -77,8 +77,8 @@ Declaration: TypeSpec Declarator Declarator_ SEMI {}
     | error SEMI {}
     ;
 
-Declaration_: Epsilon {}
-    | Declaration_ Declaration {}
+Declaration_: Epsilon {$$ = NULL}
+    | Declaration Declaration_ {$$ = add_brother($1, $2);}
     ;
 
 TypeSpec: CHAR {$$ = add_to_tree("Char",0);}
@@ -97,8 +97,8 @@ Declarator_: Epsilon {}
     | Declarator_ COMMA Declarator {}
     ;
 
-Statement_: Epsilon {}
-    | Statement_ Statement {}
+Statement_: Epsilon {$$ = NULL}
+    | Statement Statement_ {$$ = add_brother($1, $2);}
     ;
 
 Statement: error SEMI {}
