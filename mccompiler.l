@@ -135,10 +135,10 @@ STRINV (\\.|{STRANY})*
 int main(int argc, char *argv[]){
 
 	if(argc == 2){
-		if(strcmp(argv[1],"-l") == 0){
+		if(strcmp(argv[1],"-1") == 0){
 			yylex();
 		}
-		else if(strcmp(argv[1],"-1") == 0){
+		else if(strcmp(argv[1],"-l") == 0){
 			flag = 1;
 			yylex();
 		}
@@ -152,7 +152,6 @@ int main(int argc, char *argv[]){
 	}
         
 
-
 	return 0;
 }
 
@@ -161,5 +160,7 @@ int yywrap(){
 }
 
 void yyerror (const char *s) {
-	printf ("Line %d, col %d: %s: %s\n", line, col - (int)yyleng, s, yytext);
+	int c = col - (int)yyleng;
+	if(c == 0) c = 1;
+	printf ("Line %d, col %d: %s: %s\n", line, c, s, yytext);
 }
