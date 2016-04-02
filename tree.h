@@ -2,6 +2,7 @@ typedef struct node_{
 	char *label;
 	struct node_ *child;
 	struct node_ *brother;
+        char *value;
 }*node;
 
 void print_tree(node n, int depth);

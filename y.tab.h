@@ -130,11 +130,10 @@ union YYSTYPE
 {
 #line 20 "mccompiler.y" /* yacc.c:1909  */
 
-    int number;
     char *string;
     node n;
 
-#line 138 "y.tab.h" /* yacc.c:1909  */
+#line 137 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
