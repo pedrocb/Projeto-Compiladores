@@ -24,7 +24,7 @@
 
 %token <string> ID STRLIT CHRLIT INTLIT
 
-%type <n> TypeSpec Operator Subfactor Expr Start Block Block_ CommaExpr Factor Term ComparationExpr BinaryExpr SingleExpr ExprOptional
+%type <n> TypeSpec Subfactor Expr Start Block Block_ CommaExpr Factor Term ComparationExpr BinaryExpr SingleExpr ExprOptional
 %type <n> Declaration Declaration_
 %type <n> Statement GoodStatement Statement_
 
@@ -165,18 +165,15 @@ Term: Factor AST Term {$$ = add_to_tree("Mul",NULL,2,$1,$3);}
     | Factor {$$ = $1;}
     ;
 
-Operator: AMP {$$ = add_to_tree("Addr",NULL,0);}
-    |  AST {$$ = add_to_tree("Pointer",NULL,0);}
-    |  PLUS {$$ = add_to_tree("Plus",NULL,0);}
-    |  MINUS {$$ = add_to_tree("Minus",NULL,0);}
-    |  NOT {$$ = add_to_tree("Not",NULL,0);}
+Factor: AMP Factor {$$ = add_to_tree("Addr",NULL,1,$2);}
+    |  AST Factor {$$ = add_to_tree("Deref",NULL,1,$2);}
+    |  PLUS Factor {$$ = add_to_tree("Plus",NULL,1,$2);}
+    |  MINUS Factor {$$ = add_to_tree("Minus",NULL,1,$2);}
+    |  NOT Factor {$$ = add_to_tree("Not",NULL,1,$2);}
+    |  Subfactor {$$ = $1;}
     ;
 
-Factor: Operator Factor {$$ = $1;}
-    | Subfactor {$$ = $1;}
-    ;
-
-Subfactor:Subfactor LSQ Expr RSQ {$$ = add_to_tree("Add",NULL,2,$1,$3);}
+Subfactor:Subfactor LSQ Expr RSQ {node no = add_to_tree("Add",NULL,2,$1,$3); $$ = add_to_tree("Deref",NULL,1,no);}
     | ID LPAR ListExprOptional RPAR {}
     | ID {$$ = add_to_tree("Id",$1,0);}
     | INTLIT {$$ = add_to_tree("IntLit",$1,0);}
