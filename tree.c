@@ -20,7 +20,7 @@ void print_tree(node n, int depth){
 }
 
 node add_to_tree(char *label, char *value, int n_children, ...){
-	printf("Adding %s to tree\n", label);
+    //	printf("Adding %s to tree\n", label);
 
   va_list args;
   va_start(args, n_children);
@@ -53,7 +53,7 @@ node add_to_tree(char *label, char *value, int n_children, ...){
 }
 
 node add_brother(node a, node b){
-	printf("Brothering:\n");
+    /*	printf("Brothering:\n");
 	if(a != NULL)
 	    if(a->value != NULL){
 		printf("----A: %s(%s)\n",a->label,a->value);
@@ -70,7 +70,7 @@ node add_brother(node a, node b){
 		printf("----B: NULL\n");
 
 	//---------------------
-
+	*/
 	if(b == NULL)
 		return a;
 	if(a == NULL)
@@ -82,6 +82,6 @@ node add_brother(node a, node b){
 
 	t->brother = b;
 
-	printf("Finished Brothering\n");
+	//printf("Finished Brothering\n");
 	return a;
 }

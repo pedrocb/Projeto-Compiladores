@@ -1,3 +1,4 @@
 int main(void){
-  a = atoi(argv[1]);
+    for ( ; b > 0 ; )
+	a=2;
 }

@@ -1676,19 +1676,19 @@ yyreduce:
 
   case 36:
 #line 106 "mccompiler.y" /* yacc.c:1646  */
-    {}
+    {(yyval.n) = (yyvsp[0].n);}
 #line 1681 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
 #line 109 "mccompiler.y" /* yacc.c:1646  */
-    {(yyval.n) = (yyvsp[-1].n);}
+    {if(strcmp((yyvsp[-1].n)->label,"Null")==0)(yyval.n)=NULL;else{ printf("Teste\n");(yyval.n) = (yyvsp[-1].n);}}
 #line 1687 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
 #line 110 "mccompiler.y" /* yacc.c:1646  */
-    {}
+    {(yyval.n) = (yyvsp[-2].n);}
 #line 1693 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1700,7 +1700,7 @@ yyreduce:
 
   case 40:
 #line 112 "mccompiler.y" /* yacc.c:1646  */
-    {}
+    {(yyval.n) = add_to_tree("For",NULL,4,(yyvsp[-6].n),(yyvsp[-4].n),(yyvsp[-2].n),(yyvsp[0].n)); print_tree((yyval.n),0);}
 #line 1705 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1736,7 +1736,7 @@ yyreduce:
 
   case 46:
 #line 122 "mccompiler.y" /* yacc.c:1646  */
-    {(yyval.n) = add_to_tree("Store",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));print_tree((yyval.n),0);}
+    {(yyval.n) = add_to_tree("Store",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));/*print_tree($$,0)*/;}
 #line 1741 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1778,7 +1778,7 @@ yyreduce:
 
   case 53:
 #line 131 "mccompiler.y" /* yacc.c:1646  */
-    {(yyval.n) = add_to_tree("Store",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));print_tree((yyval.n),0);}
+    {(yyval.n) = add_to_tree("Store",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));/*print_tree($$,0);*/}
 #line 1783 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -2000,7 +2000,7 @@ yyreduce:
 
   case 90:
 #line 189 "mccompiler.y" /* yacc.c:1646  */
-    {}
+    {(yyval.n) = add_to_tree("Null",NULL,0);}
 #line 2005 "y.tab.c" /* yacc.c:1646  */
     break;
 

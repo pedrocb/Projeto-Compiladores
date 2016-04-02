@@ -103,13 +103,13 @@ Statement_: Epsilon {$$ = NULL;}
     ;
 
 Statement: error SEMI {}
-    | GoodStatement {}
+    | GoodStatement {$$ = $1;}
     ;
 
-GoodStatement: ExprOptional SEMI {$$ = $1;}
-    | LBRACE GoodStatement Statement_ RBRACE {}
+GoodStatement: ExprOptional SEMI {if(strcmp($1->label,"Null")==0)$$=NULL;else{ printf("Teste\n");$$ = $1;}}
+    | LBRACE GoodStatement Statement_ RBRACE {$$ = $2;}
     | IfElseStatement {}
-    | FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement {}
+    | FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement {$$ = add_to_tree("For",NULL,4,$3,$5,$7,$9); print_tree($$,0);}
     | RETURN ExprOptional SEMI {}
     | LBRACE error RBRACE {}
     | LBRACE RBRACE {}
@@ -119,7 +119,7 @@ IfElseStatement: IF LPAR Expr RPAR Statement %prec IFCENAS {}
     | IF LPAR Expr RPAR Statement ELSE Statement {}
     ;
 
-Expr: CommaExpr ASSIGN Expr {$$ = add_to_tree("Store",NULL,2,$1,$3);print_tree($$,0);}
+Expr: CommaExpr ASSIGN Expr {$$ = add_to_tree("Store",NULL,2,$1,$3);/*print_tree($$,0)*/;}
     | CommaExpr {$$ = $1;}
     | ID LPAR error RPAR {}
     | LPAR error RPAR {}
@@ -128,7 +128,7 @@ Expr: CommaExpr ASSIGN Expr {$$ = add_to_tree("Store",NULL,2,$1,$3);print_tree($
 Expr_without_comma: ID LPAR error RPAR {}
     | LPAR error RPAR {}
     | SingleExpr {$$ = $1;}
-    | SingleExpr ASSIGN Expr_without_comma {$$ = add_to_tree("Store",NULL,2,$1,$3);print_tree($$,0);}
+    | SingleExpr ASSIGN Expr_without_comma {$$ = add_to_tree("Store",NULL,2,$1,$3);/*print_tree($$,0);*/}
     ;
 
 Expr_without_comma_: Epsilon {$$ = NULL;}
@@ -186,7 +186,7 @@ ListExprOptional: Epsilon {$$ = NULL;}
     |  Expr_without_comma Expr_without_comma_ {$$ = add_brother($1,$2);}
 
 
-ExprOptional: Epsilon {}
+ExprOptional: Epsilon {$$ = add_to_tree("Null",NULL,0);}
     | Expr {$$ = $1;}
     ;
 
