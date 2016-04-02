@@ -6,16 +6,20 @@
 
 void print_tree(node n, int depth){
 	for(int i = 0; i < depth; i++)
-	     printf("..");
-	printf("%s\n", n->label);
-
+		printf("..");
+	if(n->value != NULL){
+	    printf("%s(%s)\n", n->label,n->value);
+	}
+	else{
+	    printf("%s\n", n->label);
+	}
 	if(n->child != NULL)
 		print_tree(n->child, depth + 1);
 	if(n->brother != NULL)
 		print_tree(n->brother, depth);
 }
 
-node add_to_tree(char *label, int n_children, ...){
+node add_to_tree(char *label, char *value, int n_children, ...){
   va_list args;
   va_start(args, n_children);
 
@@ -23,7 +27,12 @@ node add_to_tree(char *label, int n_children, ...){
   node n;
   n = (node)malloc(sizeof(struct node_));
   n->label = strdup(label);
-
+  if(value == NULL){
+      n->value = value;
+  }
+  else{
+      n->value = strdup(value);
+  }
 
   //add first child
   if(n_children < 1)
@@ -34,21 +43,11 @@ node add_to_tree(char *label, int n_children, ...){
   if(n_children > 1){
     node t = n->child;
     for(int i = 1; i < n_children; i++){
-			node b = va_arg(args, node);
-			add_brother(t, b);
-			t = b;
+      t->brother = va_arg(args, node);
+      t = t->brother;
     }
   }
 
   va_end(args);
   return n;
-}
-
-node add_brother(node a, node b){
-	node t = a;
-	while(t->brother != NULL)
-		t = t->brother;
-
-	t->brother = b;
-	return a;
 }

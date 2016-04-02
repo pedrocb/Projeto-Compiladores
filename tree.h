@@ -11,7 +11,7 @@ node n 					-> where to start
 int depth 			-> aux var for the prints ("..")
 */
 
-node add_to_tree(char *label, int n_children, ...);
+node add_to_tree(char *label, char *value, int n_children, ...);
 /*
 char *label 		-> label to name the new node
 int n_children 	-> number of aux arguments

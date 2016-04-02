@@ -39,7 +39,7 @@ Epsilon: {};
 
 Block: FunctionDefinition {}
     |  FunctionDeclaration {}
-    |  Declaration {$$ = add_to_tree("Declaration",0);}
+    |  Declaration {$$ = add_to_tree("Declaration",NULL,0);}
     ;
 
 Block_: Epsilon {$$ = NULL}
@@ -80,9 +80,9 @@ Declaration_: Epsilon {$$ = NULL}
     | Declaration Declaration_ {$$ = add_brother($1, $2);}
     ;
 
-TypeSpec: CHAR {$$ = add_to_tree("Char",0);}
-    |     INT  {$$ = add_to_tree("Int",0);}
-    | 	  VOID {$$ = add_to_tree("Void",0);}
+TypeSpec: CHAR {$$ = add_to_tree("Char",NULL,0);}
+    |     INT  {$$ = add_to_tree("Int",NULL,0);}
+| 	  VOID {$$ = add_to_tree("Void",NULL,0);}
     ;
 
 Declarator: Ast_ ID ArrayOptional {}
@@ -117,7 +117,7 @@ IfElseStatement: IF LPAR Expr RPAR Statement %prec IFCENAS {}
     | IF LPAR Expr RPAR Statement ELSE Statement {}
     ;
 
-Expr: CommaExpr ASSIGN Expr {$$ = add_to_tree("Store",2,$1,$3);}
+Expr: CommaExpr ASSIGN Expr {$$ = add_to_tree("Store",NULL,2,$1,$3);}
     | CommaExpr {$$ = $1;print_tree($$,0);}
     | ID LPAR error RPAR {}
     | LPAR error RPAR {}
@@ -134,40 +134,40 @@ Expr_without_comma_: Epsilon {}
     ;
 
 
-CommaExpr: CommaExpr COMMA SingleExpr {$$ = add_to_tree("Comma",2,$1,$3);}
+CommaExpr: CommaExpr COMMA SingleExpr {$$ = add_to_tree("Comma",NULL,2,$1,$3);}
     | SingleExpr {$$ = $1;}
     ;
 
-SingleExpr: SingleExpr AND BinaryExpr {$$ = add_to_tree("And",2,$1,$3);}
-    | SingleExpr OR BinaryExpr {$$ = add_to_tree("Or",2,$1,$3);}
+SingleExpr: SingleExpr AND BinaryExpr {$$ = add_to_tree("And",NULL,2,$1,$3);}
+| SingleExpr OR BinaryExpr {$$ = add_to_tree("Or",NULL,2,$1,$3);}
     | BinaryExpr {$$ = $1;}
     ;
 
-BinaryExpr: BinaryExpr EQ ComparationExpr {$$ = add_to_tree("Eq",2,$1,$3);}
-    | BinaryExpr NE ComparationExpr {$$ = add_to_tree("Ne",2,$1,$3);}
-    | BinaryExpr LT ComparationExpr {$$ = add_to_tree("Lt",2,$1,$3);}
-    | BinaryExpr GT ComparationExpr {$$ = add_to_tree("Gt",2,$1,$3);}
-    | BinaryExpr LE ComparationExpr {$$ = add_to_tree("Le",2,$1,$3);}
-    | BinaryExpr GE ComparationExpr {$$ = add_to_tree("Ge",2,$1,$3);}
+BinaryExpr: BinaryExpr EQ ComparationExpr {$$ = add_to_tree("Eq",NULL,2,$1,$3);}
+    | BinaryExpr NE ComparationExpr {$$ = add_to_tree("Ne",NULL,2,$1,$3);}
+    | BinaryExpr LT ComparationExpr {$$ = add_to_tree("Lt",NULL,2,$1,$3);}
+    | BinaryExpr GT ComparationExpr {$$ = add_to_tree("Gt",NULL,2,$1,$3);}
+    | BinaryExpr LE ComparationExpr {$$ = add_to_tree("Le",NULL,2,$1,$3);}
+    | BinaryExpr GE ComparationExpr {$$ = add_to_tree("Ge",NULL,2,$1,$3);}
     | ComparationExpr {$$ = $1;}
     ;
 
-ComparationExpr : ComparationExpr PLUS Term {$$ = add_to_tree("Add",2,$1,$3);}
-    | ComparationExpr MINUS Term {$$ = add_to_tree("Sub",2,$1,$3);}
+ComparationExpr : ComparationExpr PLUS Term {$$ = add_to_tree("Add",NULL,2,$1,$3);}
+| ComparationExpr MINUS Term {$$ = add_to_tree("Sub",NULL,2,$1,$3);}
     | Term {$$ = $1;}
     ;
 
-Term: Factor AST Term {$$ = add_to_tree("Mul",2,$1,$3);}
-    | Factor DIV Term {$$ = add_to_tree("Div",2,$1,$3);}
-    | Factor MOD Term {$$ = add_to_tree("Mod",2,$1,$3);}
+Term: Factor AST Term {$$ = add_to_tree("Mul",NULL,2,$1,$3);}
+    | Factor DIV Term {$$ = add_to_tree("Div",NULL,2,$1,$3);}
+    | Factor MOD Term {$$ = add_to_tree("Mod",NULL,2,$1,$3);}
     | Factor {$$ = $1;}
     ;
 
-Operator: AMP {$$ = add_to_tree("Addr",0);}
-    |  AST {$$ = add_to_tree("Pointer",0);}
-    |  PLUS {$$ = add_to_tree("Plus",0);}
-    |  MINUS {$$ = add_to_tree("Minus",0);}
-    |  NOT {$$ = add_to_tree("Not",0);}
+Operator: AMP {$$ = add_to_tree("Addr",NULL,0);}
+    |  AST {$$ = add_to_tree("Pointer",NULL,0);}
+    |  PLUS {$$ = add_to_tree("Plus",NULL,0);}
+    |  MINUS {$$ = add_to_tree("Minus",NULL,0);}
+    |  NOT {$$ = add_to_tree("Not",NULL,0);}
     ;
 
 Factor: Operator Factor {}
@@ -176,10 +176,10 @@ Factor: Operator Factor {}
 
 Subfactor:Subfactor LSQ Expr RSQ {}
     | ID LPAR ListExprOptional RPAR {}
-    | ID {$$ = add_to_tree(strcat(strcat("Id(",$1),")"),0);}
-| INTLIT {$$ = add_to_tree($1,0);}
-    | CHRLIT {$$ = add_to_tree(strcat(strcat("ChrLit(",$1),")"),0);}
-    | STRLIT {$$ = add_to_tree(strcat(strcat("StrLit(",$1),")"),0);}
+    | ID {$$ = add_to_tree("Id",$1,0);}
+    | INTLIT {$$ = add_to_tree("IntLit",$1,0);}
+    | CHRLIT {$$ = add_to_tree("ChrLit",$1,0);}
+    | STRLIT {$$ = add_to_tree("StrLit",$1,0);}
     | LPAR Expr RPAR {$$ = $2;}
     ;
 
@@ -187,7 +187,7 @@ ListExprOptional: Epsilon {}
     | Expr_without_comma Expr_without_comma_ {}
 
 
-ExprOptional: Epsilon {$$ = add_to_tree("Null",0);}
+ExprOptional: Epsilon {$$ = add_to_tree("Null",NULL,0);}
     | Expr {$$ = $1;}
     ;
 
