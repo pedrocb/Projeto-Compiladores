@@ -101,21 +101,18 @@ Statement_: Epsilon {}
     | Statement_ Statement {}
     ;
 
-Statement: BadStatement {}
+Statement: error SEMI {}
     | GoodStatement {}
     ;
 
 GoodStatement: ExprOptional SEMI {}
-    | LBRACE Statement_ RBRACE {}
+    | LBRACE GoodStatement Statement_ RBRACE {}
     | IfElseStatement {}
     | FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement {}
     | RETURN ExprOptional SEMI {}
     | LBRACE error RBRACE {}
+    | LBRACE RBRACE {}
     ;
-
-BadStatement: error SEMI {}
-    ;
-
 
 IfElseStatement: IF LPAR Expr RPAR Statement %prec IFCENAS {}
     | IF LPAR Expr RPAR Statement ELSE Statement {}
@@ -168,24 +165,13 @@ Factor: Operator Factor {}
     ;
 
 Subfactor:Subfactor LSQ Expr RSQ {}
-    | ID LPAR ExpressionsOptional RPAR
+    | ID LPAR ExprOptional RPAR
     | ID
     | INTLIT
     | CHRLIT {printf("%s\n", $1);}
     | STRLIT {printf("%s\n", $1);}
     | LPAR Expr RPAR
     ;
-
-
-ExpressionsOptional: Epsilon {}
-    | Expr
-      //    | Expr Expr_ Not sure if this rule is needed over the above
-    ;
-
-/*Expr_: Epsilon {}
-    | Expr_ COMMA Expr {}
-    ;
-*/
 
 ExprOptional: Epsilon {}
     | Expr {}
