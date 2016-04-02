@@ -34,11 +34,21 @@ node add_to_tree(char *label, int n_children, ...){
   if(n_children > 1){
     node t = n->child;
     for(int i = 1; i < n_children; i++){
-      t->brother = va_arg(args, node);
-      t = t->brother;
+			node b = va_arg(args, node);
+			add_brother(t, b);
+			t = b;
     }
   }
 
   va_end(args);
   return n;
+}
+
+node add_brother(node a, node b){
+	node t = a;
+	while(t->brother != NULL)
+		t = t->brother;
+
+	t->brother = b;
+	return a;
 }

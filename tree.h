@@ -16,3 +16,10 @@ char *label 		-> label to name the new node
 int n_children 	-> number of aux arguments
 ...							-> list of (node) arguments to add as children of the new node
 */
+
+node add_brother(node a, node b);
+/*
+node a					-> left node
+node a					-> right node
+returns left node
+*/
