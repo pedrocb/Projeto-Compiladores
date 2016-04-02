@@ -124,6 +124,17 @@ Expr: CommaExpr ASSIGN Expr {}
     | LPAR error RPAR {}
     ;
 
+Expr_without_comma: ID LPAR error RPAR {}
+    | LPAR error RPAR {}
+    | SingleExpr {}
+    | SingleExpr ASSIGN Expr_without_comma {}
+    ;
+
+Expr_without_comma_: Epsilon {}
+    | Expr_without_comma_ COMMA Expr_without_comma {}
+    ;
+
+
 CommaExpr: CommaExpr COMMA SingleExpr {}
     | SingleExpr {}
     ;
@@ -165,13 +176,17 @@ Factor: Operator Factor {}
     ;
 
 Subfactor:Subfactor LSQ Expr RSQ {}
-    | ID LPAR ExprOptional RPAR
+    | ID LPAR ListExprOptional RPAR {}
     | ID
     | INTLIT
-    | CHRLIT {printf("%s\n", $1);}
-    | STRLIT {printf("%s\n", $1);}
+    | CHRLIT {}
+    | STRLIT {}
     | LPAR Expr RPAR
     ;
+
+ListExprOptional: Epsilon {}
+    | Expr_without_comma Expr_without_comma_ {}
+
 
 ExprOptional: Epsilon {}
     | Expr {}
