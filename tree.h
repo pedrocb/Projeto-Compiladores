@@ -5,6 +5,8 @@ typedef struct node_{
         char *value;
 }*node;
 
+int toprint;
+
 void print_tree(node n, int depth);
 /*
 node n 					-> where to start

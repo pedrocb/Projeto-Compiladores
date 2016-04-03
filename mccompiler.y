@@ -101,7 +101,7 @@ Declarator: Ast_ ID ArrayOptional {node no = add_to_tree("Id",$2,0);node to_add;
     ;
 
 ArrayOptional: Epsilon {$$ = NULL;}
-| LSQ INTLIT RSQ {printf("-.--%s---\n",$2);$$ = add_to_tree("IntLit",$2,0);}
+| LSQ INTLIT RSQ {$$ = add_to_tree("IntLit",$2,0);}
     ;
 
 Declarator_: Epsilon {$$ = NULL;}

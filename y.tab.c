@@ -1649,7 +1649,7 @@ yyreduce:
 
   case 30:
 #line 104 "mccompiler.y" /* yacc.c:1646  */
-    {printf("-.--%s---\n",(yyvsp[-1].string));(yyval.n) = add_to_tree("IntLit",(yyvsp[-1].string),0);}
+    {(yyval.n) = add_to_tree("IntLit",(yyvsp[-1].string),0);}
 #line 1654 "y.tab.c" /* yacc.c:1646  */
     break;
 

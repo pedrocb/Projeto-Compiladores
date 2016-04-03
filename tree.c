@@ -5,6 +5,7 @@
 #include "tree.h"
 
 void print_tree(node n, int depth){
+	if(toprint == 0) return;
 	for(int i = 0; i < depth; i++)
 		printf("..");
 	if(n->value != NULL){
