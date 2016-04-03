@@ -24,7 +24,7 @@
 
 %token <string> ID STRLIT CHRLIT INTLIT
 
-%type <n> TypeSpec Subfactor Expr Start Block Block_ CommaExpr Factor Term ComparationExpr BinaryExpr SingleExpr ExprOptional ListExprOptional Expr_without_comma Expr_without_comma_ IfElseStatement
+%type <n> TypeSpec Subfactor Expr Start Block Block_ CommaExpr Factor Term ComparationExpr BinaryExpr SingleExpr ExprOptional ListExprOptional Expr_without_comma Expr_without_comma_ IfElseStatement Ast_ ParameterDeclaration IdOptional Declarator Declarator_ ArrayOptional
 %type <n> Declaration Declaration_
 %type <n> Statement GoodStatement Statement_ StatementList
 
@@ -41,7 +41,7 @@ Epsilon: {};
 
 Block: FunctionDefinition {}
     |  FunctionDeclaration {}
-    |  Declaration {$$ = add_to_tree("Declaration",NULL,0);}
+|  Declaration {$$ = $1;}
     ;
 
 Block_: Epsilon {$$ = NULL;}
@@ -67,14 +67,14 @@ FunctionDeclarator: Ast_ ID LPAR ParameterList RPAR {}
 ParameterList: ParameterDeclaration ParameterDeclaration_ {}
     ;
 
-ParameterDeclaration: TypeSpec Ast_ IdOptional {}
+ParameterDeclaration: TypeSpec Ast_ IdOptional {$$ = add_to_tree("ParamDeclaration",NULL,3,$1,$2,$3);/*print_tree($$,0);*/}
     ;
 
 ParameterDeclaration_: Epsilon {}
     | ParameterDeclaration_ COMMA ParameterDeclaration {}
     ;
 
-Declaration: TypeSpec Declarator Declarator_ SEMI {}
+Declaration: TypeSpec Declarator Declarator_ SEMI {/*$2 = add_brother($2,$3); node t = a; while(t->brother != NULL){node no = add_to_tree($1->label,NULL,0); t = add_brother(no,t)t = t->brother;} $$=add_to_tree("Declaration",NULL, 2,$1,$2);*//*print_tree($$,0);*/}
     | error SEMI {}
     ;
 
@@ -83,19 +83,19 @@ Declaration_: Epsilon {$$ = NULL;}
     ;
 
 TypeSpec: CHAR {$$ = add_to_tree("Char",NULL,0);}
-|     INT  {$$ = add_to_tree("Int",NULL,0);}
-| 	  VOID {$$ = add_to_tree("Void",NULL,0);}
+    |     INT  {$$ = add_to_tree("Int",NULL,0);}
+    | 	  VOID {$$ = add_to_tree("Void",NULL,0);}
     ;
 
-Declarator: Ast_ ID ArrayOptional {}
+Declarator: Ast_ ID ArrayOptional {node no = add_to_tree("Id",$2,0);node to_add;if($1!=NULL){$1 = add_brother($1,no); to_add = $1;} else {to_add = no;} if($3!=NULL){$$ = add_to_tree("ArrayDeclaration",NULL,2,to_add,$3);} else {$$ = add_to_tree("Declaration",NULL,1,to_add);};}
     ;
 
-ArrayOptional: Epsilon {}
-    | LSQ INTLIT RSQ {}
+ArrayOptional: Epsilon {$$ = NULL;}
+    | LSQ INTLIT RSQ {$$ = add_to_tree("IntLit",$2,0);}
     ;
 
-Declarator_: Epsilon {}
-    | Declarator_ COMMA Declarator {}
+Declarator_: Epsilon {$$ = NULL;}
+    | Declarator_ COMMA Declarator {$$ = add_brother($1,$3);}
     ;
 
 Statement_: Epsilon {$$ = NULL;}
@@ -110,7 +110,7 @@ Statement: error SEMI {}
 
 GoodStatement: ExprOptional SEMI {if(strcmp($1->label,"Null")==0){$$=NULL;free($1);}else{$$ = $1;}}
     | LBRACE StatementList RBRACE {if($2->brother!= NULL) $$ = add_to_tree("StatList",NULL,1,$2); else $$ = $2;}
-| IfElseStatement {$$ = $1;print_tree($$,0);}
+| IfElseStatement {$$ = $1;/*print_tree($$,0);*/}
     | FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement {$$ = add_to_tree("For",NULL,4,$3,$5,$7,$9); /*print_tree($$,0);*/}
     | RETURN ExprOptional SEMI {}
     | LBRACE error RBRACE {}
@@ -192,12 +192,12 @@ ExprOptional: Epsilon {$$ = add_to_tree("Null",NULL,0);}
     | Expr {$$ = $1;}
     ;
 
-IdOptional: Epsilon {}
-    | ID {}
+IdOptional: Epsilon {$$ = NULL;}
+    | ID {$$ = add_to_tree("Id",$1,0);}
     ;
 
-Ast_: Epsilon {}
-    | Ast_ AST {}
+Ast_: Epsilon {$$ = NULL;}
+| AST Ast_ {node no = add_to_tree("Pointer",NULL,0);$$ = add_brother(no,$2);}
     ;
 
 %%

@@ -1,11 +1,4 @@
-int main(void){
-    if(a=2){
-	for(;a=2;){
-	    {
-		
-		;
-		;	
-	    }    
-	}
-    }
+int ***function(int *** c){
+        int a,b[2];
+	int test;
 }
