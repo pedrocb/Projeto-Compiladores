@@ -24,7 +24,7 @@
 
 %token <string> ID STRLIT CHRLIT INTLIT
 
-%type <n> TypeSpec Subfactor Expr Start Block Block_ CommaExpr Factor Term ComparationExpr BinaryExpr SingleExpr ExprOptional ListExprOptional Expr_without_comma Expr_without_comma_ IfElseStatement Ast_ ParameterDeclaration IdOptional Declarator Declarator_ ArrayOptional
+%type <n> TypeSpec Subfactor Expr Start Block Block_ CommaExpr Factor Term ComparationExpr BinaryExpr SingleExpr ExprOptional ListExprOptional Expr_without_comma Expr_without_comma_ IfElseStatement Ast_ ParameterDeclaration IdOptional Declarator Declarator_ ArrayOptional FunctionBody ParameterList ParameterDeclaration_ FunctionDeclarator FunctionDeclaration FunctionDefinition
 %type <n> Declaration Declaration_
 %type <n> Statement GoodStatement Statement_ StatementList
 
@@ -34,13 +34,13 @@
 %%
 
 
-Start: Block Block_ {/*print_tree(add_to_tree("Program",NULL,0),0);*/}
+Start: Block Block_ {print_tree(add_to_tree("Program",NULL,2,$1,$2),0);}
     ;
 
 Epsilon: {};
 
-Block: FunctionDefinition {}
-    |  FunctionDeclaration {}
+Block: FunctionDefinition {$$ = $1;}
+|  FunctionDeclaration {$$ = $1;}
 |  Declaration {$$ = $1;}
     ;
 
@@ -48,30 +48,32 @@ Block_: Epsilon {$$ = NULL;}
     | Block Block_ {$$ = add_brother($1, $2);}
     ;
 
-FunctionDefinition: TypeSpec FunctionDeclarator FunctionBody {}
+FunctionDefinition: TypeSpec FunctionDeclarator FunctionBody {$$ = add_to_tree("FuncDefinition",NULL,3,$1,$2,$3);}
     ;
 
-FunctionBody: LBRACE Declaration Declaration_ GoodStatement Statement_ RBRACE {}
-    | LBRACE GoodStatement Statement_ RBRACE {}
-    | LBRACE Declaration Declaration_ RBRACE {}
-    | LBRACE RBRACE {}
+FunctionBody: LBRACE Declaration Declaration_ GoodStatement Statement_ RBRACE {$$ = add_to_tree("FuncBody",NULL,4,$2,$3,$4,$5);}
+    | LBRACE GoodStatement Statement_ RBRACE { $$ = add_to_tree("FuncBody",NULL,2,$2,$3);}
+    | LBRACE Declaration Declaration_ RBRACE {
+	$$ = add_to_tree("FuncBody",NULL,2,$2,$3);
+    }
+    | LBRACE RBRACE {$$ = add_to_tree("FuncBody",NULL,0);}
     | LBRACE error RBRACE {}
     ;
 
-FunctionDeclaration: TypeSpec FunctionDeclarator SEMI {}
+FunctionDeclaration: TypeSpec FunctionDeclarator SEMI {$$ = add_to_tree("FuncDeclaration",NULL,2,$1,$2);}
     ;
 
-FunctionDeclarator: Ast_ ID LPAR ParameterList RPAR {}
+FunctionDeclarator: Ast_ ID LPAR ParameterList RPAR {node no = add_brother(add_to_tree("Id",$2,0),$4); $$ =add_brother($1,no);}
     ;
 
-ParameterList: ParameterDeclaration ParameterDeclaration_ {}
+ParameterList: ParameterDeclaration ParameterDeclaration_ {$$ = add_to_tree("ParamList",NULL,2,$1,$2);/*print_tree($$,0);*/}
     ;
 
 ParameterDeclaration: TypeSpec Ast_ IdOptional {$$ = add_to_tree("ParamDeclaration",NULL,3,$1,$2,$3);/*print_tree($$,0);*/}
     ;
 
-ParameterDeclaration_: Epsilon {}
-    | ParameterDeclaration_ COMMA ParameterDeclaration {}
+ParameterDeclaration_: Epsilon {$$ = NULL;}
+| ParameterDeclaration_ COMMA ParameterDeclaration {$$ = add_brother($1,$3);}
     ;
 
 Declaration: TypeSpec Declarator Declarator_ SEMI {
@@ -84,7 +86,7 @@ Declaration: TypeSpec Declarator Declarator_ SEMI {
 	t = t->brother;
     }
     $$ = $2;
-    print_tree($$,0);}
+    /*print_tree($$,0);*/}
 | error SEMI {}
     ;
 
@@ -121,14 +123,23 @@ Statement: error SEMI {}
 GoodStatement: ExprOptional SEMI {if(strcmp($1->label,"Null")==0){$$=NULL;free($1);}else{$$ = $1;}}
     | LBRACE StatementList RBRACE {if($2->brother!= NULL) $$ = add_to_tree("StatList",NULL,1,$2); else $$ = $2;}
 | IfElseStatement {$$ = $1;/*print_tree($$,0);*/}
-    | FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement {$$ = add_to_tree("For",NULL,4,$3,$5,$7,$9); /*print_tree($$,0);*/}
-    | RETURN ExprOptional SEMI {}
+| FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement {$$ = add_to_tree("For",NULL,4,$3,$5,$7,$9); /*print_tree($$,0);*/}
+    | RETURN ExprOptional SEMI {$$ = add_to_tree("Return",NULL,1,$2);}
     | LBRACE error RBRACE {}
     | LBRACE RBRACE {$$ = NULL;}
     ;
 
-IfElseStatement: IF LPAR Expr RPAR Statement %prec IFCENAS {if($3==NULL){$3 = add_to_tree("NULL",NULL,0);} if($5==NULL){$5 = add_to_tree("NULL",NULL,0);} node no = add_to_tree("Null",NULL,0); $$ = add_to_tree("If",NULL,3,$3,$5,no);}
-| IF LPAR Expr RPAR Statement ELSE Statement {if($3==NULL) $3 = add_to_tree("NULL",NULL,0); if($5==NULL) $5 = add_to_tree("NULL",NULL,0); if($7==NULL)$7 = add_to_tree("NULL",NULL,0);$$ = add_to_tree("If",NULL,3,$3,$5,$7);}
+IfElseStatement: IF LPAR Expr RPAR Statement %prec IFCENAS {
+    if($3==NULL){
+	$3 = add_to_tree("Null",NULL,0);
+    }
+    if($5==NULL){
+	$5 = add_to_tree("NULL",NULL,0);
+    }
+    node no = add_to_tree("Null",NULL,0);
+    $$ = add_to_tree("If",NULL,3,$3,$5,no);
+ }
+    | IF LPAR Expr RPAR Statement ELSE Statement {if($5==NULL) $5 = add_to_tree("NULL",NULL,0); if($7==NULL)$7 = add_to_tree("NULL",NULL,0);$$ = add_to_tree("If",NULL,3,$3,$5,$7);}
     ;
 
 Expr: CommaExpr ASSIGN Expr {$$ = add_to_tree("Store",NULL,2,$1,$3);/*print_tree($$,0)*/;}

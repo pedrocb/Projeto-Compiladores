@@ -1,4 +1,5 @@
-int ***function(int *** c){
-  int a,b[ 2 ]
-	int test;
+int ***function(int ****,int a,void){
+    for( ; b> 0 ; )
+    	 a =1;
+	 
 }
