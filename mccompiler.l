@@ -160,7 +160,6 @@ int yywrap(){
 }
 
 void yyerror (const char *s) {
-	int c = col - (int)yyleng;
-	if(c == 0) c = 1;
+        int c = col - strlen(yytext);
 	printf ("Line %d, col %d: %s: %s\n", line, c, s, yytext);
 }
