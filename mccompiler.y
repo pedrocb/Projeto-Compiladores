@@ -74,8 +74,18 @@ ParameterDeclaration_: Epsilon {}
     | ParameterDeclaration_ COMMA ParameterDeclaration {}
     ;
 
-Declaration: TypeSpec Declarator Declarator_ SEMI {/*$2 = add_brother($2,$3); node t = a; while(t->brother != NULL){node no = add_to_tree($1->label,NULL,0); t = add_brother(no,t)t = t->brother;} $$=add_to_tree("Declaration",NULL, 2,$1,$2);*//*print_tree($$,0);*/}
-    | error SEMI {}
+Declaration: TypeSpec Declarator Declarator_ SEMI {
+    $2 = add_brother($2,$3);
+    node t = $2;
+    while(t != NULL){
+	node no = add_to_tree($1->label,NULL,0);
+	no = add_brother(no,t->child);
+	t->child = no;
+	t = t->brother;
+    }
+    $$ = $2;
+    print_tree($$,0);}
+| error SEMI {}
     ;
 
 Declaration_: Epsilon {$$ = NULL;}
@@ -91,7 +101,7 @@ Declarator: Ast_ ID ArrayOptional {node no = add_to_tree("Id",$2,0);node to_add;
     ;
 
 ArrayOptional: Epsilon {$$ = NULL;}
-    | LSQ INTLIT RSQ {$$ = add_to_tree("IntLit",$2,0);}
+| LSQ INTLIT RSQ {printf("-.--%s---\n",$2);$$ = add_to_tree("IntLit",$2,0);}
     ;
 
 Declarator_: Epsilon {$$ = NULL;}

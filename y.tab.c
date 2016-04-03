@@ -518,14 +518,14 @@ static const yytype_uint8 yyrline[] =
 {
        0,    37,    37,    40,    42,    43,    44,    47,    48,    51,
       54,    55,    56,    57,    58,    61,    64,    67,    70,    73,
-      74,    77,    78,    81,    82,    85,    86,    87,    90,    93,
-      94,    97,    98,   101,   102,   105,   107,   108,   111,   112,
-     113,   114,   115,   116,   117,   120,   121,   124,   125,   126,
-     127,   130,   131,   132,   133,   136,   137,   141,   142,   145,
-     146,   147,   150,   151,   152,   153,   154,   155,   156,   159,
-     160,   161,   164,   165,   166,   167,   170,   171,   172,   173,
-     174,   175,   178,   179,   180,   181,   182,   183,   184,   187,
-     188,   191,   192,   195,   196,   199,   200
+      74,    77,    88,    91,    92,    95,    96,    97,   100,   103,
+     104,   107,   108,   111,   112,   115,   117,   118,   121,   122,
+     123,   124,   125,   126,   127,   130,   131,   134,   135,   136,
+     137,   140,   141,   142,   143,   146,   147,   151,   152,   155,
+     156,   157,   160,   161,   162,   163,   164,   165,   166,   169,
+     170,   171,   174,   175,   176,   177,   180,   181,   182,   183,
+     184,   185,   188,   189,   190,   191,   192,   193,   194,   197,
+     198,   201,   202,   205,   206,   209,   210
 };
 #endif
 
@@ -1585,462 +1585,472 @@ yyreduce:
 
   case 21:
 #line 77 "mccompiler.y" /* yacc.c:1646  */
-    {/*$2 = add_brother($2,$3); node t = a; while(t->brother != NULL){node no = add_to_tree($1->label,NULL,0); t = add_brother(no,t)t = t->brother;} $$=add_to_tree("Declaration",NULL, 2,$1,$2);*//*print_tree($$,0);*/}
-#line 1590 "y.tab.c" /* yacc.c:1646  */
+    {
+    (yyvsp[-2].n) = add_brother((yyvsp[-2].n),(yyvsp[-1].n));
+    node t = (yyvsp[-2].n);
+    while(t != NULL){
+	node no = add_to_tree((yyvsp[-3].n)->label,NULL,0);
+	no = add_brother(no,t->child);
+	t->child = no;
+	t = t->brother;
+    }
+    (yyval.n) = (yyvsp[-2].n);
+    print_tree((yyval.n),0);}
+#line 1600 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 78 "mccompiler.y" /* yacc.c:1646  */
+#line 88 "mccompiler.y" /* yacc.c:1646  */
     {}
-#line 1596 "y.tab.c" /* yacc.c:1646  */
+#line 1606 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 81 "mccompiler.y" /* yacc.c:1646  */
+#line 91 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = NULL;}
-#line 1602 "y.tab.c" /* yacc.c:1646  */
+#line 1612 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 82 "mccompiler.y" /* yacc.c:1646  */
+#line 92 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_brother((yyvsp[-1].n), (yyvsp[0].n));}
-#line 1608 "y.tab.c" /* yacc.c:1646  */
+#line 1618 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 85 "mccompiler.y" /* yacc.c:1646  */
+#line 95 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Char",NULL,0);}
-#line 1614 "y.tab.c" /* yacc.c:1646  */
+#line 1624 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 86 "mccompiler.y" /* yacc.c:1646  */
+#line 96 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Int",NULL,0);}
-#line 1620 "y.tab.c" /* yacc.c:1646  */
+#line 1630 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 87 "mccompiler.y" /* yacc.c:1646  */
+#line 97 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Void",NULL,0);}
-#line 1626 "y.tab.c" /* yacc.c:1646  */
+#line 1636 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 90 "mccompiler.y" /* yacc.c:1646  */
+#line 100 "mccompiler.y" /* yacc.c:1646  */
     {node no = add_to_tree("Id",(yyvsp[-1].string),0);node to_add;if((yyvsp[-2].n)!=NULL){(yyvsp[-2].n) = add_brother((yyvsp[-2].n),no); to_add = (yyvsp[-2].n);} else {to_add = no;} if((yyvsp[0].n)!=NULL){(yyval.n) = add_to_tree("ArrayDeclaration",NULL,2,to_add,(yyvsp[0].n));} else {(yyval.n) = add_to_tree("Declaration",NULL,1,to_add);};}
-#line 1632 "y.tab.c" /* yacc.c:1646  */
+#line 1642 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 93 "mccompiler.y" /* yacc.c:1646  */
+#line 103 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = NULL;}
-#line 1638 "y.tab.c" /* yacc.c:1646  */
+#line 1648 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 94 "mccompiler.y" /* yacc.c:1646  */
-    {(yyval.n) = add_to_tree("IntLit",(yyvsp[-1].string),0);}
-#line 1644 "y.tab.c" /* yacc.c:1646  */
+#line 104 "mccompiler.y" /* yacc.c:1646  */
+    {printf("-.--%s---\n",(yyvsp[-1].string));(yyval.n) = add_to_tree("IntLit",(yyvsp[-1].string),0);}
+#line 1654 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 97 "mccompiler.y" /* yacc.c:1646  */
+#line 107 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = NULL;}
-#line 1650 "y.tab.c" /* yacc.c:1646  */
+#line 1660 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 98 "mccompiler.y" /* yacc.c:1646  */
+#line 108 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_brother((yyvsp[-2].n),(yyvsp[0].n));}
-#line 1656 "y.tab.c" /* yacc.c:1646  */
+#line 1666 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 101 "mccompiler.y" /* yacc.c:1646  */
+#line 111 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = NULL;}
-#line 1662 "y.tab.c" /* yacc.c:1646  */
+#line 1672 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 102 "mccompiler.y" /* yacc.c:1646  */
+#line 112 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = (yyvsp[0].n);}
-#line 1668 "y.tab.c" /* yacc.c:1646  */
+#line 1678 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 105 "mccompiler.y" /* yacc.c:1646  */
+#line 115 "mccompiler.y" /* yacc.c:1646  */
     {if((yyvsp[-1].n)!=NULL) (yyval.n) = add_brother((yyvsp[-1].n), (yyvsp[0].n)); else {(yyval.n) = add_to_tree("Null",NULL,0);}}
-#line 1674 "y.tab.c" /* yacc.c:1646  */
+#line 1684 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 107 "mccompiler.y" /* yacc.c:1646  */
+#line 117 "mccompiler.y" /* yacc.c:1646  */
     {}
-#line 1680 "y.tab.c" /* yacc.c:1646  */
+#line 1690 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 108 "mccompiler.y" /* yacc.c:1646  */
+#line 118 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = (yyvsp[0].n);}
-#line 1686 "y.tab.c" /* yacc.c:1646  */
+#line 1696 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 111 "mccompiler.y" /* yacc.c:1646  */
+#line 121 "mccompiler.y" /* yacc.c:1646  */
     {if(strcmp((yyvsp[-1].n)->label,"Null")==0){(yyval.n)=NULL;free((yyvsp[-1].n));}else{(yyval.n) = (yyvsp[-1].n);}}
-#line 1692 "y.tab.c" /* yacc.c:1646  */
+#line 1702 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 112 "mccompiler.y" /* yacc.c:1646  */
+#line 122 "mccompiler.y" /* yacc.c:1646  */
     {if((yyvsp[-1].n)->brother!= NULL) (yyval.n) = add_to_tree("StatList",NULL,1,(yyvsp[-1].n)); else (yyval.n) = (yyvsp[-1].n);}
-#line 1698 "y.tab.c" /* yacc.c:1646  */
+#line 1708 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 113 "mccompiler.y" /* yacc.c:1646  */
+#line 123 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = (yyvsp[0].n);/*print_tree($$,0);*/}
-#line 1704 "y.tab.c" /* yacc.c:1646  */
+#line 1714 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 114 "mccompiler.y" /* yacc.c:1646  */
+#line 124 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("For",NULL,4,(yyvsp[-6].n),(yyvsp[-4].n),(yyvsp[-2].n),(yyvsp[0].n)); /*print_tree($$,0);*/}
-#line 1710 "y.tab.c" /* yacc.c:1646  */
+#line 1720 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 115 "mccompiler.y" /* yacc.c:1646  */
+#line 125 "mccompiler.y" /* yacc.c:1646  */
     {}
-#line 1716 "y.tab.c" /* yacc.c:1646  */
+#line 1726 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 116 "mccompiler.y" /* yacc.c:1646  */
+#line 126 "mccompiler.y" /* yacc.c:1646  */
     {}
-#line 1722 "y.tab.c" /* yacc.c:1646  */
+#line 1732 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 117 "mccompiler.y" /* yacc.c:1646  */
+#line 127 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = NULL;}
-#line 1728 "y.tab.c" /* yacc.c:1646  */
+#line 1738 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 120 "mccompiler.y" /* yacc.c:1646  */
+#line 130 "mccompiler.y" /* yacc.c:1646  */
     {if((yyvsp[-2].n)==NULL){(yyvsp[-2].n) = add_to_tree("NULL",NULL,0);} if((yyvsp[0].n)==NULL){(yyvsp[0].n) = add_to_tree("NULL",NULL,0);} node no = add_to_tree("Null",NULL,0); (yyval.n) = add_to_tree("If",NULL,3,(yyvsp[-2].n),(yyvsp[0].n),no);}
-#line 1734 "y.tab.c" /* yacc.c:1646  */
+#line 1744 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 121 "mccompiler.y" /* yacc.c:1646  */
+#line 131 "mccompiler.y" /* yacc.c:1646  */
     {if((yyvsp[-4].n)==NULL) (yyvsp[-4].n) = add_to_tree("NULL",NULL,0); if((yyvsp[-2].n)==NULL) (yyvsp[-2].n) = add_to_tree("NULL",NULL,0); if((yyvsp[0].n)==NULL)(yyvsp[0].n) = add_to_tree("NULL",NULL,0);(yyval.n) = add_to_tree("If",NULL,3,(yyvsp[-4].n),(yyvsp[-2].n),(yyvsp[0].n));}
-#line 1740 "y.tab.c" /* yacc.c:1646  */
+#line 1750 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 124 "mccompiler.y" /* yacc.c:1646  */
+#line 134 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Store",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));/*print_tree($$,0)*/;}
-#line 1746 "y.tab.c" /* yacc.c:1646  */
+#line 1756 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 125 "mccompiler.y" /* yacc.c:1646  */
+#line 135 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = (yyvsp[0].n);}
-#line 1752 "y.tab.c" /* yacc.c:1646  */
+#line 1762 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 126 "mccompiler.y" /* yacc.c:1646  */
+#line 136 "mccompiler.y" /* yacc.c:1646  */
     {}
-#line 1758 "y.tab.c" /* yacc.c:1646  */
+#line 1768 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 127 "mccompiler.y" /* yacc.c:1646  */
+#line 137 "mccompiler.y" /* yacc.c:1646  */
     {}
-#line 1764 "y.tab.c" /* yacc.c:1646  */
+#line 1774 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 130 "mccompiler.y" /* yacc.c:1646  */
+#line 140 "mccompiler.y" /* yacc.c:1646  */
     {}
-#line 1770 "y.tab.c" /* yacc.c:1646  */
+#line 1780 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 131 "mccompiler.y" /* yacc.c:1646  */
+#line 141 "mccompiler.y" /* yacc.c:1646  */
     {}
-#line 1776 "y.tab.c" /* yacc.c:1646  */
+#line 1786 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 132 "mccompiler.y" /* yacc.c:1646  */
+#line 142 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = (yyvsp[0].n);}
-#line 1782 "y.tab.c" /* yacc.c:1646  */
+#line 1792 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 133 "mccompiler.y" /* yacc.c:1646  */
+#line 143 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Store",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));/*print_tree($$,0);*/}
-#line 1788 "y.tab.c" /* yacc.c:1646  */
+#line 1798 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 136 "mccompiler.y" /* yacc.c:1646  */
+#line 146 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = NULL;}
-#line 1794 "y.tab.c" /* yacc.c:1646  */
+#line 1804 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 137 "mccompiler.y" /* yacc.c:1646  */
+#line 147 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = (yyvsp[0].n);}
-#line 1800 "y.tab.c" /* yacc.c:1646  */
+#line 1810 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 141 "mccompiler.y" /* yacc.c:1646  */
+#line 151 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Comma",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));}
-#line 1806 "y.tab.c" /* yacc.c:1646  */
+#line 1816 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 142 "mccompiler.y" /* yacc.c:1646  */
+#line 152 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = (yyvsp[0].n);}
-#line 1812 "y.tab.c" /* yacc.c:1646  */
+#line 1822 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 145 "mccompiler.y" /* yacc.c:1646  */
+#line 155 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("And",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));}
-#line 1818 "y.tab.c" /* yacc.c:1646  */
+#line 1828 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 146 "mccompiler.y" /* yacc.c:1646  */
+#line 156 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Or",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));}
-#line 1824 "y.tab.c" /* yacc.c:1646  */
+#line 1834 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 147 "mccompiler.y" /* yacc.c:1646  */
+#line 157 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = (yyvsp[0].n);}
-#line 1830 "y.tab.c" /* yacc.c:1646  */
+#line 1840 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 150 "mccompiler.y" /* yacc.c:1646  */
+#line 160 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Eq",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));}
-#line 1836 "y.tab.c" /* yacc.c:1646  */
+#line 1846 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 151 "mccompiler.y" /* yacc.c:1646  */
+#line 161 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Ne",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));}
-#line 1842 "y.tab.c" /* yacc.c:1646  */
+#line 1852 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 152 "mccompiler.y" /* yacc.c:1646  */
+#line 162 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Lt",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));}
-#line 1848 "y.tab.c" /* yacc.c:1646  */
+#line 1858 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 153 "mccompiler.y" /* yacc.c:1646  */
+#line 163 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Gt",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));}
-#line 1854 "y.tab.c" /* yacc.c:1646  */
+#line 1864 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 154 "mccompiler.y" /* yacc.c:1646  */
+#line 164 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Le",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));}
-#line 1860 "y.tab.c" /* yacc.c:1646  */
+#line 1870 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 155 "mccompiler.y" /* yacc.c:1646  */
+#line 165 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Ge",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));}
-#line 1866 "y.tab.c" /* yacc.c:1646  */
+#line 1876 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 156 "mccompiler.y" /* yacc.c:1646  */
+#line 166 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = (yyvsp[0].n);}
-#line 1872 "y.tab.c" /* yacc.c:1646  */
+#line 1882 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 159 "mccompiler.y" /* yacc.c:1646  */
+#line 169 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Add",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));}
-#line 1878 "y.tab.c" /* yacc.c:1646  */
+#line 1888 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 160 "mccompiler.y" /* yacc.c:1646  */
+#line 170 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Sub",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));}
-#line 1884 "y.tab.c" /* yacc.c:1646  */
+#line 1894 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 71:
-#line 161 "mccompiler.y" /* yacc.c:1646  */
+#line 171 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = (yyvsp[0].n);}
-#line 1890 "y.tab.c" /* yacc.c:1646  */
+#line 1900 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 72:
-#line 164 "mccompiler.y" /* yacc.c:1646  */
+#line 174 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Mul",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));}
-#line 1896 "y.tab.c" /* yacc.c:1646  */
+#line 1906 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 73:
-#line 165 "mccompiler.y" /* yacc.c:1646  */
+#line 175 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Div",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));}
-#line 1902 "y.tab.c" /* yacc.c:1646  */
+#line 1912 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 74:
-#line 166 "mccompiler.y" /* yacc.c:1646  */
+#line 176 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Mod",NULL,2,(yyvsp[-2].n),(yyvsp[0].n));}
-#line 1908 "y.tab.c" /* yacc.c:1646  */
+#line 1918 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 75:
-#line 167 "mccompiler.y" /* yacc.c:1646  */
+#line 177 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = (yyvsp[0].n);}
-#line 1914 "y.tab.c" /* yacc.c:1646  */
+#line 1924 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 76:
-#line 170 "mccompiler.y" /* yacc.c:1646  */
+#line 180 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Addr",NULL,1,(yyvsp[0].n));}
-#line 1920 "y.tab.c" /* yacc.c:1646  */
+#line 1930 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 77:
-#line 171 "mccompiler.y" /* yacc.c:1646  */
+#line 181 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Deref",NULL,1,(yyvsp[0].n));}
-#line 1926 "y.tab.c" /* yacc.c:1646  */
+#line 1936 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 78:
-#line 172 "mccompiler.y" /* yacc.c:1646  */
+#line 182 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Plus",NULL,1,(yyvsp[0].n));}
-#line 1932 "y.tab.c" /* yacc.c:1646  */
+#line 1942 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 79:
-#line 173 "mccompiler.y" /* yacc.c:1646  */
+#line 183 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Minus",NULL,1,(yyvsp[0].n));}
-#line 1938 "y.tab.c" /* yacc.c:1646  */
+#line 1948 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 80:
-#line 174 "mccompiler.y" /* yacc.c:1646  */
+#line 184 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Not",NULL,1,(yyvsp[0].n));}
-#line 1944 "y.tab.c" /* yacc.c:1646  */
+#line 1954 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 81:
-#line 175 "mccompiler.y" /* yacc.c:1646  */
+#line 185 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = (yyvsp[0].n);}
-#line 1950 "y.tab.c" /* yacc.c:1646  */
+#line 1960 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 82:
-#line 178 "mccompiler.y" /* yacc.c:1646  */
+#line 188 "mccompiler.y" /* yacc.c:1646  */
     {node no = add_to_tree("Add",NULL,2,(yyvsp[-3].n),(yyvsp[-1].n)); (yyval.n) = add_to_tree("Deref",NULL,1,no);}
-#line 1956 "y.tab.c" /* yacc.c:1646  */
+#line 1966 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 83:
-#line 179 "mccompiler.y" /* yacc.c:1646  */
+#line 189 "mccompiler.y" /* yacc.c:1646  */
     {node no = add_to_tree("Id",(yyvsp[-3].string),0);(yyval.n) = add_to_tree("Call",NULL,2,no,(yyvsp[-1].n));}
-#line 1962 "y.tab.c" /* yacc.c:1646  */
+#line 1972 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 84:
-#line 180 "mccompiler.y" /* yacc.c:1646  */
+#line 190 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Id",(yyvsp[0].string),0);}
-#line 1968 "y.tab.c" /* yacc.c:1646  */
+#line 1978 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 85:
-#line 181 "mccompiler.y" /* yacc.c:1646  */
+#line 191 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("IntLit",(yyvsp[0].string),0);}
-#line 1974 "y.tab.c" /* yacc.c:1646  */
+#line 1984 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 86:
-#line 182 "mccompiler.y" /* yacc.c:1646  */
+#line 192 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("ChrLit",(yyvsp[0].string),0);}
-#line 1980 "y.tab.c" /* yacc.c:1646  */
+#line 1990 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 87:
-#line 183 "mccompiler.y" /* yacc.c:1646  */
+#line 193 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("StrLit",(yyvsp[0].string),0);}
-#line 1986 "y.tab.c" /* yacc.c:1646  */
+#line 1996 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 88:
-#line 184 "mccompiler.y" /* yacc.c:1646  */
+#line 194 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = (yyvsp[-1].n);}
-#line 1992 "y.tab.c" /* yacc.c:1646  */
+#line 2002 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 89:
-#line 187 "mccompiler.y" /* yacc.c:1646  */
+#line 197 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = NULL;}
-#line 1998 "y.tab.c" /* yacc.c:1646  */
+#line 2008 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 90:
-#line 188 "mccompiler.y" /* yacc.c:1646  */
+#line 198 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_brother((yyvsp[-1].n),(yyvsp[0].n));}
-#line 2004 "y.tab.c" /* yacc.c:1646  */
+#line 2014 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 91:
-#line 191 "mccompiler.y" /* yacc.c:1646  */
+#line 201 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Null",NULL,0);}
-#line 2010 "y.tab.c" /* yacc.c:1646  */
+#line 2020 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 92:
-#line 192 "mccompiler.y" /* yacc.c:1646  */
+#line 202 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = (yyvsp[0].n);}
-#line 2016 "y.tab.c" /* yacc.c:1646  */
+#line 2026 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 93:
-#line 195 "mccompiler.y" /* yacc.c:1646  */
+#line 205 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = NULL;}
-#line 2022 "y.tab.c" /* yacc.c:1646  */
+#line 2032 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 94:
-#line 196 "mccompiler.y" /* yacc.c:1646  */
+#line 206 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = add_to_tree("Id",(yyvsp[0].string),0);}
-#line 2028 "y.tab.c" /* yacc.c:1646  */
+#line 2038 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 95:
-#line 199 "mccompiler.y" /* yacc.c:1646  */
+#line 209 "mccompiler.y" /* yacc.c:1646  */
     {(yyval.n) = NULL;}
-#line 2034 "y.tab.c" /* yacc.c:1646  */
+#line 2044 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 96:
-#line 200 "mccompiler.y" /* yacc.c:1646  */
+#line 210 "mccompiler.y" /* yacc.c:1646  */
     {node no = add_to_tree("Pointer",NULL,0);(yyval.n) = add_brother(no,(yyvsp[0].n));}
-#line 2040 "y.tab.c" /* yacc.c:1646  */
+#line 2050 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2044 "y.tab.c" /* yacc.c:1646  */
+#line 2054 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2268,5 +2278,5 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 203 "mccompiler.y" /* yacc.c:1906  */
+#line 213 "mccompiler.y" /* yacc.c:1906  */
 
