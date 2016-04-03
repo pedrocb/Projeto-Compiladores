@@ -85,7 +85,7 @@ Grammar
    53                   | SingleExpr ASSIGN Expr_without_comma
 
    54 Expr_without_comma_: Epsilon
-   55                    | COMMA Expr_without_comma
+   55                    | COMMA Expr_without_comma Expr_without_comma_
 
    56 CommaExpr: CommaExpr COMMA SingleExpr
    57          | SingleExpr
@@ -235,7 +235,7 @@ Expr (63)
 Expr_without_comma (64)
     on left: 50 51 52 53, on right: 53 55 89
 Expr_without_comma_ (65)
-    on left: 54 55, on right: 89
+    on left: 54 55, on right: 55 89
 CommaExpr (66)
     on left: 56 57, on right: 46 47 56
 SingleExpr (67)
@@ -2418,7 +2418,7 @@ State 161
 
 State 162
 
-   55 Expr_without_comma_: COMMA . Expr_without_comma
+   55 Expr_without_comma_: COMMA . Expr_without_comma Expr_without_comma_
 
     AMP     shift, and go to state 30
     AST     shift, and go to state 31
@@ -2565,9 +2565,14 @@ State 176
 
 State 177
 
-   55 Expr_without_comma_: COMMA Expr_without_comma .
+   55 Expr_without_comma_: COMMA Expr_without_comma . Expr_without_comma_
 
-    $default  reduce using rule 55 (Expr_without_comma_)
+    COMMA  shift, and go to state 162
+
+    $default  reduce using rule 2 (Epsilon)
+
+    Epsilon              go to state 163
+    Expr_without_comma_  go to state 184
 
 
 State 178
@@ -2617,7 +2622,7 @@ State 181
     Term             go to state 55
     Factor           go to state 56
     Subfactor        go to state 57
-    ExprOptional     go to state 184
+    ExprOptional     go to state 185
 
 
 State 182
@@ -2643,7 +2648,7 @@ State 182
     SEMI  reduce using rule 2 (Epsilon)
 
     Epsilon          go to state 45
-    Statement        go to state 185
+    Statement        go to state 186
     GoodStatement    go to state 76
     IfElseStatement  go to state 49
     Expr             go to state 50
@@ -2666,19 +2671,26 @@ State 183
 
 State 184
 
-   40 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional . RPAR Statement
+   55 Expr_without_comma_: COMMA Expr_without_comma Expr_without_comma_ .
 
-    RPAR  shift, and go to state 186
+    $default  reduce using rule 55 (Expr_without_comma_)
 
 
 State 185
+
+   40 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional . RPAR Statement
+
+    RPAR  shift, and go to state 187
+
+
+State 186
 
    45 IfElseStatement: IF LPAR Expr RPAR Statement ELSE Statement .
 
     $default  reduce using rule 45 (IfElseStatement)
 
 
-State 186
+State 187
 
    40 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR . Statement
 
@@ -2701,7 +2713,7 @@ State 186
     SEMI  reduce using rule 2 (Epsilon)
 
     Epsilon          go to state 45
-    Statement        go to state 187
+    Statement        go to state 188
     GoodStatement    go to state 76
     IfElseStatement  go to state 49
     Expr             go to state 50
@@ -2715,7 +2727,7 @@ State 186
     ExprOptional     go to state 58
 
 
-State 187
+State 188
 
    40 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement .
 

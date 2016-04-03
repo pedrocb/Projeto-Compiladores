@@ -144,7 +144,7 @@ Expr_without_comma: ID LPAR error RPAR {}
     ;
 
 Expr_without_comma_: Epsilon {$$ = NULL;}
-    | COMMA Expr_without_comma {$$ = $2;}
+    | COMMA Expr_without_comma Expr_without_comma_ {$$ = $2;}
     ;
 
 
