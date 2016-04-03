@@ -1,4 +1,11 @@
 int main(void){
-    a a;
-    a a;
+    if(a=2){
+	for(;a=2;){
+	    {
+		
+		;
+		;	
+	    }    
+	}
+    }
 }

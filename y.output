@@ -56,127 +56,129 @@ Grammar
    31            | Declarator_ COMMA Declarator
 
    32 Statement_: Epsilon
-   33           | Statement Statement_
+   33           | StatementList
 
-   34 Statement: error SEMI
-   35          | GoodStatement
+   34 StatementList: Statement Statement_
 
-   36 GoodStatement: ExprOptional SEMI
-   37              | LBRACE Statement Statement_ RBRACE
-   38              | IfElseStatement
-   39              | FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement
-   40              | RETURN ExprOptional SEMI
-   41              | LBRACE error RBRACE
-   42              | LBRACE RBRACE
+   35 Statement: error SEMI
+   36          | GoodStatement
 
-   43 IfElseStatement: IF LPAR Expr RPAR Statement
-   44                | IF LPAR Expr RPAR Statement ELSE Statement
+   37 GoodStatement: ExprOptional SEMI
+   38              | LBRACE StatementList RBRACE
+   39              | IfElseStatement
+   40              | FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement
+   41              | RETURN ExprOptional SEMI
+   42              | LBRACE error RBRACE
+   43              | LBRACE RBRACE
 
-   45 Expr: CommaExpr ASSIGN Expr
-   46     | CommaExpr
-   47     | ID LPAR error RPAR
-   48     | LPAR error RPAR
+   44 IfElseStatement: IF LPAR Expr RPAR Statement
+   45                | IF LPAR Expr RPAR Statement ELSE Statement
 
-   49 Expr_without_comma: ID LPAR error RPAR
-   50                   | LPAR error RPAR
-   51                   | SingleExpr
-   52                   | SingleExpr ASSIGN Expr_without_comma
+   46 Expr: CommaExpr ASSIGN Expr
+   47     | CommaExpr
+   48     | ID LPAR error RPAR
+   49     | LPAR error RPAR
 
-   53 Expr_without_comma_: Epsilon
-   54                    | COMMA Expr_without_comma
+   50 Expr_without_comma: ID LPAR error RPAR
+   51                   | LPAR error RPAR
+   52                   | SingleExpr
+   53                   | SingleExpr ASSIGN Expr_without_comma
 
-   55 CommaExpr: CommaExpr COMMA SingleExpr
-   56          | SingleExpr
+   54 Expr_without_comma_: Epsilon
+   55                    | COMMA Expr_without_comma
 
-   57 SingleExpr: SingleExpr AND BinaryExpr
-   58           | SingleExpr OR BinaryExpr
-   59           | BinaryExpr
+   56 CommaExpr: CommaExpr COMMA SingleExpr
+   57          | SingleExpr
 
-   60 BinaryExpr: BinaryExpr EQ ComparationExpr
-   61           | BinaryExpr NE ComparationExpr
-   62           | BinaryExpr LT ComparationExpr
-   63           | BinaryExpr GT ComparationExpr
-   64           | BinaryExpr LE ComparationExpr
-   65           | BinaryExpr GE ComparationExpr
-   66           | ComparationExpr
+   58 SingleExpr: SingleExpr AND BinaryExpr
+   59           | SingleExpr OR BinaryExpr
+   60           | BinaryExpr
 
-   67 ComparationExpr: ComparationExpr PLUS Term
-   68                | ComparationExpr MINUS Term
-   69                | Term
+   61 BinaryExpr: BinaryExpr EQ ComparationExpr
+   62           | BinaryExpr NE ComparationExpr
+   63           | BinaryExpr LT ComparationExpr
+   64           | BinaryExpr GT ComparationExpr
+   65           | BinaryExpr LE ComparationExpr
+   66           | BinaryExpr GE ComparationExpr
+   67           | ComparationExpr
 
-   70 Term: Factor AST Term
-   71     | Factor DIV Term
-   72     | Factor MOD Term
-   73     | Factor
+   68 ComparationExpr: ComparationExpr PLUS Term
+   69                | ComparationExpr MINUS Term
+   70                | Term
 
-   74 Factor: AMP Factor
-   75       | AST Factor
-   76       | PLUS Factor
-   77       | MINUS Factor
-   78       | NOT Factor
-   79       | Subfactor
+   71 Term: Factor AST Term
+   72     | Factor DIV Term
+   73     | Factor MOD Term
+   74     | Factor
 
-   80 Subfactor: Subfactor LSQ Expr RSQ
-   81          | ID LPAR ListExprOptional RPAR
-   82          | ID
-   83          | INTLIT
-   84          | CHRLIT
-   85          | STRLIT
-   86          | LPAR Expr RPAR
+   75 Factor: AMP Factor
+   76       | AST Factor
+   77       | PLUS Factor
+   78       | MINUS Factor
+   79       | NOT Factor
+   80       | Subfactor
 
-   87 ListExprOptional: Epsilon
-   88                 | Expr_without_comma Expr_without_comma_
+   81 Subfactor: Subfactor LSQ Expr RSQ
+   82          | ID LPAR ListExprOptional RPAR
+   83          | ID
+   84          | INTLIT
+   85          | CHRLIT
+   86          | STRLIT
+   87          | LPAR Expr RPAR
 
-   89 ExprOptional: Epsilon
-   90             | Expr
+   88 ListExprOptional: Epsilon
+   89                 | Expr_without_comma Expr_without_comma_
 
-   91 IdOptional: Epsilon
-   92           | ID
+   90 ExprOptional: Epsilon
+   91             | Expr
 
-   93 Ast_: Epsilon
-   94     | Ast_ AST
+   92 IdOptional: Epsilon
+   93           | ID
+
+   94 Ast_: Epsilon
+   95     | Ast_ AST
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-error (256) 13 21 34 41 47 48 49 50
-AMP (258) 74
-AND (259) 57
-ASSIGN (260) 45 52
-AST (261) 70 75 94
+error (256) 13 21 35 42 48 49 50 51
+AMP (258) 75
+AND (259) 58
+ASSIGN (260) 46 53
+AST (261) 71 76 95
 CHAR (262) 24
-COMMA (263) 19 31 54 55
-DIV (264) 71
-ELSE (265) 44
-EQ (266) 60
-FOR (267) 39
-GE (268) 65
-GT (269) 63
-IF (270) 43 44
+COMMA (263) 19 31 55 56
+DIV (264) 72
+ELSE (265) 45
+EQ (266) 61
+FOR (267) 40
+GE (268) 66
+GT (269) 64
+IF (270) 44 45
 INT (271) 25
-LBRACE (272) 9 10 11 12 13 37 41 42
-LE (273) 64
-LPAR (274) 15 39 43 44 47 48 49 50 81 86
-LSQ (275) 29 80
-LT (276) 62
-MINUS (277) 68 77
-MOD (278) 72
-NE (279) 61
-NOT (280) 78
-OR (281) 58
-PLUS (282) 67 76
-RBRACE (283) 9 10 11 12 13 37 41 42
-RETURN (284) 40
-RPAR (285) 15 39 43 44 47 48 49 50 81 86
-RSQ (286) 29 80
-SEMI (287) 14 20 21 34 36 39 40
+LBRACE (272) 9 10 11 12 13 38 42 43
+LE (273) 65
+LPAR (274) 15 40 44 45 48 49 50 51 82 87
+LSQ (275) 29 81
+LT (276) 63
+MINUS (277) 69 78
+MOD (278) 73
+NE (279) 62
+NOT (280) 79
+OR (281) 59
+PLUS (282) 68 77
+RBRACE (283) 9 10 11 12 13 38 42 43
+RETURN (284) 41
+RPAR (285) 15 40 44 45 48 49 50 51 82 87
+RSQ (286) 29 81
+SEMI (287) 14 20 21 35 37 40 41
 VOID (288) 26
 RESERVED (289)
-ID (290) 15 27 47 49 81 82 92
-STRLIT (291) 85
-CHRLIT (292) 84
-INTLIT (293) 29 83
+ID (290) 15 27 48 50 82 83 93
+STRLIT (291) 86
+CHRLIT (292) 85
+INTLIT (293) 29 84
 IFCENAS (294)
 
 
@@ -187,7 +189,7 @@ $accept (40)
 Start (41)
     on left: 1, on right: 0
 Epsilon (42)
-    on left: 2, on right: 6 18 22 28 30 32 53 87 89 91 93
+    on left: 2, on right: 6 18 22 28 30 32 54 88 90 92 94
 Block (43)
     on left: 3 4 5, on right: 1 7
 Block_ (44)
@@ -219,42 +221,44 @@ ArrayOptional (56)
 Declarator_ (57)
     on left: 30 31, on right: 20 31
 Statement_ (58)
-    on left: 32 33, on right: 9 10 33 37
-Statement (59)
-    on left: 34 35, on right: 33 37 39 43 44
-GoodStatement (60)
-    on left: 36 37 38 39 40 41 42, on right: 9 10 35
-IfElseStatement (61)
-    on left: 43 44, on right: 38
-Expr (62)
-    on left: 45 46 47 48, on right: 43 44 45 80 86 90
-Expr_without_comma (63)
-    on left: 49 50 51 52, on right: 52 54 88
-Expr_without_comma_ (64)
-    on left: 53 54, on right: 88
-CommaExpr (65)
-    on left: 55 56, on right: 45 46 55
-SingleExpr (66)
-    on left: 57 58 59, on right: 51 52 55 56 57 58
-BinaryExpr (67)
-    on left: 60 61 62 63 64 65 66, on right: 57 58 59 60 61 62 63 64
-    65
-ComparationExpr (68)
-    on left: 67 68 69, on right: 60 61 62 63 64 65 66 67 68
-Term (69)
-    on left: 70 71 72 73, on right: 67 68 69 70 71 72
-Factor (70)
-    on left: 74 75 76 77 78 79, on right: 70 71 72 73 74 75 76 77 78
-Subfactor (71)
-    on left: 80 81 82 83 84 85 86, on right: 79 80
-ListExprOptional (72)
-    on left: 87 88, on right: 81
-ExprOptional (73)
-    on left: 89 90, on right: 36 39 40
-IdOptional (74)
-    on left: 91 92, on right: 17
-Ast_ (75)
-    on left: 93 94, on right: 15 17 27 94
+    on left: 32 33, on right: 9 10 34
+StatementList (59)
+    on left: 34, on right: 33 38
+Statement (60)
+    on left: 35 36, on right: 34 40 44 45
+GoodStatement (61)
+    on left: 37 38 39 40 41 42 43, on right: 9 10 36
+IfElseStatement (62)
+    on left: 44 45, on right: 39
+Expr (63)
+    on left: 46 47 48 49, on right: 44 45 46 81 87 91
+Expr_without_comma (64)
+    on left: 50 51 52 53, on right: 53 55 89
+Expr_without_comma_ (65)
+    on left: 54 55, on right: 89
+CommaExpr (66)
+    on left: 56 57, on right: 46 47 56
+SingleExpr (67)
+    on left: 58 59 60, on right: 52 53 56 57 58 59
+BinaryExpr (68)
+    on left: 61 62 63 64 65 66 67, on right: 58 59 60 61 62 63 64 65
+    66
+ComparationExpr (69)
+    on left: 68 69 70, on right: 61 62 63 64 65 66 67 68 69
+Term (70)
+    on left: 71 72 73 74, on right: 68 69 70 71 72 73
+Factor (71)
+    on left: 75 76 77 78 79 80, on right: 71 72 73 74 75 76 77 78 79
+Subfactor (72)
+    on left: 81 82 83 84 85 86 87, on right: 80 81
+ListExprOptional (73)
+    on left: 88 89, on right: 82
+ExprOptional (74)
+    on left: 90 91, on right: 37 40 41
+IdOptional (75)
+    on left: 92 93, on right: 17
+Ast_ (76)
+    on left: 94 95, on right: 15 17 27 95
 
 
 State 0
@@ -414,9 +418,9 @@ State 15
 
 State 16
 
-   93 Ast_: Epsilon .
+   94 Ast_: Epsilon .
 
-    $default  reduce using rule 93 (Ast_)
+    $default  reduce using rule 94 (Ast_)
 
 
 State 17
@@ -444,7 +448,7 @@ State 19
 
    15 FunctionDeclarator: Ast_ . ID LPAR ParameterList RPAR
    27 Declarator: Ast_ . ID ArrayOptional
-   94 Ast_: Ast_ . AST
+   95 Ast_: Ast_ . AST
 
     AST  shift, and go to state 26
     ID   shift, and go to state 27
@@ -535,9 +539,9 @@ State 25
 
 State 26
 
-   94 Ast_: Ast_ AST .
+   95 Ast_: Ast_ AST .
 
-    $default  reduce using rule 94 (Ast_)
+    $default  reduce using rule 95 (Ast_)
 
 
 State 27
@@ -565,7 +569,7 @@ State 28
 
 State 29
 
-   74 Factor: AMP . Factor
+   75 Factor: AMP . Factor
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -584,7 +588,7 @@ State 29
 
 State 30
 
-   75 Factor: AST . Factor
+   76 Factor: AST . Factor
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -603,24 +607,24 @@ State 30
 
 State 31
 
-   39 GoodStatement: FOR . LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement
+   40 GoodStatement: FOR . LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement
 
     LPAR  shift, and go to state 69
 
 
 State 32
 
-   43 IfElseStatement: IF . LPAR Expr RPAR Statement
-   44                | IF . LPAR Expr RPAR Statement ELSE Statement
+   44 IfElseStatement: IF . LPAR Expr RPAR Statement
+   45                | IF . LPAR Expr RPAR Statement ELSE Statement
 
     LPAR  shift, and go to state 70
 
 
 State 33
 
-   37 GoodStatement: LBRACE . Statement Statement_ RBRACE
-   41              | LBRACE . error RBRACE
-   42              | LBRACE . RBRACE
+   38 GoodStatement: LBRACE . StatementList RBRACE
+   42              | LBRACE . error RBRACE
+   43              | LBRACE . RBRACE
 
     error   shift, and go to state 71
     AMP     shift, and go to state 29
@@ -642,8 +646,9 @@ State 33
     SEMI  reduce using rule 2 (Epsilon)
 
     Epsilon          go to state 44
-    Statement        go to state 73
-    GoodStatement    go to state 74
+    StatementList    go to state 73
+    Statement        go to state 74
+    GoodStatement    go to state 75
     IfElseStatement  go to state 48
     Expr             go to state 49
     CommaExpr        go to state 50
@@ -658,10 +663,10 @@ State 33
 
 State 34
 
-   48 Expr: LPAR . error RPAR
-   86 Subfactor: LPAR . Expr RPAR
+   49 Expr: LPAR . error RPAR
+   87 Subfactor: LPAR . Expr RPAR
 
-    error   shift, and go to state 75
+    error   shift, and go to state 76
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
     LPAR    shift, and go to state 34
@@ -673,7 +678,7 @@ State 34
     CHRLIT  shift, and go to state 42
     INTLIT  shift, and go to state 43
 
-    Expr             go to state 76
+    Expr             go to state 77
     CommaExpr        go to state 50
     SingleExpr       go to state 51
     BinaryExpr       go to state 52
@@ -685,26 +690,7 @@ State 34
 
 State 35
 
-   77 Factor: MINUS . Factor
-
-    AMP     shift, and go to state 29
-    AST     shift, and go to state 30
-    LPAR    shift, and go to state 65
-    MINUS   shift, and go to state 35
-    NOT     shift, and go to state 36
-    PLUS    shift, and go to state 37
-    ID      shift, and go to state 66
-    STRLIT  shift, and go to state 41
-    CHRLIT  shift, and go to state 42
-    INTLIT  shift, and go to state 43
-
-    Factor     go to state 77
-    Subfactor  go to state 56
-
-
-State 36
-
-   78 Factor: NOT . Factor
+   78 Factor: MINUS . Factor
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -721,9 +707,9 @@ State 36
     Subfactor  go to state 56
 
 
-State 37
+State 36
 
-   76 Factor: PLUS . Factor
+   79 Factor: NOT . Factor
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -740,6 +726,25 @@ State 37
     Subfactor  go to state 56
 
 
+State 37
+
+   77 Factor: PLUS . Factor
+
+    AMP     shift, and go to state 29
+    AST     shift, and go to state 30
+    LPAR    shift, and go to state 65
+    MINUS   shift, and go to state 35
+    NOT     shift, and go to state 36
+    PLUS    shift, and go to state 37
+    ID      shift, and go to state 66
+    STRLIT  shift, and go to state 41
+    CHRLIT  shift, and go to state 42
+    INTLIT  shift, and go to state 43
+
+    Factor     go to state 80
+    Subfactor  go to state 56
+
+
 State 38
 
    12 FunctionBody: LBRACE RBRACE .
@@ -749,7 +754,7 @@ State 38
 
 State 39
 
-   40 GoodStatement: RETURN . ExprOptional SEMI
+   41 GoodStatement: RETURN . ExprOptional SEMI
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -773,46 +778,46 @@ State 39
     Term             go to state 54
     Factor           go to state 55
     Subfactor        go to state 56
-    ExprOptional     go to state 80
+    ExprOptional     go to state 81
 
 
 State 40
 
-   47 Expr: ID . LPAR error RPAR
-   81 Subfactor: ID . LPAR ListExprOptional RPAR
-   82          | ID .
+   48 Expr: ID . LPAR error RPAR
+   82 Subfactor: ID . LPAR ListExprOptional RPAR
+   83          | ID .
 
-    LPAR  shift, and go to state 81
-
-    $default  reduce using rule 82 (Subfactor)
-
-
-State 41
-
-   85 Subfactor: STRLIT .
-
-    $default  reduce using rule 85 (Subfactor)
-
-
-State 42
-
-   84 Subfactor: CHRLIT .
-
-    $default  reduce using rule 84 (Subfactor)
-
-
-State 43
-
-   83 Subfactor: INTLIT .
+    LPAR  shift, and go to state 82
 
     $default  reduce using rule 83 (Subfactor)
 
 
+State 41
+
+   86 Subfactor: STRLIT .
+
+    $default  reduce using rule 86 (Subfactor)
+
+
+State 42
+
+   85 Subfactor: CHRLIT .
+
+    $default  reduce using rule 85 (Subfactor)
+
+
+State 43
+
+   84 Subfactor: INTLIT .
+
+    $default  reduce using rule 84 (Subfactor)
+
+
 State 44
 
-   89 ExprOptional: Epsilon .
+   90 ExprOptional: Epsilon .
 
-    $default  reduce using rule 89 (ExprOptional)
+    $default  reduce using rule 90 (ExprOptional)
 
 
 State 45
@@ -842,9 +847,9 @@ State 45
     CHRLIT  reduce using rule 2 (Epsilon)
     INTLIT  reduce using rule 2 (Epsilon)
 
-    Epsilon       go to state 82
-    Declaration   go to state 83
-    Declaration_  go to state 84
+    Epsilon       go to state 83
+    Declaration   go to state 84
+    Declaration_  go to state 85
     TypeSpec      go to state 46
 
 
@@ -856,14 +861,14 @@ State 46
 
     Epsilon     go to state 16
     Declarator  go to state 18
-    Ast_        go to state 85
+    Ast_        go to state 86
 
 
 State 47
 
    10 FunctionBody: LBRACE GoodStatement . Statement_ RBRACE
 
-    error   shift, and go to state 86
+    error   shift, and go to state 87
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
     FOR     shift, and go to state 31
@@ -882,10 +887,11 @@ State 47
     RBRACE  reduce using rule 2 (Epsilon)
     SEMI    reduce using rule 2 (Epsilon)
 
-    Epsilon          go to state 87
-    Statement_       go to state 88
-    Statement        go to state 89
-    GoodStatement    go to state 74
+    Epsilon          go to state 88
+    Statement_       go to state 89
+    StatementList    go to state 90
+    Statement        go to state 74
+    GoodStatement    go to state 75
     IfElseStatement  go to state 48
     Expr             go to state 49
     CommaExpr        go to state 50
@@ -900,110 +906,110 @@ State 47
 
 State 48
 
-   38 GoodStatement: IfElseStatement .
+   39 GoodStatement: IfElseStatement .
 
-    $default  reduce using rule 38 (GoodStatement)
+    $default  reduce using rule 39 (GoodStatement)
 
 
 State 49
 
-   90 ExprOptional: Expr .
+   91 ExprOptional: Expr .
 
-    $default  reduce using rule 90 (ExprOptional)
+    $default  reduce using rule 91 (ExprOptional)
 
 
 State 50
 
-   45 Expr: CommaExpr . ASSIGN Expr
-   46     | CommaExpr .
-   55 CommaExpr: CommaExpr . COMMA SingleExpr
+   46 Expr: CommaExpr . ASSIGN Expr
+   47     | CommaExpr .
+   56 CommaExpr: CommaExpr . COMMA SingleExpr
 
-    ASSIGN  shift, and go to state 90
-    COMMA   shift, and go to state 91
+    ASSIGN  shift, and go to state 91
+    COMMA   shift, and go to state 92
 
-    $default  reduce using rule 46 (Expr)
+    $default  reduce using rule 47 (Expr)
 
 
 State 51
 
-   56 CommaExpr: SingleExpr .
-   57 SingleExpr: SingleExpr . AND BinaryExpr
-   58           | SingleExpr . OR BinaryExpr
+   57 CommaExpr: SingleExpr .
+   58 SingleExpr: SingleExpr . AND BinaryExpr
+   59           | SingleExpr . OR BinaryExpr
 
-    AND  shift, and go to state 92
-    OR   shift, and go to state 93
+    AND  shift, and go to state 93
+    OR   shift, and go to state 94
 
-    $default  reduce using rule 56 (CommaExpr)
+    $default  reduce using rule 57 (CommaExpr)
 
 
 State 52
 
-   59 SingleExpr: BinaryExpr .
-   60 BinaryExpr: BinaryExpr . EQ ComparationExpr
-   61           | BinaryExpr . NE ComparationExpr
-   62           | BinaryExpr . LT ComparationExpr
-   63           | BinaryExpr . GT ComparationExpr
-   64           | BinaryExpr . LE ComparationExpr
-   65           | BinaryExpr . GE ComparationExpr
+   60 SingleExpr: BinaryExpr .
+   61 BinaryExpr: BinaryExpr . EQ ComparationExpr
+   62           | BinaryExpr . NE ComparationExpr
+   63           | BinaryExpr . LT ComparationExpr
+   64           | BinaryExpr . GT ComparationExpr
+   65           | BinaryExpr . LE ComparationExpr
+   66           | BinaryExpr . GE ComparationExpr
 
-    EQ  shift, and go to state 94
-    GE  shift, and go to state 95
-    GT  shift, and go to state 96
-    LE  shift, and go to state 97
-    LT  shift, and go to state 98
-    NE  shift, and go to state 99
+    EQ  shift, and go to state 95
+    GE  shift, and go to state 96
+    GT  shift, and go to state 97
+    LE  shift, and go to state 98
+    LT  shift, and go to state 99
+    NE  shift, and go to state 100
 
-    $default  reduce using rule 59 (SingleExpr)
+    $default  reduce using rule 60 (SingleExpr)
 
 
 State 53
 
-   66 BinaryExpr: ComparationExpr .
-   67 ComparationExpr: ComparationExpr . PLUS Term
-   68                | ComparationExpr . MINUS Term
+   67 BinaryExpr: ComparationExpr .
+   68 ComparationExpr: ComparationExpr . PLUS Term
+   69                | ComparationExpr . MINUS Term
 
-    MINUS  shift, and go to state 100
-    PLUS   shift, and go to state 101
+    MINUS  shift, and go to state 101
+    PLUS   shift, and go to state 102
 
-    $default  reduce using rule 66 (BinaryExpr)
+    $default  reduce using rule 67 (BinaryExpr)
 
 
 State 54
 
-   69 ComparationExpr: Term .
+   70 ComparationExpr: Term .
 
-    $default  reduce using rule 69 (ComparationExpr)
+    $default  reduce using rule 70 (ComparationExpr)
 
 
 State 55
 
-   70 Term: Factor . AST Term
-   71     | Factor . DIV Term
-   72     | Factor . MOD Term
-   73     | Factor .
+   71 Term: Factor . AST Term
+   72     | Factor . DIV Term
+   73     | Factor . MOD Term
+   74     | Factor .
 
-    AST  shift, and go to state 102
-    DIV  shift, and go to state 103
-    MOD  shift, and go to state 104
+    AST  shift, and go to state 103
+    DIV  shift, and go to state 104
+    MOD  shift, and go to state 105
 
-    $default  reduce using rule 73 (Term)
+    $default  reduce using rule 74 (Term)
 
 
 State 56
 
-   79 Factor: Subfactor .
-   80 Subfactor: Subfactor . LSQ Expr RSQ
+   80 Factor: Subfactor .
+   81 Subfactor: Subfactor . LSQ Expr RSQ
 
-    LSQ  shift, and go to state 105
+    LSQ  shift, and go to state 106
 
-    $default  reduce using rule 79 (Factor)
+    $default  reduce using rule 80 (Factor)
 
 
 State 57
 
-   36 GoodStatement: ExprOptional . SEMI
+   37 GoodStatement: ExprOptional . SEMI
 
-    SEMI  shift, and go to state 106
+    SEMI  shift, and go to state 107
 
 
 State 58
@@ -1013,8 +1019,8 @@ State 58
     $default  reduce using rule 2 (Epsilon)
 
     Epsilon     go to state 16
-    Declarator  go to state 107
-    Ast_        go to state 85
+    Declarator  go to state 108
+    Ast_        go to state 86
 
 
 State 59
@@ -1032,16 +1038,16 @@ State 60
     INT   shift, and go to state 3
     VOID  shift, and go to state 4
 
-    ParameterList         go to state 108
-    ParameterDeclaration  go to state 109
-    TypeSpec              go to state 110
+    ParameterList         go to state 109
+    ParameterDeclaration  go to state 110
+    TypeSpec              go to state 111
 
 
 State 61
 
    29 ArrayOptional: LSQ . INTLIT RSQ
 
-    INTLIT  shift, and go to state 111
+    INTLIT  shift, and go to state 112
 
 
 State 62
@@ -1067,7 +1073,7 @@ State 64
 
 State 65
 
-   86 Subfactor: LPAR . Expr RPAR
+   87 Subfactor: LPAR . Expr RPAR
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1080,7 +1086,7 @@ State 65
     CHRLIT  shift, and go to state 42
     INTLIT  shift, and go to state 43
 
-    Expr             go to state 76
+    Expr             go to state 77
     CommaExpr        go to state 50
     SingleExpr       go to state 51
     BinaryExpr       go to state 52
@@ -1092,31 +1098,31 @@ State 65
 
 State 66
 
-   81 Subfactor: ID . LPAR ListExprOptional RPAR
-   82          | ID .
+   82 Subfactor: ID . LPAR ListExprOptional RPAR
+   83          | ID .
 
-    LPAR  shift, and go to state 112
+    LPAR  shift, and go to state 113
 
-    $default  reduce using rule 82 (Subfactor)
+    $default  reduce using rule 83 (Subfactor)
 
 
 State 67
 
-   74 Factor: AMP Factor .
-
-    $default  reduce using rule 74 (Factor)
-
-
-State 68
-
-   75 Factor: AST Factor .
+   75 Factor: AMP Factor .
 
     $default  reduce using rule 75 (Factor)
 
 
+State 68
+
+   76 Factor: AST Factor .
+
+    $default  reduce using rule 76 (Factor)
+
+
 State 69
 
-   39 GoodStatement: FOR LPAR . ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement
+   40 GoodStatement: FOR LPAR . ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1140,13 +1146,13 @@ State 69
     Term             go to state 54
     Factor           go to state 55
     Subfactor        go to state 56
-    ExprOptional     go to state 113
+    ExprOptional     go to state 114
 
 
 State 70
 
-   43 IfElseStatement: IF LPAR . Expr RPAR Statement
-   44                | IF LPAR . Expr RPAR Statement ELSE Statement
+   44 IfElseStatement: IF LPAR . Expr RPAR Statement
+   45                | IF LPAR . Expr RPAR Statement ELSE Statement
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1159,7 +1165,7 @@ State 70
     CHRLIT  shift, and go to state 42
     INTLIT  shift, and go to state 43
 
-    Expr             go to state 114
+    Expr             go to state 115
     CommaExpr        go to state 50
     SingleExpr       go to state 51
     BinaryExpr       go to state 52
@@ -1171,25 +1177,32 @@ State 70
 
 State 71
 
-   34 Statement: error . SEMI
-   41 GoodStatement: LBRACE error . RBRACE
+   35 Statement: error . SEMI
+   42 GoodStatement: LBRACE error . RBRACE
 
-    RBRACE  shift, and go to state 115
-    SEMI    shift, and go to state 116
+    RBRACE  shift, and go to state 116
+    SEMI    shift, and go to state 117
 
 
 State 72
 
-   42 GoodStatement: LBRACE RBRACE .
+   43 GoodStatement: LBRACE RBRACE .
 
-    $default  reduce using rule 42 (GoodStatement)
+    $default  reduce using rule 43 (GoodStatement)
 
 
 State 73
 
-   37 GoodStatement: LBRACE Statement . Statement_ RBRACE
+   38 GoodStatement: LBRACE StatementList . RBRACE
 
-    error   shift, and go to state 86
+    RBRACE  shift, and go to state 118
+
+
+State 74
+
+   34 StatementList: Statement . Statement_
+
+    error   shift, and go to state 87
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
     FOR     shift, and go to state 31
@@ -1208,10 +1221,11 @@ State 73
     RBRACE  reduce using rule 2 (Epsilon)
     SEMI    reduce using rule 2 (Epsilon)
 
-    Epsilon          go to state 87
-    Statement_       go to state 117
-    Statement        go to state 89
-    GoodStatement    go to state 74
+    Epsilon          go to state 88
+    Statement_       go to state 119
+    StatementList    go to state 90
+    Statement        go to state 74
+    GoodStatement    go to state 75
     IfElseStatement  go to state 48
     Expr             go to state 49
     CommaExpr        go to state 50
@@ -1224,93 +1238,93 @@ State 73
     ExprOptional     go to state 57
 
 
-State 74
-
-   35 Statement: GoodStatement .
-
-    $default  reduce using rule 35 (Statement)
-
-
 State 75
 
-   48 Expr: LPAR error . RPAR
+   36 Statement: GoodStatement .
 
-    RPAR  shift, and go to state 118
+    $default  reduce using rule 36 (Statement)
 
 
 State 76
 
-   86 Subfactor: LPAR Expr . RPAR
+   49 Expr: LPAR error . RPAR
 
-    RPAR  shift, and go to state 119
+    RPAR  shift, and go to state 120
 
 
 State 77
 
-   77 Factor: MINUS Factor .
+   87 Subfactor: LPAR Expr . RPAR
 
-    $default  reduce using rule 77 (Factor)
+    RPAR  shift, and go to state 121
 
 
 State 78
 
-   78 Factor: NOT Factor .
+   78 Factor: MINUS Factor .
 
     $default  reduce using rule 78 (Factor)
 
 
 State 79
 
-   76 Factor: PLUS Factor .
+   79 Factor: NOT Factor .
 
-    $default  reduce using rule 76 (Factor)
+    $default  reduce using rule 79 (Factor)
 
 
 State 80
 
-   40 GoodStatement: RETURN ExprOptional . SEMI
+   77 Factor: PLUS Factor .
 
-    SEMI  shift, and go to state 120
+    $default  reduce using rule 77 (Factor)
 
 
 State 81
 
-   47 Expr: ID LPAR . error RPAR
-   81 Subfactor: ID LPAR . ListExprOptional RPAR
+   41 GoodStatement: RETURN ExprOptional . SEMI
 
-    error   shift, and go to state 121
+    SEMI  shift, and go to state 122
+
+
+State 82
+
+   48 Expr: ID LPAR . error RPAR
+   82 Subfactor: ID LPAR . ListExprOptional RPAR
+
+    error   shift, and go to state 123
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
-    LPAR    shift, and go to state 122
+    LPAR    shift, and go to state 124
     MINUS   shift, and go to state 35
     NOT     shift, and go to state 36
     PLUS    shift, and go to state 37
-    ID      shift, and go to state 123
+    ID      shift, and go to state 125
     STRLIT  shift, and go to state 41
     CHRLIT  shift, and go to state 42
     INTLIT  shift, and go to state 43
 
     RPAR  reduce using rule 2 (Epsilon)
 
-    Epsilon             go to state 124
-    Expr_without_comma  go to state 125
-    SingleExpr          go to state 126
+    Epsilon             go to state 126
+    Expr_without_comma  go to state 127
+    SingleExpr          go to state 128
     BinaryExpr          go to state 52
     ComparationExpr     go to state 53
     Term                go to state 54
     Factor              go to state 55
     Subfactor           go to state 56
-    ListExprOptional    go to state 127
+    ListExprOptional    go to state 129
 
 
-State 82
+State 83
 
    22 Declaration_: Epsilon .
 
     $default  reduce using rule 22 (Declaration_)
 
 
-State 83
+State 84
 
    23 Declaration_: Declaration . Declaration_
 
@@ -1336,13 +1350,13 @@ State 83
     CHRLIT  reduce using rule 2 (Epsilon)
     INTLIT  reduce using rule 2 (Epsilon)
 
-    Epsilon       go to state 82
-    Declaration   go to state 83
-    Declaration_  go to state 128
+    Epsilon       go to state 83
+    Declaration   go to state 84
+    Declaration_  go to state 130
     TypeSpec      go to state 46
 
 
-State 84
+State 85
 
     9 FunctionBody: LBRACE Declaration Declaration_ . GoodStatement Statement_ RBRACE
    11             | LBRACE Declaration Declaration_ . RBRACE
@@ -1356,7 +1370,7 @@ State 84
     MINUS   shift, and go to state 35
     NOT     shift, and go to state 36
     PLUS    shift, and go to state 37
-    RBRACE  shift, and go to state 129
+    RBRACE  shift, and go to state 131
     RETURN  shift, and go to state 39
     ID      shift, and go to state 40
     STRLIT  shift, and go to state 41
@@ -1366,7 +1380,7 @@ State 84
     $default  reduce using rule 2 (Epsilon)
 
     Epsilon          go to state 44
-    GoodStatement    go to state 130
+    GoodStatement    go to state 132
     IfElseStatement  go to state 48
     Expr             go to state 49
     CommaExpr        go to state 50
@@ -1377,82 +1391,50 @@ State 84
     Factor           go to state 55
     Subfactor        go to state 56
     ExprOptional     go to state 57
-
-
-State 85
-
-   27 Declarator: Ast_ . ID ArrayOptional
-   94 Ast_: Ast_ . AST
-
-    AST  shift, and go to state 26
-    ID   shift, and go to state 131
 
 
 State 86
 
-   34 Statement: error . SEMI
+   27 Declarator: Ast_ . ID ArrayOptional
+   95 Ast_: Ast_ . AST
 
-    SEMI  shift, and go to state 116
+    AST  shift, and go to state 26
+    ID   shift, and go to state 133
 
 
 State 87
 
-   32 Statement_: Epsilon .
-   89 ExprOptional: Epsilon .
+   35 Statement: error . SEMI
 
-    SEMI      reduce using rule 89 (ExprOptional)
-    $default  reduce using rule 32 (Statement_)
+    SEMI  shift, and go to state 117
 
 
 State 88
 
-   10 FunctionBody: LBRACE GoodStatement Statement_ . RBRACE
+   32 Statement_: Epsilon .
+   90 ExprOptional: Epsilon .
 
-    RBRACE  shift, and go to state 132
+    SEMI      reduce using rule 90 (ExprOptional)
+    $default  reduce using rule 32 (Statement_)
 
 
 State 89
 
-   33 Statement_: Statement . Statement_
+   10 FunctionBody: LBRACE GoodStatement Statement_ . RBRACE
 
-    error   shift, and go to state 86
-    AMP     shift, and go to state 29
-    AST     shift, and go to state 30
-    FOR     shift, and go to state 31
-    IF      shift, and go to state 32
-    LBRACE  shift, and go to state 33
-    LPAR    shift, and go to state 34
-    MINUS   shift, and go to state 35
-    NOT     shift, and go to state 36
-    PLUS    shift, and go to state 37
-    RETURN  shift, and go to state 39
-    ID      shift, and go to state 40
-    STRLIT  shift, and go to state 41
-    CHRLIT  shift, and go to state 42
-    INTLIT  shift, and go to state 43
-
-    RBRACE  reduce using rule 2 (Epsilon)
-    SEMI    reduce using rule 2 (Epsilon)
-
-    Epsilon          go to state 87
-    Statement_       go to state 133
-    Statement        go to state 89
-    GoodStatement    go to state 74
-    IfElseStatement  go to state 48
-    Expr             go to state 49
-    CommaExpr        go to state 50
-    SingleExpr       go to state 51
-    BinaryExpr       go to state 52
-    ComparationExpr  go to state 53
-    Term             go to state 54
-    Factor           go to state 55
-    Subfactor        go to state 56
-    ExprOptional     go to state 57
+    RBRACE  shift, and go to state 134
 
 
 State 90
 
-   45 Expr: CommaExpr ASSIGN . Expr
+   33 Statement_: StatementList .
+
+    $default  reduce using rule 33 (Statement_)
+
+
+State 91
+
+   46 Expr: CommaExpr ASSIGN . Expr
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1465,32 +1447,9 @@ State 90
     CHRLIT  shift, and go to state 42
     INTLIT  shift, and go to state 43
 
-    Expr             go to state 134
+    Expr             go to state 135
     CommaExpr        go to state 50
     SingleExpr       go to state 51
-    BinaryExpr       go to state 52
-    ComparationExpr  go to state 53
-    Term             go to state 54
-    Factor           go to state 55
-    Subfactor        go to state 56
-
-
-State 91
-
-   55 CommaExpr: CommaExpr COMMA . SingleExpr
-
-    AMP     shift, and go to state 29
-    AST     shift, and go to state 30
-    LPAR    shift, and go to state 65
-    MINUS   shift, and go to state 35
-    NOT     shift, and go to state 36
-    PLUS    shift, and go to state 37
-    ID      shift, and go to state 66
-    STRLIT  shift, and go to state 41
-    CHRLIT  shift, and go to state 42
-    INTLIT  shift, and go to state 43
-
-    SingleExpr       go to state 135
     BinaryExpr       go to state 52
     ComparationExpr  go to state 53
     Term             go to state 54
@@ -1500,7 +1459,7 @@ State 91
 
 State 92
 
-   57 SingleExpr: SingleExpr AND . BinaryExpr
+   56 CommaExpr: CommaExpr COMMA . SingleExpr
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1513,7 +1472,8 @@ State 92
     CHRLIT  shift, and go to state 42
     INTLIT  shift, and go to state 43
 
-    BinaryExpr       go to state 136
+    SingleExpr       go to state 136
+    BinaryExpr       go to state 52
     ComparationExpr  go to state 53
     Term             go to state 54
     Factor           go to state 55
@@ -1522,7 +1482,7 @@ State 92
 
 State 93
 
-   58 SingleExpr: SingleExpr OR . BinaryExpr
+   58 SingleExpr: SingleExpr AND . BinaryExpr
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1544,7 +1504,7 @@ State 93
 
 State 94
 
-   60 BinaryExpr: BinaryExpr EQ . ComparationExpr
+   59 SingleExpr: SingleExpr OR . BinaryExpr
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1557,7 +1517,8 @@ State 94
     CHRLIT  shift, and go to state 42
     INTLIT  shift, and go to state 43
 
-    ComparationExpr  go to state 138
+    BinaryExpr       go to state 138
+    ComparationExpr  go to state 53
     Term             go to state 54
     Factor           go to state 55
     Subfactor        go to state 56
@@ -1565,7 +1526,7 @@ State 94
 
 State 95
 
-   65 BinaryExpr: BinaryExpr GE . ComparationExpr
+   61 BinaryExpr: BinaryExpr EQ . ComparationExpr
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1586,7 +1547,7 @@ State 95
 
 State 96
 
-   63 BinaryExpr: BinaryExpr GT . ComparationExpr
+   66 BinaryExpr: BinaryExpr GE . ComparationExpr
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1607,7 +1568,7 @@ State 96
 
 State 97
 
-   64 BinaryExpr: BinaryExpr LE . ComparationExpr
+   64 BinaryExpr: BinaryExpr GT . ComparationExpr
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1628,7 +1589,7 @@ State 97
 
 State 98
 
-   62 BinaryExpr: BinaryExpr LT . ComparationExpr
+   65 BinaryExpr: BinaryExpr LE . ComparationExpr
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1649,7 +1610,7 @@ State 98
 
 State 99
 
-   61 BinaryExpr: BinaryExpr NE . ComparationExpr
+   63 BinaryExpr: BinaryExpr LT . ComparationExpr
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1670,7 +1631,7 @@ State 99
 
 State 100
 
-   68 ComparationExpr: ComparationExpr MINUS . Term
+   62 BinaryExpr: BinaryExpr NE . ComparationExpr
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1683,14 +1644,15 @@ State 100
     CHRLIT  shift, and go to state 42
     INTLIT  shift, and go to state 43
 
-    Term       go to state 144
-    Factor     go to state 55
-    Subfactor  go to state 56
+    ComparationExpr  go to state 144
+    Term             go to state 54
+    Factor           go to state 55
+    Subfactor        go to state 56
 
 
 State 101
 
-   67 ComparationExpr: ComparationExpr PLUS . Term
+   69 ComparationExpr: ComparationExpr MINUS . Term
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1710,7 +1672,7 @@ State 101
 
 State 102
 
-   70 Term: Factor AST . Term
+   68 ComparationExpr: ComparationExpr PLUS . Term
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1730,7 +1692,7 @@ State 102
 
 State 103
 
-   71 Term: Factor DIV . Term
+   71 Term: Factor AST . Term
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1750,7 +1712,7 @@ State 103
 
 State 104
 
-   72 Term: Factor MOD . Term
+   72 Term: Factor DIV . Term
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1770,7 +1732,27 @@ State 104
 
 State 105
 
-   80 Subfactor: Subfactor LSQ . Expr RSQ
+   73 Term: Factor MOD . Term
+
+    AMP     shift, and go to state 29
+    AST     shift, and go to state 30
+    LPAR    shift, and go to state 65
+    MINUS   shift, and go to state 35
+    NOT     shift, and go to state 36
+    PLUS    shift, and go to state 37
+    ID      shift, and go to state 66
+    STRLIT  shift, and go to state 41
+    CHRLIT  shift, and go to state 42
+    INTLIT  shift, and go to state 43
+
+    Term       go to state 149
+    Factor     go to state 55
+    Subfactor  go to state 56
+
+
+State 106
+
+   81 Subfactor: Subfactor LSQ . Expr RSQ
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -1783,7 +1765,7 @@ State 105
     CHRLIT  shift, and go to state 42
     INTLIT  shift, and go to state 43
 
-    Expr             go to state 149
+    Expr             go to state 150
     CommaExpr        go to state 50
     SingleExpr       go to state 51
     BinaryExpr       go to state 52
@@ -1793,150 +1775,157 @@ State 105
     Subfactor        go to state 56
 
 
-State 106
-
-   36 GoodStatement: ExprOptional SEMI .
-
-    $default  reduce using rule 36 (GoodStatement)
-
-
 State 107
+
+   37 GoodStatement: ExprOptional SEMI .
+
+    $default  reduce using rule 37 (GoodStatement)
+
+
+State 108
 
    31 Declarator_: Declarator_ COMMA Declarator .
 
     $default  reduce using rule 31 (Declarator_)
 
 
-State 108
+State 109
 
    15 FunctionDeclarator: Ast_ ID LPAR ParameterList . RPAR
 
-    RPAR  shift, and go to state 150
+    RPAR  shift, and go to state 151
 
 
-State 109
+State 110
 
    16 ParameterList: ParameterDeclaration . ParameterDeclaration_
 
     $default  reduce using rule 2 (Epsilon)
 
-    Epsilon                go to state 151
-    ParameterDeclaration_  go to state 152
+    Epsilon                go to state 152
+    ParameterDeclaration_  go to state 153
 
 
-State 110
+State 111
 
    17 ParameterDeclaration: TypeSpec . Ast_ IdOptional
 
     $default  reduce using rule 2 (Epsilon)
 
     Epsilon  go to state 16
-    Ast_     go to state 153
-
-
-State 111
-
-   29 ArrayOptional: LSQ INTLIT . RSQ
-
-    RSQ  shift, and go to state 154
+    Ast_     go to state 154
 
 
 State 112
 
-   81 Subfactor: ID LPAR . ListExprOptional RPAR
+   29 ArrayOptional: LSQ INTLIT . RSQ
+
+    RSQ  shift, and go to state 155
+
+
+State 113
+
+   82 Subfactor: ID LPAR . ListExprOptional RPAR
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
-    LPAR    shift, and go to state 122
+    LPAR    shift, and go to state 124
     MINUS   shift, and go to state 35
     NOT     shift, and go to state 36
     PLUS    shift, and go to state 37
-    ID      shift, and go to state 123
+    ID      shift, and go to state 125
     STRLIT  shift, and go to state 41
     CHRLIT  shift, and go to state 42
     INTLIT  shift, and go to state 43
 
     $default  reduce using rule 2 (Epsilon)
 
-    Epsilon             go to state 124
-    Expr_without_comma  go to state 125
-    SingleExpr          go to state 126
+    Epsilon             go to state 126
+    Expr_without_comma  go to state 127
+    SingleExpr          go to state 128
     BinaryExpr          go to state 52
     ComparationExpr     go to state 53
     Term                go to state 54
     Factor              go to state 55
     Subfactor           go to state 56
-    ListExprOptional    go to state 127
-
-
-State 113
-
-   39 GoodStatement: FOR LPAR ExprOptional . SEMI ExprOptional SEMI ExprOptional RPAR Statement
-
-    SEMI  shift, and go to state 155
+    ListExprOptional    go to state 129
 
 
 State 114
 
-   43 IfElseStatement: IF LPAR Expr . RPAR Statement
-   44                | IF LPAR Expr . RPAR Statement ELSE Statement
+   40 GoodStatement: FOR LPAR ExprOptional . SEMI ExprOptional SEMI ExprOptional RPAR Statement
 
-    RPAR  shift, and go to state 156
+    SEMI  shift, and go to state 156
 
 
 State 115
 
-   41 GoodStatement: LBRACE error RBRACE .
+   44 IfElseStatement: IF LPAR Expr . RPAR Statement
+   45                | IF LPAR Expr . RPAR Statement ELSE Statement
 
-    $default  reduce using rule 41 (GoodStatement)
+    RPAR  shift, and go to state 157
 
 
 State 116
 
-   34 Statement: error SEMI .
+   42 GoodStatement: LBRACE error RBRACE .
 
-    $default  reduce using rule 34 (Statement)
+    $default  reduce using rule 42 (GoodStatement)
 
 
 State 117
 
-   37 GoodStatement: LBRACE Statement Statement_ . RBRACE
+   35 Statement: error SEMI .
 
-    RBRACE  shift, and go to state 157
+    $default  reduce using rule 35 (Statement)
 
 
 State 118
 
-   48 Expr: LPAR error RPAR .
+   38 GoodStatement: LBRACE StatementList RBRACE .
 
-    $default  reduce using rule 48 (Expr)
+    $default  reduce using rule 38 (GoodStatement)
 
 
 State 119
 
-   86 Subfactor: LPAR Expr RPAR .
+   34 StatementList: Statement Statement_ .
 
-    $default  reduce using rule 86 (Subfactor)
+    $default  reduce using rule 34 (StatementList)
 
 
 State 120
 
-   40 GoodStatement: RETURN ExprOptional SEMI .
+   49 Expr: LPAR error RPAR .
 
-    $default  reduce using rule 40 (GoodStatement)
+    $default  reduce using rule 49 (Expr)
 
 
 State 121
 
-   47 Expr: ID LPAR error . RPAR
+   87 Subfactor: LPAR Expr RPAR .
 
-    RPAR  shift, and go to state 158
+    $default  reduce using rule 87 (Subfactor)
 
 
 State 122
 
-   50 Expr_without_comma: LPAR . error RPAR
-   86 Subfactor: LPAR . Expr RPAR
+   41 GoodStatement: RETURN ExprOptional SEMI .
+
+    $default  reduce using rule 41 (GoodStatement)
+
+
+State 123
+
+   48 Expr: ID LPAR error . RPAR
+
+    RPAR  shift, and go to state 158
+
+
+State 124
+
+   51 Expr_without_comma: LPAR . error RPAR
+   87 Subfactor: LPAR . Expr RPAR
 
     error   shift, and go to state 159
     AMP     shift, and go to state 29
@@ -1950,7 +1939,7 @@ State 122
     CHRLIT  shift, and go to state 42
     INTLIT  shift, and go to state 43
 
-    Expr             go to state 76
+    Expr             go to state 77
     CommaExpr        go to state 50
     SingleExpr       go to state 51
     BinaryExpr       go to state 52
@@ -1960,27 +1949,27 @@ State 122
     Subfactor        go to state 56
 
 
-State 123
+State 125
 
-   49 Expr_without_comma: ID . LPAR error RPAR
-   81 Subfactor: ID . LPAR ListExprOptional RPAR
-   82          | ID .
+   50 Expr_without_comma: ID . LPAR error RPAR
+   82 Subfactor: ID . LPAR ListExprOptional RPAR
+   83          | ID .
 
     LPAR  shift, and go to state 160
 
-    $default  reduce using rule 82 (Subfactor)
+    $default  reduce using rule 83 (Subfactor)
 
 
-State 124
+State 126
 
-   87 ListExprOptional: Epsilon .
+   88 ListExprOptional: Epsilon .
 
-    $default  reduce using rule 87 (ListExprOptional)
+    $default  reduce using rule 88 (ListExprOptional)
 
 
-State 125
+State 127
 
-   88 ListExprOptional: Expr_without_comma . Expr_without_comma_
+   89 ListExprOptional: Expr_without_comma . Expr_without_comma_
 
     COMMA  shift, and go to state 161
 
@@ -1990,46 +1979,46 @@ State 125
     Expr_without_comma_  go to state 163
 
 
-State 126
+State 128
 
-   51 Expr_without_comma: SingleExpr .
-   52                   | SingleExpr . ASSIGN Expr_without_comma
-   57 SingleExpr: SingleExpr . AND BinaryExpr
-   58           | SingleExpr . OR BinaryExpr
+   52 Expr_without_comma: SingleExpr .
+   53                   | SingleExpr . ASSIGN Expr_without_comma
+   58 SingleExpr: SingleExpr . AND BinaryExpr
+   59           | SingleExpr . OR BinaryExpr
 
-    AND     shift, and go to state 92
+    AND     shift, and go to state 93
     ASSIGN  shift, and go to state 164
-    OR      shift, and go to state 93
+    OR      shift, and go to state 94
 
-    $default  reduce using rule 51 (Expr_without_comma)
+    $default  reduce using rule 52 (Expr_without_comma)
 
 
-State 127
+State 129
 
-   81 Subfactor: ID LPAR ListExprOptional . RPAR
+   82 Subfactor: ID LPAR ListExprOptional . RPAR
 
     RPAR  shift, and go to state 165
 
 
-State 128
+State 130
 
    23 Declaration_: Declaration Declaration_ .
 
     $default  reduce using rule 23 (Declaration_)
 
 
-State 129
+State 131
 
    11 FunctionBody: LBRACE Declaration Declaration_ RBRACE .
 
     $default  reduce using rule 11 (FunctionBody)
 
 
-State 130
+State 132
 
     9 FunctionBody: LBRACE Declaration Declaration_ GoodStatement . Statement_ RBRACE
 
-    error   shift, and go to state 86
+    error   shift, and go to state 87
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
     FOR     shift, and go to state 31
@@ -2048,10 +2037,11 @@ State 130
     RBRACE  reduce using rule 2 (Epsilon)
     SEMI    reduce using rule 2 (Epsilon)
 
-    Epsilon          go to state 87
+    Epsilon          go to state 88
     Statement_       go to state 166
-    Statement        go to state 89
-    GoodStatement    go to state 74
+    StatementList    go to state 90
+    Statement        go to state 74
+    GoodStatement    go to state 75
     IfElseStatement  go to state 48
     Expr             go to state 49
     CommaExpr        go to state 50
@@ -2064,7 +2054,7 @@ State 130
     ExprOptional     go to state 57
 
 
-State 131
+State 133
 
    27 Declarator: Ast_ ID . ArrayOptional
 
@@ -2076,208 +2066,201 @@ State 131
     ArrayOptional  go to state 63
 
 
-State 132
+State 134
 
    10 FunctionBody: LBRACE GoodStatement Statement_ RBRACE .
 
     $default  reduce using rule 10 (FunctionBody)
 
 
-State 133
-
-   33 Statement_: Statement Statement_ .
-
-    $default  reduce using rule 33 (Statement_)
-
-
-State 134
-
-   45 Expr: CommaExpr ASSIGN Expr .
-
-    $default  reduce using rule 45 (Expr)
-
-
 State 135
 
-   55 CommaExpr: CommaExpr COMMA SingleExpr .
-   57 SingleExpr: SingleExpr . AND BinaryExpr
-   58           | SingleExpr . OR BinaryExpr
+   46 Expr: CommaExpr ASSIGN Expr .
 
-    AND  shift, and go to state 92
-    OR   shift, and go to state 93
-
-    $default  reduce using rule 55 (CommaExpr)
+    $default  reduce using rule 46 (Expr)
 
 
 State 136
 
-   57 SingleExpr: SingleExpr AND BinaryExpr .
-   60 BinaryExpr: BinaryExpr . EQ ComparationExpr
-   61           | BinaryExpr . NE ComparationExpr
-   62           | BinaryExpr . LT ComparationExpr
-   63           | BinaryExpr . GT ComparationExpr
-   64           | BinaryExpr . LE ComparationExpr
-   65           | BinaryExpr . GE ComparationExpr
+   56 CommaExpr: CommaExpr COMMA SingleExpr .
+   58 SingleExpr: SingleExpr . AND BinaryExpr
+   59           | SingleExpr . OR BinaryExpr
 
-    EQ  shift, and go to state 94
-    GE  shift, and go to state 95
-    GT  shift, and go to state 96
-    LE  shift, and go to state 97
-    LT  shift, and go to state 98
-    NE  shift, and go to state 99
+    AND  shift, and go to state 93
+    OR   shift, and go to state 94
 
-    $default  reduce using rule 57 (SingleExpr)
+    $default  reduce using rule 56 (CommaExpr)
 
 
 State 137
 
-   58 SingleExpr: SingleExpr OR BinaryExpr .
-   60 BinaryExpr: BinaryExpr . EQ ComparationExpr
-   61           | BinaryExpr . NE ComparationExpr
-   62           | BinaryExpr . LT ComparationExpr
-   63           | BinaryExpr . GT ComparationExpr
-   64           | BinaryExpr . LE ComparationExpr
-   65           | BinaryExpr . GE ComparationExpr
+   58 SingleExpr: SingleExpr AND BinaryExpr .
+   61 BinaryExpr: BinaryExpr . EQ ComparationExpr
+   62           | BinaryExpr . NE ComparationExpr
+   63           | BinaryExpr . LT ComparationExpr
+   64           | BinaryExpr . GT ComparationExpr
+   65           | BinaryExpr . LE ComparationExpr
+   66           | BinaryExpr . GE ComparationExpr
 
-    EQ  shift, and go to state 94
-    GE  shift, and go to state 95
-    GT  shift, and go to state 96
-    LE  shift, and go to state 97
-    LT  shift, and go to state 98
-    NE  shift, and go to state 99
+    EQ  shift, and go to state 95
+    GE  shift, and go to state 96
+    GT  shift, and go to state 97
+    LE  shift, and go to state 98
+    LT  shift, and go to state 99
+    NE  shift, and go to state 100
 
     $default  reduce using rule 58 (SingleExpr)
 
 
 State 138
 
-   60 BinaryExpr: BinaryExpr EQ ComparationExpr .
-   67 ComparationExpr: ComparationExpr . PLUS Term
-   68                | ComparationExpr . MINUS Term
+   59 SingleExpr: SingleExpr OR BinaryExpr .
+   61 BinaryExpr: BinaryExpr . EQ ComparationExpr
+   62           | BinaryExpr . NE ComparationExpr
+   63           | BinaryExpr . LT ComparationExpr
+   64           | BinaryExpr . GT ComparationExpr
+   65           | BinaryExpr . LE ComparationExpr
+   66           | BinaryExpr . GE ComparationExpr
 
-    MINUS  shift, and go to state 100
-    PLUS   shift, and go to state 101
+    EQ  shift, and go to state 95
+    GE  shift, and go to state 96
+    GT  shift, and go to state 97
+    LE  shift, and go to state 98
+    LT  shift, and go to state 99
+    NE  shift, and go to state 100
 
-    $default  reduce using rule 60 (BinaryExpr)
+    $default  reduce using rule 59 (SingleExpr)
 
 
 State 139
 
-   65 BinaryExpr: BinaryExpr GE ComparationExpr .
-   67 ComparationExpr: ComparationExpr . PLUS Term
-   68                | ComparationExpr . MINUS Term
+   61 BinaryExpr: BinaryExpr EQ ComparationExpr .
+   68 ComparationExpr: ComparationExpr . PLUS Term
+   69                | ComparationExpr . MINUS Term
 
-    MINUS  shift, and go to state 100
-    PLUS   shift, and go to state 101
+    MINUS  shift, and go to state 101
+    PLUS   shift, and go to state 102
 
-    $default  reduce using rule 65 (BinaryExpr)
+    $default  reduce using rule 61 (BinaryExpr)
 
 
 State 140
 
-   63 BinaryExpr: BinaryExpr GT ComparationExpr .
-   67 ComparationExpr: ComparationExpr . PLUS Term
-   68                | ComparationExpr . MINUS Term
+   66 BinaryExpr: BinaryExpr GE ComparationExpr .
+   68 ComparationExpr: ComparationExpr . PLUS Term
+   69                | ComparationExpr . MINUS Term
 
-    MINUS  shift, and go to state 100
-    PLUS   shift, and go to state 101
+    MINUS  shift, and go to state 101
+    PLUS   shift, and go to state 102
 
-    $default  reduce using rule 63 (BinaryExpr)
+    $default  reduce using rule 66 (BinaryExpr)
 
 
 State 141
 
-   64 BinaryExpr: BinaryExpr LE ComparationExpr .
-   67 ComparationExpr: ComparationExpr . PLUS Term
-   68                | ComparationExpr . MINUS Term
+   64 BinaryExpr: BinaryExpr GT ComparationExpr .
+   68 ComparationExpr: ComparationExpr . PLUS Term
+   69                | ComparationExpr . MINUS Term
 
-    MINUS  shift, and go to state 100
-    PLUS   shift, and go to state 101
+    MINUS  shift, and go to state 101
+    PLUS   shift, and go to state 102
 
     $default  reduce using rule 64 (BinaryExpr)
 
 
 State 142
 
-   62 BinaryExpr: BinaryExpr LT ComparationExpr .
-   67 ComparationExpr: ComparationExpr . PLUS Term
-   68                | ComparationExpr . MINUS Term
+   65 BinaryExpr: BinaryExpr LE ComparationExpr .
+   68 ComparationExpr: ComparationExpr . PLUS Term
+   69                | ComparationExpr . MINUS Term
 
-    MINUS  shift, and go to state 100
-    PLUS   shift, and go to state 101
+    MINUS  shift, and go to state 101
+    PLUS   shift, and go to state 102
 
-    $default  reduce using rule 62 (BinaryExpr)
+    $default  reduce using rule 65 (BinaryExpr)
 
 
 State 143
 
-   61 BinaryExpr: BinaryExpr NE ComparationExpr .
-   67 ComparationExpr: ComparationExpr . PLUS Term
-   68                | ComparationExpr . MINUS Term
+   63 BinaryExpr: BinaryExpr LT ComparationExpr .
+   68 ComparationExpr: ComparationExpr . PLUS Term
+   69                | ComparationExpr . MINUS Term
 
-    MINUS  shift, and go to state 100
-    PLUS   shift, and go to state 101
+    MINUS  shift, and go to state 101
+    PLUS   shift, and go to state 102
 
-    $default  reduce using rule 61 (BinaryExpr)
+    $default  reduce using rule 63 (BinaryExpr)
 
 
 State 144
 
-   68 ComparationExpr: ComparationExpr MINUS Term .
+   62 BinaryExpr: BinaryExpr NE ComparationExpr .
+   68 ComparationExpr: ComparationExpr . PLUS Term
+   69                | ComparationExpr . MINUS Term
 
-    $default  reduce using rule 68 (ComparationExpr)
+    MINUS  shift, and go to state 101
+    PLUS   shift, and go to state 102
+
+    $default  reduce using rule 62 (BinaryExpr)
 
 
 State 145
 
-   67 ComparationExpr: ComparationExpr PLUS Term .
+   69 ComparationExpr: ComparationExpr MINUS Term .
 
-    $default  reduce using rule 67 (ComparationExpr)
+    $default  reduce using rule 69 (ComparationExpr)
 
 
 State 146
 
-   70 Term: Factor AST Term .
+   68 ComparationExpr: ComparationExpr PLUS Term .
 
-    $default  reduce using rule 70 (Term)
+    $default  reduce using rule 68 (ComparationExpr)
 
 
 State 147
 
-   71 Term: Factor DIV Term .
+   71 Term: Factor AST Term .
 
     $default  reduce using rule 71 (Term)
 
 
 State 148
 
-   72 Term: Factor MOD Term .
+   72 Term: Factor DIV Term .
 
     $default  reduce using rule 72 (Term)
 
 
 State 149
 
-   80 Subfactor: Subfactor LSQ Expr . RSQ
+   73 Term: Factor MOD Term .
+
+    $default  reduce using rule 73 (Term)
+
+
+State 150
+
+   81 Subfactor: Subfactor LSQ Expr . RSQ
 
     RSQ  shift, and go to state 167
 
 
-State 150
+State 151
 
    15 FunctionDeclarator: Ast_ ID LPAR ParameterList RPAR .
 
     $default  reduce using rule 15 (FunctionDeclarator)
 
 
-State 151
+State 152
 
    18 ParameterDeclaration_: Epsilon .
 
     $default  reduce using rule 18 (ParameterDeclaration_)
 
 
-State 152
+State 153
 
    16 ParameterList: ParameterDeclaration ParameterDeclaration_ .
    19 ParameterDeclaration_: ParameterDeclaration_ . COMMA ParameterDeclaration
@@ -2287,10 +2270,10 @@ State 152
     $default  reduce using rule 16 (ParameterList)
 
 
-State 153
+State 154
 
    17 ParameterDeclaration: TypeSpec Ast_ . IdOptional
-   94 Ast_: Ast_ . AST
+   95 Ast_: Ast_ . AST
 
     AST  shift, and go to state 26
     ID   shift, and go to state 169
@@ -2301,16 +2284,16 @@ State 153
     IdOptional  go to state 171
 
 
-State 154
+State 155
 
    29 ArrayOptional: LSQ INTLIT RSQ .
 
     $default  reduce using rule 29 (ArrayOptional)
 
 
-State 155
+State 156
 
-   39 GoodStatement: FOR LPAR ExprOptional SEMI . ExprOptional SEMI ExprOptional RPAR Statement
+   40 GoodStatement: FOR LPAR ExprOptional SEMI . ExprOptional SEMI ExprOptional RPAR Statement
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -2337,12 +2320,12 @@ State 155
     ExprOptional     go to state 172
 
 
-State 156
+State 157
 
-   43 IfElseStatement: IF LPAR Expr RPAR . Statement
-   44                | IF LPAR Expr RPAR . Statement ELSE Statement
+   44 IfElseStatement: IF LPAR Expr RPAR . Statement
+   45                | IF LPAR Expr RPAR . Statement ELSE Statement
 
-    error   shift, and go to state 86
+    error   shift, and go to state 87
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
     FOR     shift, and go to state 31
@@ -2362,7 +2345,7 @@ State 156
 
     Epsilon          go to state 44
     Statement        go to state 173
-    GoodStatement    go to state 74
+    GoodStatement    go to state 75
     IfElseStatement  go to state 48
     Expr             go to state 49
     CommaExpr        go to state 50
@@ -2375,74 +2358,67 @@ State 156
     ExprOptional     go to state 57
 
 
-State 157
-
-   37 GoodStatement: LBRACE Statement Statement_ RBRACE .
-
-    $default  reduce using rule 37 (GoodStatement)
-
-
 State 158
 
-   47 Expr: ID LPAR error RPAR .
+   48 Expr: ID LPAR error RPAR .
 
-    $default  reduce using rule 47 (Expr)
+    $default  reduce using rule 48 (Expr)
 
 
 State 159
 
-   50 Expr_without_comma: LPAR error . RPAR
+   51 Expr_without_comma: LPAR error . RPAR
 
     RPAR  shift, and go to state 174
 
 
 State 160
 
-   49 Expr_without_comma: ID LPAR . error RPAR
-   81 Subfactor: ID LPAR . ListExprOptional RPAR
+   50 Expr_without_comma: ID LPAR . error RPAR
+   82 Subfactor: ID LPAR . ListExprOptional RPAR
 
     error   shift, and go to state 175
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
-    LPAR    shift, and go to state 122
+    LPAR    shift, and go to state 124
     MINUS   shift, and go to state 35
     NOT     shift, and go to state 36
     PLUS    shift, and go to state 37
-    ID      shift, and go to state 123
+    ID      shift, and go to state 125
     STRLIT  shift, and go to state 41
     CHRLIT  shift, and go to state 42
     INTLIT  shift, and go to state 43
 
     RPAR  reduce using rule 2 (Epsilon)
 
-    Epsilon             go to state 124
-    Expr_without_comma  go to state 125
-    SingleExpr          go to state 126
+    Epsilon             go to state 126
+    Expr_without_comma  go to state 127
+    SingleExpr          go to state 128
     BinaryExpr          go to state 52
     ComparationExpr     go to state 53
     Term                go to state 54
     Factor              go to state 55
     Subfactor           go to state 56
-    ListExprOptional    go to state 127
+    ListExprOptional    go to state 129
 
 
 State 161
 
-   54 Expr_without_comma_: COMMA . Expr_without_comma
+   55 Expr_without_comma_: COMMA . Expr_without_comma
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
-    LPAR    shift, and go to state 122
+    LPAR    shift, and go to state 124
     MINUS   shift, and go to state 35
     NOT     shift, and go to state 36
     PLUS    shift, and go to state 37
-    ID      shift, and go to state 123
+    ID      shift, and go to state 125
     STRLIT  shift, and go to state 41
     CHRLIT  shift, and go to state 42
     INTLIT  shift, and go to state 43
 
     Expr_without_comma  go to state 176
-    SingleExpr          go to state 126
+    SingleExpr          go to state 128
     BinaryExpr          go to state 52
     ComparationExpr     go to state 53
     Term                go to state 54
@@ -2452,35 +2428,35 @@ State 161
 
 State 162
 
-   53 Expr_without_comma_: Epsilon .
+   54 Expr_without_comma_: Epsilon .
 
-    $default  reduce using rule 53 (Expr_without_comma_)
+    $default  reduce using rule 54 (Expr_without_comma_)
 
 
 State 163
 
-   88 ListExprOptional: Expr_without_comma Expr_without_comma_ .
+   89 ListExprOptional: Expr_without_comma Expr_without_comma_ .
 
-    $default  reduce using rule 88 (ListExprOptional)
+    $default  reduce using rule 89 (ListExprOptional)
 
 
 State 164
 
-   52 Expr_without_comma: SingleExpr ASSIGN . Expr_without_comma
+   53 Expr_without_comma: SingleExpr ASSIGN . Expr_without_comma
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
-    LPAR    shift, and go to state 122
+    LPAR    shift, and go to state 124
     MINUS   shift, and go to state 35
     NOT     shift, and go to state 36
     PLUS    shift, and go to state 37
-    ID      shift, and go to state 123
+    ID      shift, and go to state 125
     STRLIT  shift, and go to state 41
     CHRLIT  shift, and go to state 42
     INTLIT  shift, and go to state 43
 
     Expr_without_comma  go to state 177
-    SingleExpr          go to state 126
+    SingleExpr          go to state 128
     BinaryExpr          go to state 52
     ComparationExpr     go to state 53
     Term                go to state 54
@@ -2490,9 +2466,9 @@ State 164
 
 State 165
 
-   81 Subfactor: ID LPAR ListExprOptional RPAR .
+   82 Subfactor: ID LPAR ListExprOptional RPAR .
 
-    $default  reduce using rule 81 (Subfactor)
+    $default  reduce using rule 82 (Subfactor)
 
 
 State 166
@@ -2504,9 +2480,9 @@ State 166
 
 State 167
 
-   80 Subfactor: Subfactor LSQ Expr RSQ .
+   81 Subfactor: Subfactor LSQ Expr RSQ .
 
-    $default  reduce using rule 80 (Subfactor)
+    $default  reduce using rule 81 (Subfactor)
 
 
 State 168
@@ -2518,21 +2494,21 @@ State 168
     VOID  shift, and go to state 4
 
     ParameterDeclaration  go to state 179
-    TypeSpec              go to state 110
+    TypeSpec              go to state 111
 
 
 State 169
 
-   92 IdOptional: ID .
+   93 IdOptional: ID .
 
-    $default  reduce using rule 92 (IdOptional)
+    $default  reduce using rule 93 (IdOptional)
 
 
 State 170
 
-   91 IdOptional: Epsilon .
+   92 IdOptional: Epsilon .
 
-    $default  reduce using rule 91 (IdOptional)
+    $default  reduce using rule 92 (IdOptional)
 
 
 State 171
@@ -2544,47 +2520,47 @@ State 171
 
 State 172
 
-   39 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional . SEMI ExprOptional RPAR Statement
+   40 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional . SEMI ExprOptional RPAR Statement
 
     SEMI  shift, and go to state 180
 
 
 State 173
 
-   43 IfElseStatement: IF LPAR Expr RPAR Statement .
-   44                | IF LPAR Expr RPAR Statement . ELSE Statement
+   44 IfElseStatement: IF LPAR Expr RPAR Statement .
+   45                | IF LPAR Expr RPAR Statement . ELSE Statement
 
     ELSE  shift, and go to state 181
 
-    $default  reduce using rule 43 (IfElseStatement)
+    $default  reduce using rule 44 (IfElseStatement)
 
 
 State 174
 
-   50 Expr_without_comma: LPAR error RPAR .
+   51 Expr_without_comma: LPAR error RPAR .
 
-    $default  reduce using rule 50 (Expr_without_comma)
+    $default  reduce using rule 51 (Expr_without_comma)
 
 
 State 175
 
-   49 Expr_without_comma: ID LPAR error . RPAR
+   50 Expr_without_comma: ID LPAR error . RPAR
 
     RPAR  shift, and go to state 182
 
 
 State 176
 
-   54 Expr_without_comma_: COMMA Expr_without_comma .
+   55 Expr_without_comma_: COMMA Expr_without_comma .
 
-    $default  reduce using rule 54 (Expr_without_comma_)
+    $default  reduce using rule 55 (Expr_without_comma_)
 
 
 State 177
 
-   52 Expr_without_comma: SingleExpr ASSIGN Expr_without_comma .
+   53 Expr_without_comma: SingleExpr ASSIGN Expr_without_comma .
 
-    $default  reduce using rule 52 (Expr_without_comma)
+    $default  reduce using rule 53 (Expr_without_comma)
 
 
 State 178
@@ -2603,7 +2579,7 @@ State 179
 
 State 180
 
-   39 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional SEMI . ExprOptional RPAR Statement
+   40 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional SEMI . ExprOptional RPAR Statement
 
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
@@ -2632,9 +2608,9 @@ State 180
 
 State 181
 
-   44 IfElseStatement: IF LPAR Expr RPAR Statement ELSE . Statement
+   45 IfElseStatement: IF LPAR Expr RPAR Statement ELSE . Statement
 
-    error   shift, and go to state 86
+    error   shift, and go to state 87
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
     FOR     shift, and go to state 31
@@ -2654,7 +2630,7 @@ State 181
 
     Epsilon          go to state 44
     Statement        go to state 184
-    GoodStatement    go to state 74
+    GoodStatement    go to state 75
     IfElseStatement  go to state 48
     Expr             go to state 49
     CommaExpr        go to state 50
@@ -2669,30 +2645,30 @@ State 181
 
 State 182
 
-   49 Expr_without_comma: ID LPAR error RPAR .
+   50 Expr_without_comma: ID LPAR error RPAR .
 
-    $default  reduce using rule 49 (Expr_without_comma)
+    $default  reduce using rule 50 (Expr_without_comma)
 
 
 State 183
 
-   39 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional . RPAR Statement
+   40 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional . RPAR Statement
 
     RPAR  shift, and go to state 185
 
 
 State 184
 
-   44 IfElseStatement: IF LPAR Expr RPAR Statement ELSE Statement .
+   45 IfElseStatement: IF LPAR Expr RPAR Statement ELSE Statement .
 
-    $default  reduce using rule 44 (IfElseStatement)
+    $default  reduce using rule 45 (IfElseStatement)
 
 
 State 185
 
-   39 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR . Statement
+   40 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR . Statement
 
-    error   shift, and go to state 86
+    error   shift, and go to state 87
     AMP     shift, and go to state 29
     AST     shift, and go to state 30
     FOR     shift, and go to state 31
@@ -2712,7 +2688,7 @@ State 185
 
     Epsilon          go to state 44
     Statement        go to state 186
-    GoodStatement    go to state 74
+    GoodStatement    go to state 75
     IfElseStatement  go to state 48
     Expr             go to state 49
     CommaExpr        go to state 50
@@ -2727,6 +2703,6 @@ State 185
 
 State 186
 
-   39 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement .
+   40 GoodStatement: FOR LPAR ExprOptional SEMI ExprOptional SEMI ExprOptional RPAR Statement .
 
-    $default  reduce using rule 39 (GoodStatement)
+    $default  reduce using rule 40 (GoodStatement)
