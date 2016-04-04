@@ -1551,13 +1551,13 @@ yyreduce:
 
   case 17:
 #line 69 "mccompiler.y" /* yacc.c:1646  */
-    {(yyval.n) = add_to_tree("ParamList",NULL,2,(yyvsp[-1].n),(yyvsp[0].n));/*print_tree($$,0);*/}
+    {(yyval.n) = add_to_tree("ParamList",NULL,2,(yyvsp[-1].n),(yyvsp[0].n));}
 #line 1556 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
 #line 72 "mccompiler.y" /* yacc.c:1646  */
-    {(yyval.n) = add_to_tree("ParamDeclaration",NULL,3,(yyvsp[-2].n),(yyvsp[-1].n),(yyvsp[0].n));/*print_tree($$,0);*/}
+    {(yyval.n) = add_to_tree("ParamDeclaration",NULL,3,(yyvsp[-2].n),(yyvsp[-1].n),(yyvsp[0].n));}
 #line 1562 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1585,13 +1585,13 @@ yyreduce:
 	t = t->brother;
     }
     (yyval.n) = (yyvsp[-2].n);
-    /*print_tree($$,0);*/}
+    }
 #line 1590 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
 #line 90 "mccompiler.y" /* yacc.c:1646  */
-    {}
+    {(yyval.n) = NULL;}
 #line 1596 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1690,7 +1690,7 @@ yyreduce:
 
   case 36:
 #line 134 "mccompiler.y" /* yacc.c:1646  */
-    {}
+    {(yyval.n) = NULL;}
 #line 1695 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1715,13 +1715,13 @@ yyreduce:
 
   case 40:
 #line 141 "mccompiler.y" /* yacc.c:1646  */
-    {(yyval.n) = (yyvsp[0].n);/*print_tree($$,0);*/}
+    {(yyval.n) = (yyvsp[0].n);}
 #line 1720 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
 #line 142 "mccompiler.y" /* yacc.c:1646  */
-    {if((yyvsp[0].n)==NULL)(yyvsp[0].n) = add_to_tree("Null",NULL,0);(yyval.n) = add_to_tree("For",NULL,4,(yyvsp[-6].n),(yyvsp[-4].n),(yyvsp[-2].n),(yyvsp[0].n)); /*print_tree($$,0);*/}
+    {if((yyvsp[0].n)==NULL)(yyvsp[0].n) = add_to_tree("Null",NULL,0);(yyval.n) = add_to_tree("For",NULL,4,(yyvsp[-6].n),(yyvsp[-4].n),(yyvsp[-2].n),(yyvsp[0].n)); }
 #line 1726 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1733,7 +1733,7 @@ yyreduce:
 
   case 43:
 #line 144 "mccompiler.y" /* yacc.c:1646  */
-    {}
+    {(yyval.n) = NULL;}
 #line 1738 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1778,13 +1778,13 @@ yyreduce:
 
   case 49:
 #line 165 "mccompiler.y" /* yacc.c:1646  */
-    {}
+    {(yyval.n) = add_to_tree("Null",NULL,0);}
 #line 1783 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
 #line 166 "mccompiler.y" /* yacc.c:1646  */
-    {}
+    {(yyval.n) = add_to_tree("Null",NULL,0);}
 #line 1789 "y.tab.c" /* yacc.c:1646  */
     break;
 
