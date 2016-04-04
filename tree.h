@@ -7,7 +7,7 @@ typedef struct node_{
 
 int toprint;
 
-void print_tree(node n, int depth);
+void print_and_free(node n, int depth);
 /*
 node n 					-> where to start
 int depth 			-> aux var for the prints ("..")

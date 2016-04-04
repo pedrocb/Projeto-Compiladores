@@ -34,7 +34,7 @@
 %%
 
 
-Start: Block Block_ {print_tree(add_to_tree("Program",NULL,2,$1,$2),0);}
+Start: Block Block_ {print_and_free(add_to_tree("Program",NULL,2,$1,$2),0);}
     ;
 
 Epsilon: {};
@@ -77,15 +77,16 @@ ParameterDeclaration_: Epsilon {$$ = NULL;}
     ;
 
 Declaration: TypeSpec Declarator Declarator_ SEMI {
-    $2 = add_brother($2,$3);
-    node t = $2;
-    while(t != NULL){
-	node no = add_to_tree($1->label,NULL,0);
-	no = add_brother(no,t->child);
-	t->child = no;
-	t = t->brother;
-    }
-    $$ = $2;
+      $2 = add_brother($2,$3);
+      node t = $2;
+      while(t != NULL){
+      	node no = add_to_tree($1->label,NULL,0);
+      	no = add_brother(no,t->child);
+      	t->child = no;
+      	t = t->brother;
+      }
+      $$ = $2;
+      free($1);
     }
     | error SEMI {$$ = NULL;}
     ;
