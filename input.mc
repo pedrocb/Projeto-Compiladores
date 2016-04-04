@@ -1,5 +1,4 @@
-int ***function(int ****,int a,void){
-    for( ; b> 0 ; )
-    	 a =1;
-	 
+int function(int a){
+    a(a,c*2+1,a+2);
 }
+
