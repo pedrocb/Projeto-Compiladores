@@ -32,3 +32,5 @@ node a					-> left node
 node a					-> right node
 returns left node
 */
+
+node get_brother(node no, int position);

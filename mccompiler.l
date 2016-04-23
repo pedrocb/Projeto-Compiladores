@@ -155,7 +155,12 @@ int main(int argc, char *argv[]){
 	}
 	else{
 	    yyparse();
+	    symbol_tables = create_table("Global");
+	    add_predefined_functions(symbol_tables);
 	    handle_tree(syntax_tree);
+	    table table_ = create_table("Test Function");
+	    add_symbol(table_,"return","int",1);
+	    print_tables();
 	}
 
 

@@ -8,12 +8,12 @@ void print_and_free(node n, int depth){
       if(n->value != NULL) printf("%s(%s)\n", n->label,n->value);
       else printf("%s\n", n->label);
     }
-
     if(n->child != NULL) print_and_free(n->child, depth + 1);
     if(n->brother != NULL) print_and_free(n->brother, depth);
 
     free(n);
 }
+
 
 node add_to_tree(char *label, char *value, int n_children, ...){
     va_list args;
@@ -62,4 +62,12 @@ node add_brother(node a, node b){
     t->brother = b;
 
     return a;
+}
+
+node get_brother(node no, int position){
+    node result = no;
+    for(int i=0;i<position-1;i++){
+	result = result->brother;
+    }
+    return result;
 }
