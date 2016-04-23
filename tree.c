@@ -1,7 +1,3 @@
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
 #include "tree.h"
 
 void print_and_free(node n, int depth){
@@ -40,10 +36,10 @@ node add_to_tree(char *label, char *value, int n_children, ...){
 
 
       //Add child
-    	if(n->child == NULL){
-    	    n->child = b;
-    	    t = b;
-    	}
+      if(n->child == NULL){
+	  n->child = b;
+	  t = b;
+      }
       //Add brothers
     	else{
     	    add_brother(t, b);

@@ -1,9 +1,9 @@
 %{
 	#include <string.h>
 	#include <stdio.h>
-	#include "tree.h"
+        #include "symboltable.h"
 	#include "y.tab.h"
-
+    
 	#define COL col += yyleng;
 	#define LINE line++; col=1;
 	#define PRINT if(flag == 1) printf
@@ -150,10 +150,12 @@ int main(int argc, char *argv[]){
 		else if(strcmp(argv[1],"-t") == 0){
 			toprint = 1;
 			yyparse();
+			print_and_free(syntax_tree,0);
 		}
 	}
 	else{
-		yyparse();
+	    yyparse();
+	    handle_tree(syntax_tree);
 	}
 
 
@@ -168,5 +170,4 @@ void yyerror (const char *s) {
   int c = col - strlen(yytext);
   printf ("Line %d, col %d: %s: %s\n", line, c, s, yytext);
   toprint = 0;
-
 }

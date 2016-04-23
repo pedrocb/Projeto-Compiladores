@@ -1459,7 +1459,7 @@ yyreduce:
     {
         case 2:
 #line 37 "mccompiler.y" /* yacc.c:1646  */
-    {print_and_free(add_to_tree("Program",NULL,2,(yyvsp[-1].n),(yyvsp[0].n)),0);}
+    {syntax_tree = add_to_tree("Program",NULL,2,(yyvsp[-1].n),(yyvsp[0].n));}
 #line 1464 "y.tab.c" /* yacc.c:1646  */
     break;
 

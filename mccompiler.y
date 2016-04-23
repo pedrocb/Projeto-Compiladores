@@ -34,7 +34,7 @@
 %%
 
 
-Start: Block Block_ {print_and_free(add_to_tree("Program",NULL,2,$1,$2),0);}
+Start: Block Block_ {syntax_tree = add_to_tree("Program",NULL,2,$1,$2);}
     ;
 
 Epsilon: {};

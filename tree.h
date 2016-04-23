@@ -1,3 +1,8 @@
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+
 typedef struct node_{
 	char *label;
 	struct node_ *child;
@@ -6,6 +11,7 @@ typedef struct node_{
 }*node;
 
 int toprint;
+node syntax_tree;
 
 void print_and_free(node n, int depth);
 /*
