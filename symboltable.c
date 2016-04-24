@@ -2,19 +2,19 @@
 //Cria uma tabela com o nome name
 table create_table(char *name){
     table table_;
-    for(table_ = symbol_tables;table_!=NULL;table_=table_->next){
-	if(strcmp(table_->name,name)==0){
-	    return table_;
+    if(symbol_tables!=NULL){
+	for(table_ = symbol_tables;table_->next!=NULL;table_=table_->next){
+	    if(strcmp(table_->next->name,name)==0){
+		return table_->next;
+	    }
 	}
     }
-    
     table new_table = (table)malloc(sizeof(struct table_));
     new_table->next = NULL; 
     new_table->name = strdup(name);
-    
-    if(table_!=NULL){
+    if(symbol_tables!=NULL){
 	table_->next = new_table; //Insere a tabela no fim da lista de tabelas
-    }    
+    }
     return new_table;
 }
 
@@ -62,7 +62,7 @@ void add_predefined_functions(table table_){
     add_symbol(table_,"itoa",itoa_type_,0);
     add_symbol(table_,"puts",atoi_type_,0);
 }
-
+//Percorre os parametros e adiciona tanto
 type handle_param_list(node no){
     node aux = no->child;
     type typelist = NULL;
