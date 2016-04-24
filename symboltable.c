@@ -1,25 +1,26 @@
 #include "symboltable.h"
-
-table create_table(char *name){
+//Cria uma tabela com o nome name
+table create_table(char *name){                                
     table new_table = (table)malloc(sizeof(struct table_));
-    new_table->next = NULL;
+    new_table->next = NULL; 
     new_table->name = strdup(name);
     
-    table last_table = symbol_tables;
+    table last_table = symbol_tables; 
     if(last_table!=NULL){
 	while(last_table->next!=NULL){
 	    last_table = last_table->next;
 	}
-	last_table->next = new_table;
+	last_table->next = new_table; //Insere a tabela no fim da lista de tabelas
     }    
     return new_table;
 }
 
-void add_symbol(table table_,char *name, char *type, int param){
-
+//Cria e adiciona um simbolo a tabela table_
+void add_symbol(table table_,char *name, type type_, int param){
+    
     symbol new_symbol = (symbol)malloc(sizeof(struct symbol_));
     new_symbol->name = strdup(name);
-    new_symbol->type = strdup(type);
+    new_symbol->type_ = type_;
     new_symbol->next = NULL;
     new_symbol->param = param;
     
@@ -28,23 +29,53 @@ void add_symbol(table table_,char *name, char *type, int param){
 	while(last->next!=NULL){
 	    last=last->next;
 	}
-	last->next = new_symbol;
+	last->next = new_symbol;  //Adiciona no fim da lista de simbolos da tabela
     }
     else{
-	table_->first = new_symbol;
+	table_->first = new_symbol; //Caso seja o primeiro simbolo
     }
 }
 
-void add_predefined_functions(table table_){
-    add_symbol(table_,"atoi","int(char*)",0);
-    add_symbol(table_,"itoa","char*(int,char*)",0);
-    add_symbol(table_,"puts","int(char*)",0);
+//Construtor de tipo de variavel
+type new_type(int pointers, char* name, type param){
+    type result = (type)malloc(sizeof(struct type_));
+    
+    result->pointers = pointers;
+    char *type = strdup(name);
+    for (char *p = type ; *p; ++p) *p = tolower(*p); //Para ficar tudo em minisculas (os tokens têm a primeira letra em maiusculo) Se calhar so fazer à primeira letra é suficiente
+    
+    result->type = type;
+    result->param = param;
+    
+    return result;
 }
 
+//Adiciona funções predefinidas (está no enunciado)
+void add_predefined_functions(table table_){
+    type atoi_type_ = new_type(0,"int",new_type(1,"char",NULL));
+    type itoa_type_ = new_type(1,"char",atoi_type_);
+    
+    add_symbol(table_,"atoi",atoi_type_,0);
+    add_symbol(table_,"itoa",itoa_type_,0);
+    add_symbol(table_,"puts",atoi_type_,0);
+}
+
+//Função para ir percorrendo a ast
 void handle_tree(node current_node){
     if(strcmp(current_node->label, "FuncDefinition") == 0){
-	//node aux = get_brother(current_node->child,2);
-	//printf("Função %s\n",aux->value);
+	node aux = current_node->child;
+	int pointers = 0;
+	char *type = aux->label; //Primeiro filho é o tipo da função
+	aux = aux->brother; 
+	while(strcmp(aux->label,"Id") != 0){ //Depois vem uma lista de ponteiros
+	    pointers++;
+	    aux = aux->brother;
+	}
+	
+	add_symbol(symbol_tables,aux->value,new_type(pointers,type,NULL),0); //Depois vem o id da função
+	current_table = create_table(aux->value); //current table vai ter a tabela da função que estamos a tratar, para mais tarde sabermos em que tabela inserir os simbolos
+
+	
     }
     else{
 	if(current_node->child != NULL)
@@ -54,8 +85,30 @@ void handle_tree(node current_node){
 	handle_tree(current_node->brother);
 }
 
+void print_type(type type){ 
+    printf("%s",type->type);
+    for(int i=0;i<type->pointers;i++){
+	printf("*");
+    }
+    
+}
+
 void print_symbol(symbol symbol_){
-    printf("%s\t%s\t%s\n",symbol_->name,symbol_->type,(symbol_->param==1)?"param":"");
+    printf("%s\t",symbol_->name);
+    print_type(symbol_->type_);
+    type params = symbol_->type_->param;
+    if(params!=NULL){
+	printf("(");
+	print_type(params);
+	params = params->param;
+	while(params!=NULL){
+	    printf(", ");
+	    print_type(params);
+	    params = params->param;
+	}
+	printf(")");
+    }
+    printf("\t%s\n",(symbol_->param==1)?"param":"");
 }
 
 void print_table(table table_){
