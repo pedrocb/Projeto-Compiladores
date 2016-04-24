@@ -1,5 +1,3 @@
-char ****function(int a){
-        a(a,c*2+1,a+2);
+char ****function(int ola,int){
 }
-
 

@@ -27,6 +27,7 @@ void handle_tree(node tree);
 table create_table(char *name);
 void add_symbol(table table_,char *name, type type_, int param);
 void add_predefined_functions(table table_);
+type build_type_list(node no);
 
 void print_tables();
 void print_table(table table_);

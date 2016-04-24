@@ -1,16 +1,19 @@
 #include "symboltable.h"
 //Cria uma tabela com o nome name
-table create_table(char *name){                                
+table create_table(char *name){
+    table table_;
+    for(table_ = symbol_tables;table_!=NULL;table_=table_->next){
+	if(strcmp(table_->name,name)==0){
+	    return table_;
+	}
+    }
+    
     table new_table = (table)malloc(sizeof(struct table_));
     new_table->next = NULL; 
     new_table->name = strdup(name);
     
-    table last_table = symbol_tables; 
-    if(last_table!=NULL){
-	while(last_table->next!=NULL){
-	    last_table = last_table->next;
-	}
-	last_table->next = new_table; //Insere a tabela no fim da lista de tabelas
+    if(table_!=NULL){
+	table_->next = new_table; //Insere a tabela no fim da lista de tabelas
     }    
     return new_table;
 }
@@ -60,22 +63,51 @@ void add_predefined_functions(table table_){
     add_symbol(table_,"puts",atoi_type_,0);
 }
 
+type handle_param_list(node no){
+    node aux = no->child;
+    type typelist = NULL;
+    type current_type;
+    while(aux!=NULL){
+	node var = aux->child;
+	int pointers = 0;
+	char *type_ = var->label;
+	var = var->brother;
+	while(var!= NULL && strcmp(var->label,"Id") != 0){
+	    pointers++;
+	    var = var->brother;
+	}
+	type type_new = new_type(pointers,type_,NULL);
+	if(var!=NULL)
+	    add_symbol(current_table,var->value,new_type(pointers,type_,NULL),1);
+	if(typelist == NULL){
+	    typelist = type_new;
+	    current_type = typelist;
+	}
+	else{
+	    current_type->param = type_new;
+	    current_type = current_type->param;
+	}
+	aux = aux->brother; 
+    }
+    return typelist;
+}
+
+
 //Função para ir percorrendo a ast
 void handle_tree(node current_node){
     if(strcmp(current_node->label, "FuncDefinition") == 0){
 	node aux = current_node->child;
 	int pointers = 0;
-	char *type = aux->label; //Primeiro filho é o tipo da função
+	char *type_ = aux->label; //Primeiro filho é o tipo da função
 	aux = aux->brother; 
 	while(strcmp(aux->label,"Id") != 0){ //Depois vem uma lista de ponteiros
 	    pointers++;
 	    aux = aux->brother;
 	}
-	
-	add_symbol(symbol_tables,aux->value,new_type(pointers,type,NULL),0); //Depois vem o id da função
 	current_table = create_table(aux->value); //current table vai ter a tabela da função que estamos a tratar, para mais tarde sabermos em que tabela inserir os simbolos
-
+	type typelist = handle_param_list(aux->brother);
 	
+	add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função
     }
     else{
 	if(current_node->child != NULL)
