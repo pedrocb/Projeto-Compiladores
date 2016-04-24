@@ -155,7 +155,8 @@ int main(int argc, char *argv[]){
 	}
 	else{
 	    yyparse();
-	    symbol_tables = create_table("Global");
+            symbol_tables = create_table("Global");
+	    current_table = symbol_tables;
 	    add_predefined_functions(symbol_tables);
 	    handle_tree(syntax_tree);
 	    print_tables();

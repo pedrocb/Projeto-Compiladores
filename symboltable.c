@@ -50,7 +50,7 @@ type new_type(int pointers, char* name, type param){
 
   result->type = type;
   result->param = param;
-
+  result->array = NULL;
   return result;
 }
 
@@ -79,7 +79,7 @@ type handle_param_list(node no){
     }
     type type_new = new_type(pointers,type_,NULL); //Cria o tipo para a declaraçao da função na tabela global
     if(var!=NULL)
-    add_symbol(current_table,var->value,new_type(pointers,type_,NULL),1); //Adiciona o simbolo a funçao,
+      add_symbol(current_table,var->value,new_type(pointers,type_,NULL),1); //Adiciona o simbolo a funçao,
     if(typelist == NULL){ //Se é o primeiro parametro
       typelist = type_new;
       current_type = typelist;
@@ -108,7 +108,7 @@ void handle_tree(node current_node){
     current_table = create_table(aux->value); //current table vai ter a tabela da função que estamos a tratar, para mais tarde sabermos em que tabela inserir os simbolos
     add_symbol(current_table,"return", new_type(0,"int",NULL),0);
     type typelist = handle_param_list(aux->brother); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
-
+    
     add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função
     handle_tree(aux->brother);
   }
@@ -123,12 +123,25 @@ void handle_tree(node current_node){
     }
     add_symbol(current_table,aux->value,new_type(pointers,type_,NULL),0); //Depois vem o id da função
   }
+  else if(strcmp(current_node->label, "ArrayDeclaration") == 0){
+    node aux = current_node->child;
+    int pointers = 0;
+    char *type_ = aux->label; //Primeiro filho é o tipo da função
+    aux = aux->brother;
+    while(strcmp(aux->label,"Id") != 0){ //Depois vem uma lista de ponteiros
+      pointers++;
+      aux = aux->brother;
+    }
+    type type_new = new_type(pointers,type_,NULL);
+    type_new->array = aux->brother->value;
+    add_symbol(current_table,aux->value,type_new,0); //Depois vem o id da função
+  }
   else{
     if(current_node->child != NULL)
-    handle_tree(current_node->child);
+      handle_tree(current_node->child);
   }
   if(current_node->brother != NULL)
-  handle_tree(current_node->brother);
+    handle_tree(current_node->brother);
 }
 
 void print_type(type type){
@@ -136,7 +149,9 @@ void print_type(type type){
   for(int i=0;i<type->pointers;i++){
     printf("*");
   }
-
+  if(type->array != NULL){
+    printf("[%s]",type->array);
+  }
 }
 
 void print_symbol(symbol symbol_){

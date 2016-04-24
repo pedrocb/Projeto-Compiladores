@@ -1,4 +1,4 @@
-char buffer[20];
+char *buffer[20];
 int gcd(int a, int b) {
   if (a == 0) {
     return b;
