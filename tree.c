@@ -63,6 +63,7 @@ node add_brother(node a, node b){
   return a;
 }
 
+
 node get_brother(node no, int position){
   node result = no;
   for(int i=0;i<position-1;i++){

@@ -1,4 +1,7 @@
 lex.yy.c
+y.tab.h
+y.tab.c
+y.output
 mccompiler
-mccompiler.zip
 *.txt
+mccompiler.zip
