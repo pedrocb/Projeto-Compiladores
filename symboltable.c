@@ -1,4 +1,5 @@
 #include "symboltable.h"
+
 //Cria uma tabela com o nome name
 table create_table(char *name){
     table table_;
@@ -95,7 +96,7 @@ type handle_param_list(node no){
 
 //Função para ir percorrendo a ast
 void handle_tree(node current_node){
-    if(strcmp(current_node->label, "FuncDefinition") == 0){
+    if(strcmp(current_node->label, "FuncDefinition") == 0 || strcmp(current_node->label, "FuncDeclaration") == 0){
 	node aux = current_node->child;
 	int pointers = 0;
 	char *type_ = aux->label; //Primeiro filho é o tipo da função
@@ -105,9 +106,22 @@ void handle_tree(node current_node){
 	    aux = aux->brother;
 	}
 	current_table = create_table(aux->value); //current table vai ter a tabela da função que estamos a tratar, para mais tarde sabermos em que tabela inserir os simbolos
+	add_symbol(current_table,"return", new_type(0,"int",NULL),0);
 	type typelist = handle_param_list(aux->brother); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
 	
 	add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função
+	handle_tree(aux->brother);
+    }
+    else if(strcmp(current_node->label, "Declaration") == 0){
+	node aux = current_node->child;
+	int pointers = 0;
+	char *type_ = aux->label; //Primeiro filho é o tipo da função
+	aux = aux->brother; 
+	while(strcmp(aux->label,"Id") != 0){ //Depois vem uma lista de ponteiros
+	    pointers++;
+	    aux = aux->brother;
+	}	
+	add_symbol(current_table,aux->value,new_type(pointers,type_,NULL),0); //Depois vem o id da função
     }
     else{
 	if(current_node->child != NULL)

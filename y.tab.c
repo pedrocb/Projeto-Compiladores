@@ -1579,10 +1579,10 @@ yyreduce:
       (yyvsp[-2].n) = add_brother((yyvsp[-2].n),(yyvsp[-1].n));
       node t = (yyvsp[-2].n);
       while(t != NULL){
-      	node no = add_to_tree((yyvsp[-3].n)->label,NULL,0);
-      	no = add_brother(no,t->child);
-      	t->child = no;
-      	t = t->brother;
+	  node no = add_to_tree((yyvsp[-3].n)->label,NULL,0);
+	  no = add_brother(no,t->child);
+	  t->child = no;
+	  t = t->brother;
       }
       (yyval.n) = (yyvsp[-2].n);
       free((yyvsp[-3].n));
