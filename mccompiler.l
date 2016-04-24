@@ -137,31 +137,43 @@ STRINV (\\.|{STRANY})*
 int main(int argc, char *argv[]){
 	toprint = 0;
 
-	if(argc == 2){
-		if(strcmp(argv[1],"-1") == 0){
-			meta1 = 1;
-			yylex();
-		}
-		else if(strcmp(argv[1],"-l") == 0){
-			meta1 = 1;
+	//Default Argument
+	if(argc != 2)
+		argv[1] = "-3";
+
+	//Meta 1
+	if(strcmp(argv[1],"-1") == 0 || strcmp(argv[1],"-l") == 0){
+
+		if(strcmp(argv[1],"-l") == 0)
 			flag = 1;
-			yylex();
-		}
-		else if(strcmp(argv[1],"-t") == 0){
-			toprint = 1;
-			yyparse();
-			print_and_free(syntax_tree,0);
-		}
-	}
-	else{
-	    yyparse();
-            symbol_tables = create_table("Global");
-	    current_table = symbol_tables;
-	    add_predefined_functions(symbol_tables);
-	    handle_tree(syntax_tree);
-	    print_tables();
+
+		meta1 = 1;
+		yylex();
 	}
 
+	//Meta 2
+	if(strcmp(argv[1],"-2") == 0 || strcmp(argv[1],"-t") == 0){
+
+		if(strcmp(argv[1],"-t") == 0)
+			toprint = 1;
+
+		yyparse();
+		print_and_free(syntax_tree,0);
+	}
+
+	//Meta 3
+	if(strcmp(argv[1],"-3") == 0 || strcmp(argv[1],"-s") == 0){
+
+		if(strcmp(argv[1],"-s") == 0)
+			;
+		
+		yyparse();
+    symbol_tables = create_table("Global");
+    current_table = symbol_tables;
+    add_predefined_functions(symbol_tables);
+    handle_tree(syntax_tree);
+    print_tables();
+	}
 
 	return 0;
 }
