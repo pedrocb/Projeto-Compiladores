@@ -1,5 +1,2 @@
-char ****function(int ola,int ole){
-}
-
-char ****function(int olaa,int oale){
+char ****function(char ola,int ole){
 }

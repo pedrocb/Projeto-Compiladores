@@ -4,8 +4,8 @@ table create_table(char *name){
     table table_;
     if(symbol_tables!=NULL){
 	for(table_ = symbol_tables;table_->next!=NULL;table_=table_->next){
-	    if(strcmp(table_->next->name,name)==0){
-		return table_->next;
+	    if(strcmp(table_->next->name,name)==0){ //Caso já exista uma com o mesmo nome
+		return table_->next; 
 	    }
 	}
     }
@@ -64,11 +64,11 @@ void add_predefined_functions(table table_){
 }
 //Percorre os parametros e adiciona tanto
 type handle_param_list(node no){
-    node aux = no->child;
+    node aux = no->child; //ParamList
     type typelist = NULL;
     type current_type;
-    while(aux!=NULL){
-	node var = aux->child;
+    while(aux!=NULL){ //Se existe um parameterDecl
+	node var = aux->child; 
 	int pointers = 0;
 	char *type_ = var->label;
 	var = var->brother;
@@ -76,15 +76,15 @@ type handle_param_list(node no){
 	    pointers++;
 	    var = var->brother;
 	}
-	type type_new = new_type(pointers,type_,NULL);
+	type type_new = new_type(pointers,type_,NULL); //Cria o tipo para a declaraçao da função na tabela global
 	if(var!=NULL)
-	    add_symbol(current_table,var->value,new_type(pointers,type_,NULL),1);
-	if(typelist == NULL){
-	    typelist = type_new;
+	    add_symbol(current_table,var->value,new_type(pointers,type_,NULL),1); //Adiciona o simbolo a funçao,
+	if(typelist == NULL){ //Se é o primeiro parametro
+	    typelist = type_new; 
 	    current_type = typelist;
 	}
-	else{
-	    current_type->param = type_new;
+	else{ 
+	    current_type->param = type_new; //Vai adicionando os tipos dos parametros a typelist
 	    current_type = current_type->param;
 	}
 	aux = aux->brother; 
@@ -105,7 +105,7 @@ void handle_tree(node current_node){
 	    aux = aux->brother;
 	}
 	current_table = create_table(aux->value); //current table vai ter a tabela da função que estamos a tratar, para mais tarde sabermos em que tabela inserir os simbolos
-	type typelist = handle_param_list(aux->brother);
+	type typelist = handle_param_list(aux->brother); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
 	
 	add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função
     }
