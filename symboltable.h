@@ -1,25 +1,25 @@
 #include"tree.h"
 
 //Estrutura para o tipo de um simbolo. Facilita porque já nao temos que trabalhar com strings
-typedef struct type_{ 
-    int pointers;
-    char *type;
-    struct type_ *param; // Caso seja um tipo de uma função os parametros são guardados numa lista de tipos
+typedef struct type_{
+  int pointers;
+  char *type;
+  struct type_ *param; // Caso seja um tipo de uma função os parametros são guardados numa lista de tipos
 }*type;
 
 
 typedef struct symbol_{
-    struct symbol_ *next;
-    char *name;
-    type type_;
-    int param; //flag para impressão
+  struct symbol_ *next;
+  char *name;
+  type type_;
+  int param; //flag para impressão
 }*symbol;
 
 
 typedef struct table_{
-    struct table_ *next;
-    symbol first;
-    char *name;
+  struct table_ *next;
+  symbol first;
+  char *name;
 }*table;
 
 

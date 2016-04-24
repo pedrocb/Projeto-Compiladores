@@ -1,9 +1,9 @@
 %{
 	#include <string.h>
 	#include <stdio.h>
-        #include "symboltable.h"
+  #include "symboltable.h"
 	#include "y.tab.h"
-    
+
 	#define COL col += yyleng;
 	#define LINE line++; col=1;
 	#define PRINT if(flag == 1) printf
@@ -160,8 +160,8 @@ int main(int argc, char *argv[]){
 	    handle_tree(syntax_tree);
 	    print_tables();
 	}
-	
-	
+
+
 	return 0;
 }
 

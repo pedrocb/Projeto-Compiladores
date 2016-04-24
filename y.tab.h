@@ -128,10 +128,10 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 20 "mccompiler.y" /* yacc.c:1909  */
+#line 18 "mccompiler.y" /* yacc.c:1909  */
 
-    char *string;
-    node n;
+  char *string;
+  node n;
 
 #line 137 "y.tab.h" /* yacc.c:1909  */
 };
