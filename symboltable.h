@@ -5,7 +5,7 @@ typedef struct type_{
   int pointers;
   char *type;
   struct type_ *param; // Caso seja um tipo de uma função os parametros são guardados numa lista de tipos
-  char *array;
+  int array;
 }*type;
 
 typedef struct symbol_{

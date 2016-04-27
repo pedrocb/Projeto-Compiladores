@@ -27,7 +27,6 @@ void add_symbol(table table_,char *name, type type_, int param){
   new_symbol->type_ = type_;
   new_symbol->next = NULL;
   new_symbol->param = param;
-
   symbol last = table_->first;
   if(last!=NULL){
     while(last->next!=NULL){
@@ -47,10 +46,9 @@ type new_type(int pointers, char* name, type param){
   result->pointers = pointers;
   char *type = strdup(name);
   for (char *p = type ; *p; ++p) *p = tolower(*p); //Para ficar tudo em minisculas (os tokens têm a primeira letra em maiusculo) Se calhar so fazer à primeira letra é suficiente
-
   result->type = type;
   result->param = param;
-  result->array = NULL;
+  result->array = -1;
   return result;
 }
 
@@ -78,7 +76,7 @@ type handle_param_list(node no){
       var = var->brother;
     }
     type type_new = new_type(pointers,type_,NULL); //Cria o tipo para a declaraçao da função na tabela global
-    if(var!=NULL)
+    if(var!=NULL) 
       add_symbol(current_table,var->value,new_type(pointers,type_,NULL),1); //Adiciona o simbolo a funçao,
     if(typelist == NULL){ //Se é o primeiro parametro
       typelist = type_new;
@@ -133,7 +131,11 @@ void handle_tree(node current_node){
       aux = aux->brother;
     }
     type type_new = new_type(pointers,type_,NULL);
-    type_new->array = aux->brother->value;
+    if(aux->brother->value[0] == '0'){
+      sscanf(aux->brother->value,"%o",&type_new->array);
+    }else{
+      sscanf(aux->brother->value,"%d",&type_new->array);
+    }
     add_symbol(current_table,aux->value,type_new,0); //Depois vem o id da função
   }
   else{
@@ -149,8 +151,8 @@ void print_type(type type){
   for(int i=0;i<type->pointers;i++){
     printf("*");
   }
-  if(type->array != NULL){
-    printf("[%s]",type->array);
+  if(type->array != -1){
+    printf("[%d]",type->array);
   }
 }
 

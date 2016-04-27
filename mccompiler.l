@@ -1,7 +1,7 @@
 %{
 	#include <string.h>
 	#include <stdio.h>
-  #include "symboltable.h"
+        #include "symboltable.h"
 	#include "y.tab.h"
 
 	#define COL col += yyleng;
