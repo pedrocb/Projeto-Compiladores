@@ -166,7 +166,7 @@ int main(int argc, char *argv[]){
 
 		if(strcmp(argv[1],"-s") == 0)
 			;
-		
+
 		yyparse();
     symbol_tables = create_table("Global");
     current_table = symbol_tables;

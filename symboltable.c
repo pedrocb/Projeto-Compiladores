@@ -19,6 +19,17 @@ table create_table(char *name){
   return new_table;
 }
 
+table get_table(char *name){
+  for(table tab = symbol_tables;tab!=NULL;tab = tab->next){
+    if(strcmp(tab->name,name) == 0){
+      return tab;
+    }
+  }
+  return NULL;
+}
+
+
+
 //Cria e adiciona um simbolo a tabela table_
 void add_symbol(table table_,char *name, type type_, int param){
 
@@ -37,6 +48,15 @@ void add_symbol(table table_,char *name, type type_, int param){
   else{
     table_->first = new_symbol; //Caso seja o primeiro simbolo
   }
+}
+
+symbol get_symbol(table table_, char *name){
+  for(symbol symb = table_->first;symb!=NULL;symb = symb->next){
+    if(strcmp(symb->name,name) == 0){
+      return symb;
+    }
+  }
+  return NULL;
 }
 
 //Construtor de tipo de variavel
@@ -91,7 +111,6 @@ type handle_param_list(node no){
   return typelist;
 }
 
-
 //Função para ir percorrendo a ast
 void handle_tree(node current_node){
   if(strcmp(current_node->label, "FuncDefinition") == 0 || strcmp(current_node->label, "FuncDeclaration") == 0){
@@ -103,11 +122,18 @@ void handle_tree(node current_node){
       pointers++;
       aux = aux->brother;
     }
-    current_table = create_table(aux->value); //current table vai ter a tabela da função que estamos a tratar, para mais tarde sabermos em que tabela inserir os simbolos
-    add_symbol(current_table,"return", new_type(0,"int",NULL),0);
-    type typelist = handle_param_list(aux->brother); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
-    
-    add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função
+    current_table = get_table(aux->value);
+    if(current_table == NULL){
+      current_table = create_table(aux->value); //current table vai ter a tabela da função que estamos a tratar, para mais tarde sabermos em que tabela inserir os simbolos
+      add_symbol(current_table,"return", new_type(0,"int",NULL),0);
+      type typelist = handle_param_list(aux->brother); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
+      if(get_symbol(symbol_tables,aux->value)==NULL){
+	add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função
+      }
+      if(strcmp(current_node->label, "FuncDeclaration") == 0){
+	current_table = symbol_tables;
+      }
+    }
     handle_tree(aux->brother);
   }
   else if(strcmp(current_node->label, "Declaration") == 0){
@@ -119,7 +145,9 @@ void handle_tree(node current_node){
       pointers++;
       aux = aux->brother;
     }
-    add_symbol(current_table,aux->value,new_type(pointers,type_,NULL),0); //Depois vem o id da função
+    if(get_symbol(current_table,aux->value)==NULL){
+      add_symbol(current_table,aux->value,new_type(pointers,type_,NULL),0); //Depois vem o id da função
+    }
   }
   else if(strcmp(current_node->label, "ArrayDeclaration") == 0){
     node aux = current_node->child;
@@ -136,7 +164,10 @@ void handle_tree(node current_node){
     }else{
       sscanf(aux->brother->value,"%d",&type_new->array);
     }
-    add_symbol(current_table,aux->value,type_new,0); //Depois vem o id da função
+    if(get_symbol(current_table, aux->value)==NULL){
+      add_symbol(current_table,aux->value,type_new,0); //Depois vem o id da função
+    }
+
   }
   else{
     if(current_node->child != NULL)
@@ -146,48 +177,3 @@ void handle_tree(node current_node){
     handle_tree(current_node->brother);
 }
 
-void print_type(type type){
-  printf("%s",type->type);
-  for(int i=0;i<type->pointers;i++){
-    printf("*");
-  }
-  if(type->array != -1){
-    printf("[%d]",type->array);
-  }
-}
-
-void print_symbol(symbol symbol_){
-  printf("%s\t",symbol_->name);
-  print_type(symbol_->type_);
-  type params = symbol_->type_->param;
-  if(params!=NULL){
-    printf("(");
-    print_type(params);
-    params = params->param;
-    while(params!=NULL){
-      printf(", ");
-      print_type(params);
-      params = params->param;
-    }
-    printf(")");
-  }
-  printf("\t%s\n",(symbol_->param==1)?"param":"");
-}
-
-void print_table(table table_){
-  printf("===== %s Symbol Table =====\n",table_->name);
-  symbol symbol_ = table_->first;
-  while(symbol_!=NULL){
-    print_symbol(symbol_);
-    symbol_=symbol_->next;
-  }
-  printf("\n");
-}
-
-void print_tables(){
-  table table_ = symbol_tables;
-  while(table_!=NULL){
-    print_table(table_);
-    table_ = table_->next;
-  }
-}

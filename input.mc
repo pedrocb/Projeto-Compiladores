@@ -1,5 +1,8 @@
-char *buffer[20];
-int gcd(int a, int b) {
+int main(int argc, char **argv);
+
+char *buffer[012];
+
+int gcd(int) {
   if (a == 0) {
     return b;
   } else {

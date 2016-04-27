@@ -1,5 +1,4 @@
 #include"tree.h"
-
 //Estrutura para o tipo de um simbolo. Facilita porque já nao temos que trabalhar com strings
 typedef struct type_{
   int pointers;
