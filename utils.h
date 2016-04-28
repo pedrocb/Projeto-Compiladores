@@ -1,4 +1,4 @@
-#include"symboltable.h"
+#include "symboltable.h"
 
 void print_type(type type);
 void print_symbol(symbol symbol_);

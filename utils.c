@@ -1,4 +1,4 @@
-#include"utils.h"
+#include "utils.h"
 
 void print_type(type type){
   printf("%s",type->type);
@@ -50,4 +50,3 @@ void print_tables(){
     table_ = table_->next;
   }
 }
-

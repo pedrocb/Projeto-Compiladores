@@ -1,7 +1,7 @@
 %{
 	#include <string.h>
 	#include <stdio.h>
-        #include "symboltable.h"
+  #include "semantics.h"
 	#include "y.tab.h"
 
 	#define COL col += yyleng;
@@ -140,33 +140,33 @@ int main(int argc, char *argv[]){
 	//Default Argument
 	if(argc != 2)
 	  argv[1] = "-3";
-	
+
 	//Meta 1
 	if(strcmp(argv[1],"-1") == 0 || strcmp(argv[1],"-l") == 0){
-	  
+
 	  if(strcmp(argv[1],"-l") == 0)
 	    flag = 1;
-	  
+
 	  meta1 = 1;
 	  yylex();
 	}
-	
+
 	//Meta 2
 	if(strcmp(argv[1],"-2") == 0 || strcmp(argv[1],"-t") == 0){
-	  
+
 	  if(strcmp(argv[1],"-t") == 0)
 	    toprint = 1;
 
 	  yyparse();
 	  print_and_free(syntax_tree,0);
 	}
-	
+
 	//Meta 3
 	if(strcmp(argv[1],"-3") == 0 || strcmp(argv[1],"-s") == 0){
-	  
+
 	  if(strcmp(argv[1],"-s") == 0)
 	    ;
-	  
+
 	  yyparse();
 	  symbol_tables = create_table("Global");
 	  symbol_tables->to_print = 1;

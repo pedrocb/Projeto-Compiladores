@@ -1,4 +1,4 @@
-#include"tree.h"
+#include "tree.h"
 //Estrutura para o tipo de um simbolo. Facilita porque já nao temos que trabalhar com strings
 typedef struct type_{
   int pointers;
@@ -24,15 +24,11 @@ typedef struct table_{
 }*table;
 
 
-void handle_tree(node tree);
 table create_table(char *name);
 void add_symbol(table table_,char *name, type type_, int param);
-void add_predefined_functions(table table_);
-type build_type_list(node no);
-
-void print_tables();
-void print_table(table table_);
-void print_symbol(symbol symbol_);
+type new_type(int pointers, char* name, type param);
+table get_table(char *name);
+symbol get_symbol(table table_, char *name);
 
 table symbol_tables;
 table current_table;
