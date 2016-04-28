@@ -1,5 +1,5 @@
-int ola(int ola);
-char buffer[20];
+char buffr[20];
+int ola(char ola);
 
 int gcd(int a,int b) {
   if (a == 0) {
@@ -13,6 +13,10 @@ int gcd(int a,int b) {
     return a;
   }
 }
+
+int ola(int ole){
+    return 1;
+}
 void* main(void a) {
   int gcd, b;
   int argc;
@@ -24,7 +28,5 @@ void* main(void a) {
   puts("Error: two parameters required.");
   return 0;
 }
-int ola(int ole){
+     
 
-
-}

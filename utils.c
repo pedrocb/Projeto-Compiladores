@@ -29,14 +29,15 @@ void print_symbol(symbol symbol_){
 }
 
 void print_table(table table_){
-  
-  printf("===== %s%s Symbol Table =====\n",(table_->function==1)?"Function ":"",table_->name);
-  symbol symbol_ = table_->first;
-  while(symbol_!=NULL){
-    print_symbol(symbol_);
-    symbol_=symbol_->next;
+  if(table_->to_print == 1){
+    printf("===== %s%s Symbol Table =====\n",(table_->function==1)?"Function ":"",table_->name);
+    symbol symbol_ = table_->first;
+    while(symbol_!=NULL){
+      print_symbol(symbol_);
+      symbol_=symbol_->next;
+    }
+    printf("\n");
   }
-  printf("\n");
 }
 
 void print_tables(){

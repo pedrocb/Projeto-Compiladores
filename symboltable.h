@@ -20,6 +20,7 @@ typedef struct table_{
   symbol first;
   char *name;
   int function;
+  int to_print;
 }*table;
 
 
