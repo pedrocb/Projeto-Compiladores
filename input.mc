@@ -1,5 +1,4 @@
 char buffr[20];
-int ola(char ola);
 
 int gcd(int a,int b) {
   if (a == 0) {
@@ -13,6 +12,8 @@ int gcd(int a,int b) {
     return a;
   }
 }
+
+int o;
 
 int ola(int ole){
     return 1;

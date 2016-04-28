@@ -135,7 +135,9 @@ void handle_tree(node current_node){
     if(get_symbol(symbol_tables,aux->value)==NULL){
       add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função
     }
+    
     handle_tree(aux->brother);
+    current_table = symbol_tables;
   }
   else if(strcmp(current_node->label, "FuncDeclaration") == 0){
     node aux = current_node->child;
