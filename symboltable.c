@@ -13,6 +13,7 @@ table create_table(char *name){
   table new_table = (table)malloc(sizeof(struct table_));
   new_table->next = NULL;
   new_table->name = strdup(name);
+  new_table->function = 0;
   if(symbol_tables!=NULL){
     table_->next = new_table; //Insere a tabela no fim da lista de tabelas
   }
@@ -125,7 +126,8 @@ void handle_tree(node current_node){
     current_table = get_table(aux->value);
     if(current_table == NULL){
       current_table = create_table(aux->value); //current table vai ter a tabela da função que estamos a tratar, para mais tarde sabermos em que tabela inserir os simbolos
-      add_symbol(current_table,"return", new_type(0,"int",NULL),0);
+      current_table->function = 1;
+      add_symbol(current_table,"return", new_type(pointers,type_,NULL),0);
       type typelist = handle_param_list(aux->brother); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
       if(get_symbol(symbol_tables,aux->value)==NULL){
 	add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função

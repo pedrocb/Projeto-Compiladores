@@ -19,6 +19,7 @@ typedef struct table_{
   struct table_ *next;
   symbol first;
   char *name;
+  int function;
 }*table;
 
 

@@ -173,7 +173,9 @@ int main(int argc, char *argv[]){
     add_predefined_functions(symbol_tables);
     handle_tree(syntax_tree);
     print_tables();
-	}
+    toprint = 1;
+    print_and_free(syntax_tree,0);
+}
 
 	return 0;
 }

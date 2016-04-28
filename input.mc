@@ -1,8 +1,7 @@
-int main(int argc, char **argv);
+int ola(int ola);
+char buffer[20];
 
-char *buffer[012];
-
-int gcd(int) {
+int gcd(int a,int b) {
   if (a == 0) {
     return b;
   } else {
@@ -14,8 +13,9 @@ int gcd(int) {
     return a;
   }
 }
-int main(int argc, char **argv) {
-  int a, b;
+void* main(void a) {
+  int gcd, b;
+  int argc;
   if (argc > 2) {
     a = atoi(argv[1]);
     b = atoi(argv[2]);
@@ -23,4 +23,8 @@ int main(int argc, char **argv) {
   } else
   puts("Error: two parameters required.");
   return 0;
+}
+int ola(int ole){
+
+
 }

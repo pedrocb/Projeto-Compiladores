@@ -19,17 +19,18 @@ void print_symbol(symbol symbol_){
     print_type(params);
     params = params->param;
     while(params!=NULL){
-      printf(", ");
+      printf(",");
       print_type(params);
       params = params->param;
     }
     printf(")");
   }
-  printf("\t%s\n",(symbol_->param==1)?"param":"");
+  printf("%s\n",(symbol_->param==1)?"\tparam":"");
 }
 
 void print_table(table table_){
-  printf("===== %s Symbol Table =====\n",table_->name);
+  
+  printf("===== %s%s Symbol Table =====\n",(table_->function==1)?"Function ":"",table_->name);
   symbol symbol_ = table_->first;
   while(symbol_!=NULL){
     print_symbol(symbol_);
