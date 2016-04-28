@@ -30,7 +30,10 @@ void print_symbol(symbol symbol_){
 
 void print_table(table table_){
   if(table_->to_print == 1){
-    printf("===== %s%s Symbol Table =====\n",(table_->function==1)?"Function ":"",table_->name);
+    if(strcmp(table_->name,"Global") == 0)
+      printf("===== %s Symbol Table =====\n",table_->name);
+    else
+      printf("===== Function %s Symbol Table =====\n",table_->name);
     symbol symbol_ = table_->first;
     while(symbol_!=NULL){
       print_symbol(symbol_);

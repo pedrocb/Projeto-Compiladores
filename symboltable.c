@@ -80,8 +80,11 @@ void add_predefined_functions(table table_){
   type itoa_type_ = new_type(1,"char",atoi_type_);
 
   add_symbol(table_,"atoi",atoi_type_,0);
+  create_table("atoi");
   add_symbol(table_,"itoa",itoa_type_,0);
+  create_table("itoa");
   add_symbol(table_,"puts",atoi_type_,0);
+  create_table("puts");
 }
 //Percorre os parametros e adiciona tanto
 type handle_param_list(node no, int flag){

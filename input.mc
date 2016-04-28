@@ -1,4 +1,4 @@
-char buffr[20];
+char *buffr[20];
 
 int gcd(int a,int b) {
   if (a == 0) {
@@ -13,11 +13,12 @@ int gcd(int a,int b) {
   }
 }
 
-int o;
+int ola(int ola);
 
-int ola(int ole){
+int puts(char* ola){
     return 1;
 }
+
 void* main(void a) {
   int gcd, b;
   int argc;
@@ -29,5 +30,12 @@ void* main(void a) {
   puts("Error: two parameters required.");
   return 0;
 }
-     
+
+int ola(int ole){
+    int a;
+    int h;
+    int ole;
+    int a;
+    return 1;
+}
 
