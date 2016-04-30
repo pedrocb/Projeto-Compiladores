@@ -1,14 +1,11 @@
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <ctype.h>
+#include "symboltable.h"
 
 typedef struct node_{
-	char *label;
-	struct node_ *child;
-	struct node_ *brother;
-	char *value;
+  char *label;
+  struct node_ *child;
+  struct node_ *brother;
+  char *value;
+  type type_;
 }*node;
 
 int toprint;
@@ -30,7 +27,7 @@ int n_children 	-> number of aux arguments
 node add_brother(node a, node b);
 /*
 node a					-> left node
-node a					-> right node
+node b					-> right node
 returns left node
 */
 

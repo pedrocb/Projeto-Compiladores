@@ -1,6 +1,6 @@
 #include "utils.h"
 
-void print_type(type type){
+void print_single_type(type type){
   printf("%s",type->type);
   for(int i=0;i<type->pointers;i++){
     printf("*");
@@ -10,21 +10,25 @@ void print_type(type type){
   }
 }
 
-void print_symbol(symbol symbol_){
-  printf("%s\t",symbol_->name);
-  print_type(symbol_->type_);
-  type params = symbol_->type_->param;
+void print_type(type type_){
+  print_single_type(type_);
+  type params = type_->param;
   if(params!=NULL){
     printf("(");
-    print_type(params);
+    print_single_type(params);
     params = params->param;
     while(params!=NULL){
       printf(",");
-      print_type(params);
+      print_single_type(params);
       params = params->param;
     }
     printf(")");
   }
+}
+
+void print_symbol(symbol symbol_){
+  printf("%s\t",symbol_->name);
+  print_type(symbol_->type_);
   printf("%s\n",(symbol_->param==1)?"\tparam":"");
 }
 

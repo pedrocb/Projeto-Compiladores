@@ -1,16 +1,21 @@
-#include "tree.h"
+#include "utils.h"
 
 void print_and_free(node n, int depth){
   if(toprint == 1){
     for(int i = 0; i < depth; i++)
       printf("..");
-
-    if(n->value != NULL) printf("%s(%s)\n", n->label,n->value);
-    else printf("%s\n", n->label);
+    
+    if(n->value != NULL) printf("%s(%s)", n->label,n->value);
+    else printf("%s", n->label);
+    if(n->type_ != NULL){
+      printf(" - ");
+      print_type(n->type_);
+    }
+    printf("\n");
   }
   if(n->child != NULL) print_and_free(n->child, depth + 1);
   if(n->brother != NULL) print_and_free(n->brother, depth);
-
+  
   free(n);
 }
 

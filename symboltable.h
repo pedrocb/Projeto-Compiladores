@@ -1,4 +1,9 @@
-#include "tree.h"
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <ctype.h>
+
 //Estrutura para o tipo de um simbolo. Facilita porque já nao temos que trabalhar com strings
 typedef struct type_{
   int pointers;
