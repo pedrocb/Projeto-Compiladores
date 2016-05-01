@@ -113,8 +113,8 @@ Declarator: Ast_ ID ArrayOptional{
   	     $$ = add_to_tree("Declaration",NULL,1,to_add);
       }
       ;
-    }
-    ;
+ }
+;
 
 ArrayOptional: Epsilon  {$$ = NULL;}
 | LSQ INTLIT RSQ    {$$ = add_to_tree("IntLit",$2,0);}

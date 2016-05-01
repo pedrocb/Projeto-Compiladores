@@ -195,6 +195,9 @@ void handle_tree(node current_node){
     current_node->type_ = new_type(0,"char",NULL);
     current_node->type_->array = strlen(current_node->value) -1;
   }
+  else if(strcmp(current_node->label, "ChrLit") == 0){
+    current_node->type_ = new_type(0,"char",NULL);
+  }
   else if(strcmp(current_node->label, "Call") == 0){
     handle_tree(current_node->child);
     current_node->type_ = new_type(current_node->child->type_->pointers,current_node->child->type_->type,NULL);
