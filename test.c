@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-
 #define typename(x) _Generic((x),        /* Get the name of a type */             \
                                                                                   \
         _Bool: "_Bool",                  unsigned char: "unsigned char",          \
@@ -16,8 +15,8 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
       default: "other")
 
 int main(){
-  char *a;
-  char b;
-  printf("%s\n",typename(a + b));
+  int *a[2];
+  void *b;
+  printf("%s\n",typename(*a));
   return 1;
 }

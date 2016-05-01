@@ -144,15 +144,17 @@ void handle_tree(node current_node){
   else if(strcmp(current_node->label, "Add") == 0 || strcmp(current_node->label, "Sub") == 0){
     handle_tree(current_node->child);
     type type_1 = current_node->child->type_;
+    int type_1_pointers = (type_1->array == -1)?type_1->pointers:type_1->pointers+1;
     type type_2 = current_node->child->brother->type_;
-    if(type_1->pointers == 0 &&  type_2->pointers == 0){
+    int type_2_pointers = (type_2->array == -1)?type_2->pointers:type_2->pointers+1;
+    if(type_1_pointers == 0 &&  type_2_pointers == 0){
       current_node->type_ = new_type(0,"int",NULL);
     }
-    else if(type_1->pointers > 0 &&  type_2->pointers == 0){
-      current_node->type_ = type_1;
+    else if(type_1_pointers > 0 && type_2_pointers == 0){
+      current_node->type_ = new_type(type_1_pointers,type_1->type,NULL);
     }
-    else if(type_1->pointers == 0 &&  type_2->pointers > 0){
-      current_node->type_ = type_2;
+    else if(type_1_pointers == 0 &&  type_2_pointers > 0){
+      current_node->type_ = new_type(type_2_pointers,type_2->type,NULL);
     }
     else{
       current_node->type_ = new_type(0,"ERROR",NULL);
@@ -165,8 +167,10 @@ void handle_tree(node current_node){
   else if(strcmp(current_node->label, "Mul") == 0 || strcmp(current_node->label, "Div") == 0 || strcmp(current_node->label, "Mod") == 0 ){
     handle_tree(current_node->child);
     type type_1 = current_node->child->type_;
+    int type_1_pointers = (type_1->array == -1)?type_1->pointers:type_1->pointers+1;
     type type_2 = current_node->child->brother->type_;
-    if(type_1->pointers == 0 &&  type_2->pointers == 0){
+    int type_2_pointers = (type_2->array == -1)?type_2->pointers:type_2->pointers+1;
+    if(type_1_pointers == 0 &&  type_2_pointers == 0){
       current_node->type_ = new_type(0,"int",NULL);
     }
     else{
@@ -208,21 +212,29 @@ void handle_tree(node current_node){
   }
   else if(strcmp(current_node->label, "Deref") == 0){
     handle_tree(current_node->child);
-    if(current_node->child->type_->pointers > 0){
-      current_node->type_ = new_type(current_node->child->type_->pointers - 1 , current_node->child->type_->type, NULL);
+    int pointers = (current_node->child->type_->array == -1)?current_node->child->type_->pointers:current_node->child->type_->pointers+1;
+    if(pointers> 0){
+      current_node->type_ = new_type(pointers - 1 , current_node->child->type_->type, NULL);
     }
   }
   else if(strcmp(current_node->label, "Addr") == 0){
     handle_tree(current_node->child);
-    current_node->type_ = new_type(current_node->child->type_->pointers + 1, current_node->child->type_->type, NULL);
+    int pointers = (current_node->child->type_->array == -1)?current_node->child->type_->pointers:current_node->child->type_->pointers+1;
+    current_node->type_ = new_type(current_pointers + 1, current_node->child->type_->type, NULL);
   }
   else if(strcmp(current_node->label, "Minus") == 0 || strcmp(current_node->label, "Plus") == 0 ){
     handle_tree(current_node->child);
-    if(current_node->type_->pointers == 0){
+    int pointers = (current_node->child->type_->array == -1)?current_node->child->type_->pointers:current_node->child->type_->pointers+1;
+    if(pointers == 0){
       current_node->type_ = new_type(0,"int",NULL);
     }
   }
-  else if(strcmp(current_node->label, "Not") == 0 || strcmp(current_node->label, "And") == 0 || strcmp(current_node->label, "Or") == 0){
+  else if(strcmp(current_node->label, "Not") == 0){
+    handle_tree(current_node->child);
+    current_node->type_ = new_type(0,"int",NULL);
+  }
+  else if(strcmp(current_node->label, "And") == 0 || strcmp(current_node->label, "Or") == 0){
+    handle_tree(current_node->child);
     current_node->type_ = new_type(0,"int",NULL);
   }
   else{
