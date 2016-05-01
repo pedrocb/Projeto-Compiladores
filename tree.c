@@ -13,9 +13,14 @@ void print_and_free(node n, int depth){
     }
     printf("\n");
   }
-  if(n->child != NULL) print_and_free(n->child, depth + 1);
-  if(n->brother != NULL) print_and_free(n->brother, depth);
-  
+  if(n && n->child != NULL){
+    print_and_free(n->child, depth + 1);
+  }
+  if(n && n->brother != NULL){
+    print_and_free(n->brother, depth);
+  }
+  free(n->label);
+  free(n->value);
   free(n);
 }
 
@@ -28,6 +33,9 @@ node add_to_tree(char *label, char *value, int n_children, ...){
   node n;
   n = (node)malloc(sizeof(struct node_));
   n->label = strdup(label);
+  n->child = NULL;
+  n->brother = NULL;
+  n->type_ = NULL;
   if(value == NULL) n->value = value;
   else n->value = strdup(value);
 

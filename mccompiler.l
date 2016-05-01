@@ -113,7 +113,7 @@ STRINV (\\.|{STRANY})*
 
 
 {ID} 							{PRINT("ID(%s)\n",yytext); COL; yylval.string = strdup(yytext); RET ID;}
-{INTLIT} 					{PRINT("INTLIT(%s)\n",yytext); COL; yylval.string = strdup(yytext); RET INTLIT;}
+{INTLIT} 					{PRINT("INTLIT(%s)\n",yytext); COL; yylval.string = strdup(yytext); RET INTLIT; }
 
 "/*" 							{BEGIN COMMENT; state_line=line; state_col=col; COL;}
 <COMMENT>"*/"			{BEGIN 0; COL;}
@@ -157,7 +157,7 @@ int main(int argc, char *argv[]){
 	  if(strcmp(argv[1],"-t") == 0)
 	    toprint = 1;
 
-	  yyparse();
+          yyparse();
 	  print_and_free(syntax_tree,0);
 	}
 
@@ -167,8 +167,8 @@ int main(int argc, char *argv[]){
 	  if(strcmp(argv[1],"-s") == 0)
 	    ;
 
-	  yyparse();
-	  symbol_tables = create_table("Global");
+          yyparse();
+          symbol_tables = create_table("Global");
 	  symbol_tables->to_print = 1;
 	  current_table = symbol_tables;
 	  add_predefined_functions(symbol_tables);

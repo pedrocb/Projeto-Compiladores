@@ -123,6 +123,7 @@ void handle_array_declaration(node no){
 
 //Função para ir percorrendo a ast
 void handle_tree(node current_node){
+  if(current_node == NULL) return;
   if(strcmp(current_node->label, "Program") ==0 || strcmp(current_node->label , "FuncBody") == 0){
     handle_tree(current_node->child);
     return;
@@ -142,13 +143,35 @@ void handle_tree(node current_node){
   }
   else if(strcmp(current_node->label, "Add") == 0 || strcmp(current_node->label, "Sub") == 0){
     handle_tree(current_node->child);
-    if(strcmp(current_node->child->label, current_node->child->brother->label) == 0){
-      current_node->type_ = current_node->child->type_;
+    type type_1 = current_node->child->type_;
+    type type_2 = current_node->child->brother->type_;
+    if(type_1->pointers == 0 &&  type_2->pointers == 0){
+      current_node->type_ = new_type(0,"int",NULL);
+    }
+    else if(type_1->pointers > 0 &&  type_2->pointers == 0){
+      current_node->type_ = type_1;
+    }
+    else if(type_1->pointers == 0 &&  type_2->pointers > 0){
+      current_node->type_ = type_2;
+    }
+    else{
+      current_node->type_ = new_type(0,"ERROR",NULL);
     }
   }
   else if(strcmp(current_node->label, "Eq") == 0 || strcmp(current_node->label, "Ne") == 0 || strcmp(current_node->label, "Lt") == 0 || strcmp(current_node->label, "Gt") == 0 || strcmp(current_node->label, "Le") == 0 || strcmp(current_node->label, "Ge") == 0){
     handle_tree(current_node->child);
     current_node->type_ = new_type(0,"int",NULL);
+  }
+  else if(strcmp(current_node->label, "Mul") == 0 || strcmp(current_node->label, "Div") == 0 || strcmp(current_node->label, "Mod") == 0 ){
+    handle_tree(current_node->child);
+    type type_1 = current_node->child->type_;
+    type type_2 = current_node->child->brother->type_;
+    if(type_1->pointers == 0 &&  type_2->pointers == 0){
+      current_node->type_ = new_type(0,"int",NULL);
+    }
+    else{
+      current_node->type_ = new_type(0,"ERROR",NULL);
+    }
   }
   else if(strcmp(current_node->label, "IntLit") == 0){
     current_node->type_ = new_type(0,"int",NULL);
@@ -163,6 +186,9 @@ void handle_tree(node current_node){
       if(symbol_ != NULL){
 	current_node->type_ = symbol_->type_;
       }
+      else{
+	current_node->type_ = new_type(0,"error",NULL);
+      }
     }
   }
   else if(strcmp(current_node->label, "StrLit") == 0){
@@ -173,6 +199,29 @@ void handle_tree(node current_node){
     handle_tree(current_node->child);
     current_node->type_ = new_type(current_node->child->type_->pointers,current_node->child->type_->type,NULL);
   }
+  else if(strcmp(current_node->label, "Store") == 0){
+    handle_tree(current_node->child);
+    current_node->type_ = current_node->child->type_;
+  }
+  else if(strcmp(current_node->label, "Deref") == 0){
+    handle_tree(current_node->child);
+    if(current_node->child->type_->pointers > 0){
+      current_node->type_ = new_type(current_node->child->type_->pointers - 1 , current_node->child->type_->type, NULL);
+    }
+  }
+  else if(strcmp(current_node->label, "Addr") == 0){
+    handle_tree(current_node->child);
+    current_node->type_ = new_type(current_node->child->type_->pointers + 1, current_node->child->type_->type, NULL);
+  }
+  else if(strcmp(current_node->label, "Minus") == 0 || strcmp(current_node->label, "Plus") == 0 ){
+    handle_tree(current_node->child);
+    if(current_node->type_->pointers == 0){
+      current_node->type_ = new_type(0,"int",NULL);
+    }
+  }
+  else if(strcmp(current_node->label, "Not") == 0 || strcmp(current_node->label, "And") == 0 || strcmp(current_node->label, "Or") == 0){
+    current_node->type_ = new_type(0,"int",NULL);
+  }
   else{
     if(current_node->child != NULL){
       handle_tree(current_node->child);
@@ -181,5 +230,4 @@ void handle_tree(node current_node){
   if(current_node->brother != NULL){
     handle_tree(current_node->brother);
   }
-  
 }

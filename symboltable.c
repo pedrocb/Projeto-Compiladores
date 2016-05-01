@@ -15,6 +15,7 @@ table create_table(char *name){
   new_table->name = strdup(name);
   new_table->function = 0;
   new_table->to_print = 0;
+  new_table->first = NULL;
   if(symbol_tables!=NULL){
     table_->next = new_table; //Insere a tabela no fim da lista de tabelas
   }

@@ -82,6 +82,8 @@ Declaration: TypeSpec Declarator Declarator_ SEMI{
     	  t = t->brother;
       }
       $$ = $2;
+      free($1->label);
+      free($1->value);
       free($1);
     }
     | error SEMI {$$ = NULL;}
@@ -106,7 +108,7 @@ Declarator: Ast_ ID ArrayOptional{
   	     to_add = no;
       }
       if($3!=NULL){
-  	     $$ = add_to_tree("ArrayDeclaration",NULL,2,to_add,$3);
+	     $$ = add_to_tree("ArrayDeclaration",NULL,2,to_add,$3);
       } else {
   	     $$ = add_to_tree("Declaration",NULL,1,to_add);
       }
@@ -115,7 +117,7 @@ Declarator: Ast_ ID ArrayOptional{
     ;
 
 ArrayOptional: Epsilon  {$$ = NULL;}
-    | LSQ INTLIT RSQ    {$$ = add_to_tree("IntLit",$2,0);}
+| LSQ INTLIT RSQ    {$$ = add_to_tree("IntLit",$2,0);}
     ;
 
 Declarator_: Epsilon                {$$ = NULL;}
@@ -226,10 +228,10 @@ FunctionCall: ID LPAR ListExprOptional RPAR {node no = add_to_tree("Id",$1,0);$$
     | Terminator                            {$$ = $1;}
     ;
 
-Terminator: ID        {$$ = add_to_tree("Id",$1,0);}
-    | INTLIT          {$$ = add_to_tree("IntLit",$1,0);}
-    | CHRLIT          {$$ = add_to_tree("ChrLit",$1,0);}
-    | STRLIT          {$$ = add_to_tree("StrLit",$1,0);}
+Terminator: ID        {$$ = add_to_tree("Id",$1,0); free($1);}
+    | INTLIT          {$$ = add_to_tree("IntLit",$1,0); free($1);}
+    | CHRLIT          {$$ = add_to_tree("ChrLit",$1,0); free($1);}
+    | STRLIT          {$$ = add_to_tree("StrLit",$1,0); free($1);}
     | LPAR Expr RPAR  {$$ = $2;}
     ;
 
