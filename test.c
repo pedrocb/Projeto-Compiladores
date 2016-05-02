@@ -15,8 +15,8 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
       default: "other")
 
 int main(){
-  int *a[2];
-  void *b;
-  printf("%s\n",typename(*a));
+  int a;
+  char b;
+  printf("%s\n",typename((b, a)));
   return 1;
 }
