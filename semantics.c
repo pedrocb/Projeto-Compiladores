@@ -223,7 +223,21 @@ void handle_tree(node current_node){
   }
   else if(strcmp(current_node->label, "Call") == 0){
     handle_tree(current_node->child);
-    current_node->type_ = new_type(current_node->child->type_->pointers,current_node->child->type_->type,NULL);
+    int n_parameters = 0;
+    int n_arguments = 0;;
+    for(node parameter = current_node->child->brother; parameter !=NULL ;parameter = parameter->brother){
+      n_parameters++;
+    }
+    for(type argument = current_node->child->type_->param; argument !=NULL ;argument = argument->param){
+      n_arguments++;
+    }
+    if(n_parameters != n_arguments){
+      printf("Wrong number of arguments to function %s (got %d, required %d)\n",current_node->child->value,n_arguments,n_parameters);
+      current_node->type_ = new_type(0,"undef",NULL);
+    }
+    else{
+      current_node->type_ = new_type(current_node->child->type_->pointers,current_node->child->type_->type,NULL);
+    }
   }
   else if(strcmp(current_node->label, "Store") == 0){
     handle_tree(current_node->child);
