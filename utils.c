@@ -54,3 +54,37 @@ void print_tables(){
     table_ = table_->next;
   }
 }
+
+int strlit_len(char *str){
+  int max = strlen(str);
+  int len = 0;
+
+  int escape = 0;
+  int nums = 0;
+
+  for(int i = 1; i < max; i++){
+    if(escape == 1){
+      if(nums == 0){
+        if(str[i] == 'n' || str[i] == 't' || str[i] == '\'' || str[i] == '\"' || str[i] == '\\')
+          escape = 0;
+        else
+          nums++;
+      }
+      else{
+        if(str[i] == '0' || str[i] == '1' || str[i] == '2' || str[i] == '3' || str[i] == '4' || str[i] == '5' || str[i] == '6' || str[i] == '7')
+          nums++;
+          if(nums == 3)
+            escape = 0;
+        else{
+          escape = 0;
+        }
+      }
+    }
+    else{
+      len++;
+      if(str[i] == '\\')
+        escape = 1;
+    }
+  }
+  return len;
+}
