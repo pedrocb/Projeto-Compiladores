@@ -153,8 +153,11 @@ void handle_tree(node current_node){
     else if(type_1_pointers > 0 && type_2_pointers == 0){
       current_node->type_ = new_type(type_1_pointers,type_1->type,NULL);
     }
+    else if(type_1_pointers == type_2_pointers && strcmp(type_1->type,type_2->type) == 0){
+      current_node->type_ = new_type(0,"int",NULL);
+    }
     else{
-      current_node->type_ = new_type(0,"ERROR",NULL);
+      current_node->type_ = new_type(0,"undef",NULL);
     }
   }
   else if(strcmp(current_node->label, "Add") == 0){
@@ -173,7 +176,7 @@ void handle_tree(node current_node){
       current_node->type_ = new_type(type_2_pointers,type_2->type,NULL);
     }
     else{
-      current_node->type_ = new_type(0,"ERROR",NULL);
+      current_node->type_ = new_type(0,"undef",NULL);
     }
   }
   else if(strcmp(current_node->label, "Eq") == 0 || strcmp(current_node->label, "Ne") == 0 || strcmp(current_node->label, "Lt") == 0 || strcmp(current_node->label, "Gt") == 0 || strcmp(current_node->label, "Le") == 0 || strcmp(current_node->label, "Ge") == 0){
@@ -190,7 +193,7 @@ void handle_tree(node current_node){
       current_node->type_ = new_type(0,"int",NULL);
     }
     else{
-      current_node->type_ = new_type(0,"ERROR",NULL);
+      current_node->type_ = new_type(0,"undef",NULL);
     }
   }
   else if(strcmp(current_node->label, "IntLit") == 0){
@@ -207,16 +210,16 @@ void handle_tree(node current_node){
 	current_node->type_ = symbol_->type_;
       }
       else{
-	current_node->type_ = new_type(0,"error",NULL);
+	current_node->type_ = new_type(0,"undef",NULL);
       }
     }
   }
   else if(strcmp(current_node->label, "StrLit") == 0){
     current_node->type_ = new_type(0,"char",NULL);
-    current_node->type_->array = strlen(current_node->value) -1;
+    current_node->type_->array = strlen(current_node->value) - 1;
   }
   else if(strcmp(current_node->label, "ChrLit") == 0){
-    current_node->type_ = new_type(0,"char",NULL);
+    current_node->type_ = new_type(0,"int",NULL);
   }
   else if(strcmp(current_node->label, "Call") == 0){
     handle_tree(current_node->child);
@@ -245,7 +248,6 @@ void handle_tree(node current_node){
       int pointers = (current_node->child->type_->array == -1)?current_node->child->type_->pointers:current_node->child->type_->pointers+1;
       current_node->type_ = new_type(pointers + 1, current_node->child->type_->type, NULL);
     }
-    
   }
   else if(strcmp(current_node->label, "Minus") == 0 || strcmp(current_node->label, "Plus") == 0 ){
     handle_tree(current_node->child);
