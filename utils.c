@@ -95,6 +95,7 @@ int strlit_len(char *str){
     }
   }
   return len;
+}
 
 void print_n_arguments_error(char *function,int n_arguments,int n_parameters){
   printf("Wrong number of arguments to function %s (got %d, required %d)\n",function,n_arguments,n_parameters);
