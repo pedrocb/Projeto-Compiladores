@@ -15,7 +15,7 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
        void *: "pointer to void",                int *: "pointer to int",         \
       default: "other")
 
-int ola;
+int ola(int r);
 
 int main(){
   ola();

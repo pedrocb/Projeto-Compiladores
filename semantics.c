@@ -63,6 +63,9 @@ void handle_function_definition(node no){
   if(get_symbol(symbol_tables,aux->value)==NULL){
     add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função
   }
+  else{
+    print_already_defined_error(aux->value);
+  }
   handle_tree(aux->brother->brother);
 }
 
@@ -83,7 +86,13 @@ void handle_function_declaration(node no){
     if(get_symbol(symbol_tables,aux->value)==NULL){
       add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função
     }
+    else{
+      print_already_defined_error(aux->value);
+    }
     current_table = symbol_tables;
+  }
+  else{
+    print_already_defined_error(aux->value);
   }
 }
 
@@ -102,6 +111,9 @@ void handle_declaration(node no){
   }
   if(get_symbol(current_table,aux->value)==NULL){
     add_symbol(current_table,aux->value,new_type(pointers,type_,NULL),0); //Depois vem o id da função
+  }
+  else{
+    print_already_defined_error(aux->value);
   }
 }
 
@@ -126,6 +138,8 @@ void handle_array_declaration(node no){
   }
   if(get_symbol(current_table, aux->value)==NULL){
     add_symbol(current_table,aux->value,type_new,0); //Depois vem o id da função
+  }else{
+    print_already_defined_error(aux->value);
   }
 }
 

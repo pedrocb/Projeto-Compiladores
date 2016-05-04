@@ -70,3 +70,7 @@ void print_unknown_symbol(char *symbol){
 void print_not_function_error(char *symbol){
   printf("Symbol %s is not a function\n",symbol);
 }
+
+void print_already_defined_error(char *symbol){
+  printf("Symbol %s already defined\n",symbol);
+}
