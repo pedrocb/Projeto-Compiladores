@@ -68,9 +68,8 @@ CHRINV (\\.|{CHRANY})*
 
 STRANY [^\\\"\n]
 STRLIT ({ESCAPE}|{STRANY})*
-STRUNT ({ESCAPE}|(\\*[^\n\"\\]*))*
-STRINV (\\.|{STRANY})*
-
+STRUNT ({ESCAPE}(\"\\\")|[^\"\n])*
+STRINV (\\(.*)|{STRANY})*
 
 %%
 
