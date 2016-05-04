@@ -15,10 +15,9 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
        void *: "pointer to void",                int *: "pointer to int",         \
       default: "other")
 
-int* ola();
+int ola;
 
 int main(){
-  char *test = "\012\18"; 
-  printf("%d\n",strlen(test));
+  ola();
   return 1;
 }

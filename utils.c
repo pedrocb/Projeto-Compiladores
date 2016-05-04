@@ -54,3 +54,19 @@ void print_tables(){
     table_ = table_->next;
   }
 }
+
+void print_n_arguments_error(char *function,int n_arguments,int n_parameters){
+  printf("Wrong number of arguments to function %s (got %d, required %d)\n",function,n_arguments,n_parameters);
+}
+
+void print_void_error(){
+  printf("Invalid use of void type in declaration\n");
+}
+
+void print_unknown_symbol(char *symbol){
+  printf("Unknown symbol %s\n",symbol);
+}
+
+void print_not_function_error(char *symbol){
+  printf("Symbol %s is not a function\n",symbol);
+}

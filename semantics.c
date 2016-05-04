@@ -96,6 +96,10 @@ void handle_declaration(node no){
     pointers++;
     aux = aux->brother;
   }
+  if(strcmp(type_,"Void") == 0 && pointers == 0){
+    print_void_error();
+    return;
+  }
   if(get_symbol(current_table,aux->value)==NULL){
     add_symbol(current_table,aux->value,new_type(pointers,type_,NULL),0); //Depois vem o id da função
   }
@@ -109,7 +113,11 @@ void handle_array_declaration(node no){
   while(strcmp(aux->label,"Id") != 0){ //Depois vem uma lista de ponteiros
     pointers++;
     aux = aux->brother;
-    }
+  }
+  if(strcmp(type_,"Void") == 0 && pointers == 0){
+    print_void_error();
+    return;
+  }
   type type_new = new_type(pointers,type_,NULL);
   if(aux->brother->value[0] == '0'){
     sscanf(aux->brother->value,"%o",&type_new->array);
@@ -210,6 +218,7 @@ void handle_tree(node current_node){
 	current_node->type_ = symbol_->type_;
       }
       else{
+	print_unknown_symbol(current_node->value);
 	current_node->type_ = new_type(0,"undef",NULL);
       }
     }
@@ -225,18 +234,25 @@ void handle_tree(node current_node){
     handle_tree(current_node->child);
     int n_parameters = 0;
     int n_arguments = 0;;
-    for(node parameter = current_node->child->brother; parameter !=NULL ;parameter = parameter->brother){
-      n_parameters++;
-    }
-    for(type argument = current_node->child->type_->param; argument !=NULL ;argument = argument->param){
-      n_arguments++;
-    }
-    if(n_parameters != n_arguments){
-      printf("Wrong number of arguments to function %s (got %d, required %d)\n",current_node->child->value,n_arguments,n_parameters);
-      current_node->type_ = new_type(0,"undef",NULL);
-    }
-    else{
-      current_node->type_ = new_type(current_node->child->type_->pointers,current_node->child->type_->type,NULL);
+    if(strcmp(current_node->child->type_->type,"undef") != 0){
+      if(current_node->child->type_->param != NULL){
+	for(node parameter = current_node->child->brother; parameter !=NULL ;parameter = parameter->brother){
+	  n_parameters++;
+	}
+	for(type argument = current_node->child->type_->param; argument !=NULL ;argument = argument->param){
+	  n_arguments++;
+	}
+	if(n_parameters != n_arguments){
+	  print_n_arguments_error(current_node->child->value,n_arguments,n_parameters);
+	  current_node->type_ = new_type(0,"undef",NULL);
+	}
+	else{
+	  current_node->type_ = new_type(current_node->child->type_->pointers,current_node->child->type_->type,NULL);
+	}
+      }
+      else{
+	print_not_function_error(current_node->child->value);
+      }
     }
   }
   else if(strcmp(current_node->label, "Store") == 0){
