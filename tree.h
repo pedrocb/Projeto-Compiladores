@@ -5,6 +5,8 @@ typedef struct node_{
   struct node_ *child;
   struct node_ *brother;
   char *value;
+  int tline;
+  int tcol;
   type type_;
 }*node;
 

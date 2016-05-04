@@ -179,6 +179,7 @@ void handle_tree(node current_node){
       current_node->type_ = new_type(0,"int",NULL);
     }
     else{
+      error_operator_types(current_node, current_node->child->type_, current_node->child->brother->type_);
       current_node->type_ = new_type(0,"undef",NULL);
     }
   }
@@ -198,6 +199,7 @@ void handle_tree(node current_node){
       current_node->type_ = new_type(type_2_pointers,type_2->type,NULL);
     }
     else{
+      error_operator_types(current_node, current_node->child->type_, current_node->child->brother->type_);
       current_node->type_ = new_type(0,"undef",NULL);
     }
   }
@@ -215,6 +217,7 @@ void handle_tree(node current_node){
       current_node->type_ = new_type(0,"int",NULL);
     }
     else{
+      error_operator_types(current_node, current_node->child->type_, current_node->child->brother->type_);
       current_node->type_ = new_type(0,"undef",NULL);
     }
   }
@@ -250,22 +253,22 @@ void handle_tree(node current_node){
     int n_arguments = 0;;
     if(strcmp(current_node->child->type_->type,"undef") != 0){
       if(current_node->child->type_->param != NULL){
-	for(node parameter = current_node->child->brother; parameter !=NULL ;parameter = parameter->brother){
-	  n_parameters++;
-	}
-	for(type argument = current_node->child->type_->param; argument !=NULL ;argument = argument->param){
-	  n_arguments++;
-	}
-	if(n_parameters != n_arguments){
-	  print_n_arguments_error(current_node->child->value,n_arguments,n_parameters);
-	  current_node->type_ = new_type(0,"undef",NULL);
-	}
-	else{
-	  current_node->type_ = new_type(current_node->child->type_->pointers,current_node->child->type_->type,NULL);
-	}
+      	for(node parameter = current_node->child->brother; parameter !=NULL ;parameter = parameter->brother){
+      	  n_parameters++;
+      	}
+      	for(type argument = current_node->child->type_->param; argument !=NULL ;argument = argument->param){
+      	  n_arguments++;
+      	}
+      	if(n_parameters != n_arguments){
+      	  print_n_arguments_error(current_node->child->value,n_arguments,n_parameters);
+      	  current_node->type_ = new_type(0,"undef",NULL);
+      	}
+      	else{
+      	  current_node->type_ = new_type(current_node->child->type_->pointers,current_node->child->type_->type,NULL);
+      	}
       }
       else{
-	print_not_function_error(current_node->child->value);
+	       print_not_function_error(current_node->child->value);
       }
     }
   }
@@ -279,6 +282,10 @@ void handle_tree(node current_node){
     int pointers = (current_node->child->type_->array == -1)?current_node->child->type_->pointers:current_node->child->type_->pointers+1;
     if(pointers > 0){
       current_node->type_ = new_type(pointers - 1 , current_node->child->type_->type, NULL);
+    }
+    else{
+      error_operator_type(current_node, current_node->child->type_);
+      current_node->type_ = new_type(0,"undef",NULL);
     }
   }
   else if(strcmp(current_node->label, "Comma") == 0){
@@ -298,6 +305,10 @@ void handle_tree(node current_node){
     int pointers = (current_node->child->type_->array == -1)?current_node->child->type_->pointers:current_node->child->type_->pointers+1;
     if(pointers == 0){
       current_node->type_ = new_type(0,"int",NULL);
+    }
+    else{
+      error_operator_type(current_node, current_node->child->type_);
+      current_node->type_ = new_type(0,"undef",NULL);
     }
   }
   else if(strcmp(current_node->label, "Not") == 0){
