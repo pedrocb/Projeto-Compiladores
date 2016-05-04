@@ -71,19 +71,27 @@ int strlit_len(char *str){
           nums++;
       }
       else{
-        if(str[i] == '0' || str[i] == '1' || str[i] == '2' || str[i] == '3' || str[i] == '4' || str[i] == '5' || str[i] == '6' || str[i] == '7')
+        if(str[i] == '0' || str[i] == '1' || str[i] == '2' || str[i] == '3' || str[i] == '4' || str[i] == '5' || str[i] == '6' || str[i] == '7'){
           nums++;
           if(nums == 3)
             escape = 0;
+        }
         else{
           escape = 0;
+          len++;
+          if(str[i] == '\\'){
+            escape = 1;
+            nums = 0;
+          }
         }
       }
     }
     else{
       len++;
-      if(str[i] == '\\')
+      if(str[i] == '\\'){
         escape = 1;
+        nums = 0;
+      }
     }
   }
   return len;

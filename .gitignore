@@ -5,3 +5,5 @@ y.output
 mccompiler
 *.txt
 mccompiler.zip
+a.out
+test.c
