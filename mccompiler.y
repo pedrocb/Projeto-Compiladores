@@ -59,7 +59,7 @@ FunctionBody: LBRACE Declaration Declaration_ GoodStatement Statement_ RBRACE {$
 FunctionDeclaration: TypeSpec FunctionDeclarator SEMI {$$ = add_to_tree("FuncDeclaration",NULL,2,$1,$2);}
     ;
 
-FunctionDeclarator: Ast_ ID LPAR ParameterList RPAR {node no = add_brother(add_to_tree("Id",$2,0),$4); $$ = add_brother($1,no);}
+FunctionDeclarator: Ast_ ID LPAR ParameterList RPAR {node no = add_brother(add_to_tree("Id",$2,0),$4); no->tline = @2.first_line; no->tcol = @2.first_column; $$ = add_brother($1,no);}
     ;
 
 ParameterList: ParameterDeclaration ParameterDeclaration_ {$$ = add_to_tree("ParamList",NULL,2,$1,$2);}
@@ -100,6 +100,8 @@ TypeSpec: CHAR {$$ = add_to_tree("Char",NULL,0);}
 
 Declarator: Ast_ ID ArrayOptional{
       node no = add_to_tree("Id",$2,0);
+      no->tline = @2.first_line;
+      no->tcol = @2.first_column;
       node to_add;
       if($1!=NULL){
       	$1 = add_brother($1,no);
@@ -224,7 +226,10 @@ Subfactor:Subfactor LSQ Expr RSQ   {node no = add_to_tree("Add",NULL,2,$1,$3); $
     | FunctionCall                {$$ = $1;}
     ;
 
-FunctionCall: ID LPAR ListExprOptional RPAR {node no = add_to_tree("Id",$1,0);$$ = add_to_tree("Call",NULL,2,no,$3); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
+FunctionCall: ID LPAR ListExprOptional RPAR {node no = add_to_tree("Id",$1,0);
+   no->tline = @1.first_line;
+   no->tcol = @1.first_column;
+   $$ = add_to_tree("Call",NULL,2,no,$3); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
     | Terminator                            {$$ = $1;}
     ;
 

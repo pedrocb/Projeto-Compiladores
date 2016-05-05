@@ -102,7 +102,8 @@ void generic_error(int l, int c){
 }
 
 
-void print_n_arguments_error(char *function,int n_arguments,int n_parameters){
+void print_n_arguments_error(char *function,int n_arguments,int n_parameters,int line,int col){
+  generic_error(line,col);
   printf("Wrong number of arguments to function %s (got %d, required %d)\n",function,n_arguments,n_parameters);
 }
 
@@ -114,15 +115,18 @@ void print_unknown_symbol(char *symbol){
   printf("Unknown symbol %s\n",symbol);
 }
 
-void print_not_function_error(char *symbol){
+void print_not_function_error(char *symbol,int line,int col){
+  generic_error(line,col);
   printf("Symbol %s is not a function\n",symbol);
 }
 
-void print_already_defined_error(char *symbol){
+void print_already_defined_error(char *symbol, int line, int col){
+  generic_error(line,col);
   printf("Symbol %s already defined\n",symbol);
 }
 
-void print_lvalue_error(){
+void print_lvalue_error(int line, int col){
+  generic_error(line,col);
   printf("Lvalue required\n");
 }
 void error_operator_type(node n, type t){

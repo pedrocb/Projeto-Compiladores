@@ -22,10 +22,6 @@ int ola(char a){
   }
 
 int main(){
-  int a[3];
-  int *b;
-  if("ola"){
-    ola('a');
-  }
+  void a;
   return 1;
 }

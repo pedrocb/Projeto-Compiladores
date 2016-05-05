@@ -64,7 +64,7 @@ void handle_function_definition(node no){
     add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função
   }
   else{
-    print_already_defined_error(aux->value);
+    print_already_defined_error(aux->value,aux->tline,aux->tcol);
   }
   handle_tree(aux->brother->brother);
 }
@@ -87,12 +87,12 @@ void handle_function_declaration(node no){
       add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função
     }
     else{
-      print_already_defined_error(aux->value);
+      print_already_defined_error(aux->value, aux->tline, aux->tcol);
     }
     current_table = symbol_tables;
   }
   else{
-    print_already_defined_error(aux->value);
+    print_already_defined_error(aux->value, aux->tline, aux->tcol);
   }
 }
 
@@ -113,7 +113,7 @@ void handle_declaration(node no){
     add_symbol(current_table,aux->value,new_type(pointers,type_,NULL),0); //Depois vem o id da função
   }
   else{
-    print_already_defined_error(aux->value);
+    print_already_defined_error(aux->value,aux->tline,aux->tcol);
   }
 }
 
@@ -139,7 +139,7 @@ void handle_array_declaration(node no){
   if(get_symbol(current_table, aux->value)==NULL){
     add_symbol(current_table,aux->value,type_new,0); //Depois vem o id da função
   }else{
-    print_already_defined_error(aux->value);
+    print_already_defined_error(aux->value,aux->tline,aux->tcol);
   }
 }
 
@@ -261,7 +261,7 @@ void handle_tree(node current_node){
 	  n_arguments++;
 	}
 	if(n_parameters != n_arguments){
-	  print_n_arguments_error(current_node->child->value,n_parameters,n_arguments);
+	  print_n_arguments_error(current_node->child->value,n_parameters,n_arguments,current_node->child->tline,current_node->child->tcol);
 	  current_node->type_ = new_type(0,"undef",NULL);
 	}
 	else{
@@ -269,7 +269,7 @@ void handle_tree(node current_node){
 	}
       }
       else{
-	print_not_function_error(current_node->child->value);
+	print_not_function_error(current_node->child->value,current_node->child->tline,current_node->child->tcol);
 	current_node->type_ = new_type(0,"undef",NULL);
       }
     }
@@ -284,7 +284,7 @@ void handle_tree(node current_node){
       current_node->type_ = new_type(pointers,current_node->child->type_->type,NULL);
     }
     else{
-      print_lvalue_error();
+      print_lvalue_error(current_node->tline,current_node->tcol);
     }
   }
   else if(strcmp(current_node->label, "Deref") == 0){
@@ -294,10 +294,7 @@ void handle_tree(node current_node){
       current_node->type_ = new_type(pointers - 1 , current_node->child->type_->type, NULL);
     }
     else{
-<<<<<<< HEAD
-=======
       error_operator_type(current_node, current_node->child->type_);
->>>>>>> 5f1092eddecdd5568aae1f7e1256724b28de42bc
       current_node->type_ = new_type(0,"undef",NULL);
     }
   }

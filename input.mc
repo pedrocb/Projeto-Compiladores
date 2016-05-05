@@ -1,10 +1,5 @@
+int a(int);
+int a;
 void main(void){
-  int a;
-  int *b;
-  char c;
-  char *d;
-  void *e;
-
-  a - b;
-  b - a;
+    a(1,2);
 }
