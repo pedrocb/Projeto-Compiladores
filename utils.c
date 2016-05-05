@@ -116,3 +116,7 @@ void print_not_function_error(char *symbol){
 void print_already_defined_error(char *symbol){
   printf("Symbol %s already defined\n",symbol);
 }
+
+void print_lvalue_error(){
+  printf("Lvalue required\n");
+}

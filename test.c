@@ -15,9 +15,17 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
        void *: "pointer to void",                int *: "pointer to int",         \
       default: "other")
 
-int ola(int r);
+int ola(char a);
+
+int ola(char a){
+  return 1;
+  }
 
 int main(){
-  ola();
+  int a[3];
+  int *b;
+  if("ola"){
+    ola('a');
+  }
   return 1;
 }

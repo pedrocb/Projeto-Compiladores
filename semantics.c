@@ -105,10 +105,10 @@ void handle_declaration(node no){
     pointers++;
     aux = aux->brother;
   }
-  if(strcmp(type_,"Void") == 0 && pointers == 0){
+  /*if(strcmp(type_,"Void") == 0 && pointers == 0){
     print_void_error();
     return;
-  }
+    }*/
   if(get_symbol(current_table,aux->value)==NULL){
     add_symbol(current_table,aux->value,new_type(pointers,type_,NULL),0); //Depois vem o id da função
   }
@@ -126,10 +126,10 @@ void handle_array_declaration(node no){
     pointers++;
     aux = aux->brother;
   }
-  if(strcmp(type_,"Void") == 0 && pointers == 0){
+  /*if(strcmp(type_,"Void") == 0 && pointers == 0){
     print_void_error();
     return;
-  }
+    }*/
   type type_new = new_type(pointers,type_,NULL);
   if(aux->brother->value[0] == '0'){
     sscanf(aux->brother->value,"%o",&type_new->array);
@@ -254,10 +254,11 @@ void handle_tree(node current_node){
 	  n_parameters++;
 	}
 	for(type argument = current_node->child->type_->param; argument !=NULL ;argument = argument->param){
+	  if(strcmp(argument->type,"void") == 0 && argument->pointers == 0) continue;
 	  n_arguments++;
 	}
 	if(n_parameters != n_arguments){
-	  print_n_arguments_error(current_node->child->value,n_arguments,n_parameters);
+	  print_n_arguments_error(current_node->child->value,n_parameters,n_arguments);
 	  current_node->type_ = new_type(0,"undef",NULL);
 	}
 	else{
@@ -266,19 +267,31 @@ void handle_tree(node current_node){
       }
       else{
 	print_not_function_error(current_node->child->value);
+	current_node->type_ = new_type(0,"undef",NULL);
       }
+    }
+    else{
+      current_node->type_ = new_type(0,"undef",NULL);
     }
   }
   else if(strcmp(current_node->label, "Store") == 0){
     handle_tree(current_node->child);
-    int pointers = (current_node->child->type_->array == -1)?current_node->child->type_->pointers:current_node->child->type_->pointers+1;
-    current_node->type_ = new_type(pointers,current_node->child->type_->type,NULL);
+    if(strcmp(current_node->child->label,"Id") == 0){
+      int pointers = (current_node->child->type_->array == -1)?current_node->child->type_->pointers:current_node->child->type_->pointers+1;
+      current_node->type_ = new_type(pointers,current_node->child->type_->type,NULL);
+    }
+    else{
+      print_lvalue_error();
+    }
   }
   else if(strcmp(current_node->label, "Deref") == 0){
     handle_tree(current_node->child);
     int pointers = (current_node->child->type_->array == -1)?current_node->child->type_->pointers:current_node->child->type_->pointers+1;
     if(pointers > 0){
       current_node->type_ = new_type(pointers - 1 , current_node->child->type_->type, NULL);
+    }
+    else{
+      current_node->type_ = new_type(0,"undef",NULL);
     }
   }
   else if(strcmp(current_node->label, "Comma") == 0){
