@@ -4,7 +4,7 @@ void print_and_free(node n, int depth){
   if(toprint == 1){
     for(int i = 0; i < depth; i++)
       printf("..");
-    
+
     if(n->value != NULL) printf("%s(%s)", n->label,n->value);
     else printf("%s", n->label);
     if(n->type_ != NULL){
@@ -36,6 +36,10 @@ node add_to_tree(char *label, char *value, int n_children, ...){
   n->child = NULL;
   n->brother = NULL;
   n->type_ = NULL;
+
+  n->tline = -1;
+  n->tcol = -1;
+
   if(value == NULL) n->value = value;
   else n->value = strdup(value);
 

@@ -179,6 +179,7 @@ void handle_tree(node current_node){
       current_node->type_ = new_type(0,"int",NULL);
     }
     else{
+      error_operator_types(current_node, current_node->child->type_, current_node->child->brother->type_);
       current_node->type_ = new_type(0,"undef",NULL);
     }
   }
@@ -198,6 +199,7 @@ void handle_tree(node current_node){
       current_node->type_ = new_type(type_2_pointers,type_2->type,NULL);
     }
     else{
+      error_operator_types(current_node, current_node->child->type_, current_node->child->brother->type_);
       current_node->type_ = new_type(0,"undef",NULL);
     }
   }
@@ -215,6 +217,7 @@ void handle_tree(node current_node){
       current_node->type_ = new_type(0,"int",NULL);
     }
     else{
+      error_operator_types(current_node, current_node->child->type_, current_node->child->brother->type_);
       current_node->type_ = new_type(0,"undef",NULL);
     }
   }
@@ -291,6 +294,10 @@ void handle_tree(node current_node){
       current_node->type_ = new_type(pointers - 1 , current_node->child->type_->type, NULL);
     }
     else{
+<<<<<<< HEAD
+=======
+      error_operator_type(current_node, current_node->child->type_);
+>>>>>>> 5f1092eddecdd5568aae1f7e1256724b28de42bc
       current_node->type_ = new_type(0,"undef",NULL);
     }
   }
@@ -311,6 +318,10 @@ void handle_tree(node current_node){
     int pointers = (current_node->child->type_->array == -1)?current_node->child->type_->pointers:current_node->child->type_->pointers+1;
     if(pointers == 0){
       current_node->type_ = new_type(0,"int",NULL);
+    }
+    else{
+      error_operator_type(current_node, current_node->child->type_);
+      current_node->type_ = new_type(0,"undef",NULL);
     }
   }
   else if(strcmp(current_node->label, "Not") == 0){

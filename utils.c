@@ -97,6 +97,11 @@ int strlit_len(char *str){
   return len;
 }
 
+void generic_error(int l, int c){
+  printf("Line %d, col %d: ", l, c);
+}
+
+
 void print_n_arguments_error(char *function,int n_arguments,int n_parameters){
   printf("Wrong number of arguments to function %s (got %d, required %d)\n",function,n_arguments,n_parameters);
 }
@@ -119,4 +124,19 @@ void print_already_defined_error(char *symbol){
 
 void print_lvalue_error(){
   printf("Lvalue required\n");
+}
+void error_operator_type(node n, type t){
+  generic_error(n->tline, n->tcol);
+  printf("Operator %s cannot be applied to type ", n->value);
+  print_single_type(t);
+  printf("\n");
+}
+
+void error_operator_types(node n, type t1, type t2){
+  generic_error(n->tline, n->tcol);
+  printf("Operator %s cannot be applied to types ", n->value);
+  print_single_type(t1);
+  printf(", ");
+  print_single_type(t2);
+  printf("\n");
 }

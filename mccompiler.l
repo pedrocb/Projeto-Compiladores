@@ -4,7 +4,8 @@
   #include "semantics.h"
 	#include "y.tab.h"
 
-	#define COL col += yyleng;
+	#define VAL yylval.string = strdup(yytext);
+	#define COL yylloc.first_line = line; yylloc.first_column = col; col += yyleng;
 	#define LINE line++; col=1;
 	#define PRINT if(flag == 1) printf
 	#define RET if(meta1 == 0) return
@@ -73,46 +74,46 @@ STRINV (\\(.*)|{STRANY})*
 
 %%
 
-{AMP}  			{PRINT("AMP\n"); COL; RET AMP;}
-{AND}  			{PRINT("AND\n"); COL; RET AND;}
-{ASSIGN}		{PRINT("ASSIGN\n"); COL; RET ASSIGN;}
-{AST}  			{PRINT("AST\n"); COL; RET AST;}
-{CHAR} 			{PRINT("CHAR\n"); COL; RET CHAR;}
-{COMMA} 		{PRINT("COMMA\n"); COL; RET COMMA;}
-{DIV} 			{PRINT("DIV\n"); COL; RET DIV;}
-{ELSE} 			{PRINT("ELSE\n"); COL; RET ELSE;}
-{EQ} 				{PRINT("EQ\n"); COL; RET EQ;}
-{FOR} 			{PRINT("FOR\n"); COL; RET FOR;}
-{GE} 				{PRINT("GE\n"); COL; RET GE;}
-{GT} 				{PRINT("GT\n"); COL; RET GT;}
-{IF} 				{PRINT("IF\n"); COL; RET IF;}
-{INT} 			{PRINT("INT\n"); COL; RET INT;}
-{LBRACE}		{PRINT("LBRACE\n"); COL; RET LBRACE;}
-{LE} 				{PRINT("LE\n"); COL; RET LE;}
-{LPAR} 			{PRINT("LPAR\n"); COL; RET LPAR;}
-{LSQ} 			{PRINT("LSQ\n"); COL; RET LSQ;}
-{LT} 				{PRINT("LT\n"); COL; RET LT;}
-{MINUS} 		{PRINT("MINUS\n"); COL; RET MINUS;}
-{MOD} 			{PRINT("MOD\n"); COL; RET MOD;}
-{NE} 				{PRINT("NE\n"); COL; RET NE;}
-{NOT} 			{PRINT("NOT\n"); COL; RET NOT;}
-{OR} 				{PRINT("OR\n"); COL; RET OR;}
-{PLUS} 			{PRINT("PLUS\n"); COL; RET PLUS;}
-{RBRACE}		{PRINT("RBRACE\n"); COL; RET RBRACE;}
-{RETURN}		{PRINT("RETURN\n"); COL; RET RETURN;}
-{RPAR} 			{PRINT("RPAR\n"); COL; RET RPAR;}
-{RSQ} 			{PRINT("RSQ\n"); COL; RET RSQ;}
-{SEMI} 			{PRINT("SEMI\n"); COL; RET SEMI;}
-{RESERVED} 	{PRINT("RESERVED(%s)\n",yytext); COL; RET RESERVED;}
-{VOID} 			{PRINT("VOID\n"); COL; RET VOID;}
+{AMP}  			{PRINT("AMP\n"); COL; VAL; RET AMP;}
+{AND}  			{PRINT("AND\n"); COL; VAL; RET AND;}
+{ASSIGN}		{PRINT("ASSIGN\n"); COL; VAL; RET ASSIGN;}
+{AST}  			{PRINT("AST\n"); COL; VAL; RET AST;}
+{CHAR} 			{PRINT("CHAR\n"); COL; VAL; RET CHAR;}
+{COMMA} 		{PRINT("COMMA\n"); COL; VAL; RET COMMA;}
+{DIV} 			{PRINT("DIV\n"); COL; VAL; RET DIV;}
+{ELSE} 			{PRINT("ELSE\n"); COL; VAL; RET ELSE;}
+{EQ} 				{PRINT("EQ\n"); COL; VAL; RET EQ;}
+{FOR} 			{PRINT("FOR\n"); COL; VAL; RET FOR;}
+{GE} 				{PRINT("GE\n"); COL; VAL; RET GE;}
+{GT} 				{PRINT("GT\n"); COL; VAL; RET GT;}
+{IF} 				{PRINT("IF\n"); COL; VAL; RET IF;}
+{INT} 			{PRINT("INT\n"); COL; VAL; RET INT;}
+{LBRACE}		{PRINT("LBRACE\n"); COL; VAL; RET LBRACE;}
+{LE} 				{PRINT("LE\n"); COL; VAL; RET LE;}
+{LPAR} 			{PRINT("LPAR\n"); COL; VAL; RET LPAR;}
+{LSQ} 			{PRINT("LSQ\n"); COL; VAL; RET LSQ;}
+{LT} 				{PRINT("LT\n"); COL; VAL; RET LT;}
+{MINUS} 		{PRINT("MINUS\n"); COL; VAL; RET MINUS;}
+{MOD} 			{PRINT("MOD\n"); COL; VAL; RET MOD;}
+{NE} 				{PRINT("NE\n"); COL; VAL; RET NE;}
+{NOT} 			{PRINT("NOT\n"); COL; VAL; RET NOT;}
+{OR} 				{PRINT("OR\n"); COL; VAL; RET OR;}
+{PLUS} 			{PRINT("PLUS\n"); COL; VAL; RET PLUS;}
+{RBRACE}		{PRINT("RBRACE\n"); COL; VAL; RET RBRACE;}
+{RETURN}		{PRINT("RETURN\n"); COL; VAL; RET RETURN;}
+{RPAR} 			{PRINT("RPAR\n"); COL; VAL; RET RPAR;}
+{RSQ} 			{PRINT("RSQ\n"); COL; VAL; RET RSQ;}
+{SEMI} 			{PRINT("SEMI\n"); COL; VAL; RET SEMI;}
+{RESERVED} 	{PRINT("RESERVED(%s)\n",yytext); COL; VAL; RET RESERVED;}
+{VOID} 			{PRINT("VOID\n"); COL; VAL; RET VOID;}
 
 \n {LINE;}
 \r {;}
 [ \t]+ {COL;}
 
 
-{ID} 							{PRINT("ID(%s)\n",yytext); COL; yylval.string = strdup(yytext); RET ID;}
-{INTLIT} 					{PRINT("INTLIT(%s)\n",yytext); COL; yylval.string = strdup(yytext); RET INTLIT; }
+{ID} 							{PRINT("ID(%s)\n",yytext); COL; VAL; RET ID;}
+{INTLIT} 					{PRINT("INTLIT(%s)\n",yytext); COL; VAL; RET INTLIT; }
 
 "/*" 							{BEGIN COMMENT; state_line=line; state_col=col; COL;}
 <COMMENT>"*/"			{BEGIN 0; COL;}
@@ -121,11 +122,11 @@ STRINV (\\(.*)|{STRANY})*
 <COMMENT><<EOF>>	{BEGIN 0; printf("Line %d, col %d: unterminated comment\n", state_line, state_col); COL;}
 
 
-\'{CHRLIT}\'			{PRINT("CHRLIT(%s)\n", yytext); COL; yylval.string = strdup(yytext); RET CHRLIT;}
+\'{CHRLIT}\'			{PRINT("CHRLIT(%s)\n", yytext); COL; VAL; RET CHRLIT;}
 \'{CHRUNT}				{printf("Line %d, col %d: unterminated char constant\n", line, col); COL;}
 \'{CHRINV}\'			{printf("Line %d, col %d: invalid char constant (%s)\n", line, col, yytext); COL;}
 
-\"{STRLIT}\"			{PRINT("STRLIT(%s)\n", yytext); COL; yylval.string = strdup(yytext); RET STRLIT;}
+\"{STRLIT}\"			{PRINT("STRLIT(%s)\n", yytext); COL; VAL; RET STRLIT;}
 \"{STRUNT}				{printf("Line %d, col %d: unterminated string constant\n", line, col); COL;}
 \"{STRINV}\"			{printf("Line %d, col %d: invalid string constant (%s)\n", line, col, yytext); COL;}
 
