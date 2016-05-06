@@ -2,6 +2,7 @@ void main(void , int){
      char a;
      char a;
 }
+int main;
 
 
 int b[2];

@@ -27,7 +27,7 @@ type handle_param_list(node no, int flag){
       pointers++;
       var = var->brother;
     }
-    if(strcmp(type_,"Void") == 0 && (typelist != NULL || aux->brother != NULL || var!=NULL)){
+    if(strcmp(type_,"Void") == 0 && pointers == 0 && (typelist != NULL || aux->brother != NULL || var!=NULL)){
       print_void_error(aux->child->tline,aux->child->tcol);
       return NULL;
     }
