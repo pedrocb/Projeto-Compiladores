@@ -7,6 +7,7 @@ typedef struct node_{
   char *value;
   int tline;
   int tcol;
+  int lit;
   type type_;
 }*node;
 

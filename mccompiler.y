@@ -59,7 +59,7 @@ FunctionBody: LBRACE Declaration Declaration_ GoodStatement Statement_ RBRACE {$
 FunctionDeclaration: TypeSpec FunctionDeclarator SEMI {$$ = add_to_tree("FuncDeclaration",NULL,2,$1,$2);}
     ;
 
-FunctionDeclarator: Ast_ ID LPAR ParameterList RPAR {node no = add_brother(add_to_tree("Id",$2,0),$4); no->tline = @2.first_line; no->tcol = @2.first_column; $$ = add_brother($1,no);}
+FunctionDeclarator: Ast_ ID LPAR ParameterList RPAR {node no = add_brother(add_to_tree("Id",$2,0),$4); no->tline = @2.first_line; no->tcol = @2.first_column; no->lit = 1; $$ = add_brother($1,no);}
     ;
 
 ParameterList: ParameterDeclaration ParameterDeclaration_ {$$ = add_to_tree("ParamList",NULL,2,$1,$2);}
@@ -102,6 +102,7 @@ Declarator: Ast_ ID ArrayOptional{
       node no = add_to_tree("Id",$2,0);
       no->tline = @2.first_line;
       no->tcol = @2.first_column;
+      no->lit = 1;
       node to_add;
       if($1!=NULL){
       	$1 = add_brother($1,no);
@@ -229,14 +230,15 @@ Subfactor:Subfactor LSQ Expr RSQ   {node no = add_to_tree("Add",NULL,2,$1,$3); $
 FunctionCall: ID LPAR ListExprOptional RPAR {node no = add_to_tree("Id",$1,0);
    no->tline = @1.first_line;
    no->tcol = @1.first_column;
+   no->lit = 1;
    $$ = add_to_tree("Call",NULL,2,no,$3); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
     | Terminator                            {$$ = $1;}
     ;
 
-Terminator: ID        {$$ = add_to_tree("Id",$1,0); free($1); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
-    | INTLIT          {$$ = add_to_tree("IntLit",$1,0); free($1); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
-    | CHRLIT          {$$ = add_to_tree("ChrLit",$1,0); free($1); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
-    | STRLIT          {$$ = add_to_tree("StrLit",$1,0); free($1); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
+Terminator: ID        {$$ = add_to_tree("Id",$1,0); free($1); $$->tline = @1.first_line; $$->tcol = @1.first_column; $$->lit = 1;}
+    | INTLIT          {$$ = add_to_tree("IntLit",$1,0); free($1); $$->tline = @1.first_line; $$->tcol = @1.first_column; $$->lit = 1;}
+    | CHRLIT          {$$ = add_to_tree("ChrLit",$1,0); free($1); $$->tline = @1.first_line; $$->tcol = @1.first_column; $$->lit = 1;}
+    | STRLIT          {$$ = add_to_tree("StrLit",$1,0); free($1); $$->tline = @1.first_line; $$->tcol = @1.first_column; $$->lit = 1;}
     | LPAR Expr RPAR  {$$ = $2;}
     ;
 
@@ -249,7 +251,7 @@ ExprOptional: Epsilon {$$ = add_to_tree("Null",NULL,0);}
     ;
 
 IdOptional: Epsilon {$$ = NULL;}
-    | ID            {$$ = add_to_tree("Id",$1,0); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
+    | ID            {$$ = add_to_tree("Id",$1,0); $$->tline = @1.first_line; $$->tcol = @1.first_column; $$->lit = 1;}
     ;
 
 Ast_: Epsilon   {$$ = NULL;}
