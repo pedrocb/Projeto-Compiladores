@@ -105,7 +105,7 @@ Declaration_: Epsilon           {$$ = NULL;}
 
 TypeSpec: CHAR {$$ = add_to_tree("Char",NULL,0);}
     |     INT  {$$ = add_to_tree("Int",NULL,0);}
-    | 	  VOID {$$ = add_to_tree("Void",NULL,0);}
+    | 	  VOID {$$ = add_to_tree("Void",NULL,0); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
     ;
 
 Declarator: Ast_ ID ArrayOptional{

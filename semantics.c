@@ -121,6 +121,10 @@ void handle_declaration(node no){
     pointers++;
     aux = aux->brother;
   }
+  if(strcmp(type_,"Void") == 0 && pointers == 0){
+    print_void_error(no->child->tline,no->child->tcol);
+    return;
+  }
   symbol symbol_ = get_symbol(current_table,aux->value);
   type type_new = new_type(pointers,type_,NULL);
   if(symbol_==NULL){
@@ -146,6 +150,10 @@ void handle_array_declaration(node no){
   while(strcmp(aux->label,"Id") != 0){ //Depois vem uma lista de ponteiros
     pointers++;
     aux = aux->brother;
+  }
+  if(strcmp(type_,"Void") == 0 && pointers == 0){
+    print_void_error(no->child->tline,no->child->tcol);
+    return;
   }
   type type_new = new_type(pointers,type_,NULL);
   if(aux->brother->value[0] == '0'){

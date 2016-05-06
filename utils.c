@@ -107,7 +107,8 @@ void print_n_arguments_error(char *function,int n_arguments,int n_parameters,int
   printf("Wrong number of arguments to function %s (got %d, required %d)\n",function,n_arguments,n_parameters);
 }
 
-void print_void_error(){
+void print_void_error(int line, int col){
+  generic_error(line,col);
   printf("Invalid use of void type in declaration\n");
 }
 
