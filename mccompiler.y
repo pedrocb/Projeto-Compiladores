@@ -59,7 +59,17 @@ FunctionBody: LBRACE Declaration Declaration_ GoodStatement Statement_ RBRACE {$
 FunctionDeclaration: TypeSpec FunctionDeclarator SEMI {$$ = add_to_tree("FuncDeclaration",NULL,2,$1,$2);}
     ;
 
-FunctionDeclarator: Ast_ ID LPAR ParameterList RPAR {node no = add_brother(add_to_tree("Id",$2,0),$4); no->tline = @2.first_line; no->tcol = @2.first_column; no->lit = 1; $$ = add_brother($1,no);}
+FunctionDeclarator: Ast_ ID LPAR ParameterList RPAR {
+
+    node n1 = add_to_tree("Id",$2,0);
+    n1->tline = @2.first_line;
+    n1->tcol = @2.first_column;
+    n1->lit = 1;
+
+    node no = add_brother(n1,$4);
+    $$ = add_brother($1,no);
+
+    }
     ;
 
 ParameterList: ParameterDeclaration ParameterDeclaration_ {$$ = add_to_tree("ParamList",NULL,2,$1,$2);}
@@ -120,7 +130,7 @@ Declarator: Ast_ ID ArrayOptional{
 ;
 
 ArrayOptional: Epsilon  {$$ = NULL;}
-| LSQ INTLIT RSQ    {$$ = add_to_tree("IntLit",$2,0);}
+| LSQ INTLIT RSQ    {$$ = add_to_tree("IntLit",$2,0); $$->tline = @2.first_line; $$->tcol = @2.first_column; $$->lit = 1;}
     ;
 
 Declarator_: Epsilon                {$$ = NULL;}
