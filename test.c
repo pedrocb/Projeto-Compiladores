@@ -14,12 +14,14 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
   long double: "long double",                   char *: "pointer to char",        \
        void *: "pointer to void",                int *: "pointer to int",         \
       default: "other")
+//int a;
+//int a;
+//char a;
 
-int ola(char a);
+int a(char w,void);
 
-char ola(char a);
-
-int main(){
-  void a;
+int main(void){
+  int a;
+  char a;
   return 1;
 }

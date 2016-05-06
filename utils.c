@@ -145,3 +145,31 @@ void error_operator_types(node n, type t1, type t2){
   print_single_type(t2);
   printf("\n");
 }
+
+int compare_types(type type_1, type type_2){
+  type aux_1 = type_1, aux_2 = type_2;
+  while(1){
+    if(aux_1 == NULL && aux_2 == NULL){
+      return 1;
+    }
+    else if(aux_1 == NULL || aux_2 == NULL){
+      return 0;
+    }
+    if(strcmp(aux_1->type, aux_2->type)==0 && aux_1->pointers == aux_2->pointers){
+      aux_1 = aux_1->param;
+      aux_2 = aux_2->param;
+    }
+    else{
+      return 0;
+    }
+  }
+}
+
+void error_conflicting_types(type t1, type t2, int line, int col){
+  generic_error(line,col);
+  printf("Conflicting types (got ");
+  print_type(t1);
+  printf(", expected ");
+  print_type(t2);
+  printf(")\n");
+}

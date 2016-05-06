@@ -12,3 +12,5 @@ void print_already_defined_error(char *symbol, int line, int col);
 void print_lvalue_error(int line,int col);
 void error_operator_type(node n, type t);
 void error_operator_types(node n, type t1, type t2);
+int compare_types(type type_1, type type_2);
+void error_conflicting_types(type t1, type t2, int line, int col);

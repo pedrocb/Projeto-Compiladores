@@ -57,14 +57,22 @@ void handle_function_definition(node no){
     current_table = create_table(aux->value); //current table vai ter a tabela da função que estamos a tratar, para mais tarde sabermos em que tabela inserir os simbolos
     current_table->function = 1;
   }
+  if(current_table->to_print == 1){
+    print_already_defined_error(aux->value,aux->tline,aux->tcol);
+    return;
+  }
   current_table->to_print = 1;
   add_symbol(current_table,"return", new_type(pointers,type_,NULL),0);
   type typelist = handle_param_list(aux->brother,0); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
-  if(get_symbol(symbol_tables,aux->value)==NULL){
-    add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função
+  symbol symbol_ = get_symbol(symbol_tables,aux->value);
+  type type_new = new_type(pointers,type_,typelist);
+  if(symbol_ == NULL){
+    add_symbol(symbol_tables,aux->value,type_new,0); //Depois vem o id da função
   }
   else{
-    print_already_defined_error(aux->value,aux->tline,aux->tcol);
+    if(!compare_types(symbol_->type_,type_new)){
+      error_conflicting_types(type_new,symbol_->type_,aux->tline,aux->tcol);
+    }
   }
   handle_tree(aux->brother->brother);
 }
@@ -78,21 +86,29 @@ void handle_function_declaration(node no){
     pointers++;
     aux = aux->brother;
   }
+  type typelist = handle_param_list(aux->brother,1); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
+  type type_new = new_type(pointers,type_,typelist);
   current_table = get_table(aux->value);
   if(current_table == NULL){
     current_table = create_table(aux->value);
     current_table->function = 1;
-    type typelist = handle_param_list(aux->brother,1); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
+    symbol symbol_ = get_symbol(symbol_tables,aux->value);
+    
     if(get_symbol(symbol_tables,aux->value)==NULL){
-      add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função
+      add_symbol(symbol_tables,aux->value,type_new,0); //Depois vem o id da função
     }
     else{
-      print_already_defined_error(aux->value, aux->tline, aux->tcol);
+      if(!compare_types(symbol_->type_,type_new)){
+	error_conflicting_types(type_new,symbol_->type_,aux->tline,aux->tcol);
+      }      
     }
     current_table = symbol_tables;
   }
   else{
-    print_already_defined_error(aux->value, aux->tline, aux->tcol);
+    symbol symbol_ = get_symbol(symbol_tables,aux->value);
+    if(!compare_types(symbol_->type_,type_new)){
+      error_conflicting_types(type_new,symbol_->type_,aux->tline,aux->tcol);
+    }
   }
 }
 
@@ -105,15 +121,20 @@ void handle_declaration(node no){
     pointers++;
     aux = aux->brother;
   }
-  /*if(strcmp(type_,"Void") == 0 && pointers == 0){
-    print_void_error();
-    return;
-    }*/
-  if(get_symbol(current_table,aux->value)==NULL){
-    add_symbol(current_table,aux->value,new_type(pointers,type_,NULL),0); //Depois vem o id da função
+  symbol symbol_ = get_symbol(current_table,aux->value);
+  type type_new = new_type(pointers,type_,NULL);
+  if(symbol_==NULL){
+    add_symbol(current_table,aux->value,type_new,0); //Depois vem o id da função
   }
   else{
-    print_already_defined_error(aux->value,aux->tline,aux->tcol);
+    if(compare_types(symbol_->type_,type_new)){
+      if(current_table != symbol_tables){
+	print_already_defined_error(aux->value,aux->tline,aux->tcol);
+      }
+    }
+    else{
+      error_conflicting_types(type_new,symbol_->type_,aux->tline,aux->tcol);
+    }
   }
 }
 
@@ -126,20 +147,24 @@ void handle_array_declaration(node no){
     pointers++;
     aux = aux->brother;
   }
-  /*if(strcmp(type_,"Void") == 0 && pointers == 0){
-    print_void_error();
-    return;
-    }*/
   type type_new = new_type(pointers,type_,NULL);
   if(aux->brother->value[0] == '0'){
     sscanf(aux->brother->value,"%o",&type_new->array);
   }else{
     sscanf(aux->brother->value,"%d",&type_new->array);
   }
-  if(get_symbol(current_table, aux->value)==NULL){
+  symbol symbol_  = get_symbol(current_table, aux->value);
+  if(symbol_==NULL){
     add_symbol(current_table,aux->value,type_new,0); //Depois vem o id da função
   }else{
-    print_already_defined_error(aux->value,aux->tline,aux->tcol);
+    if(compare_types(symbol_->type_,type_new)){
+      if(current_table != symbol_tables){
+	print_already_defined_error(aux->value,aux->tline,aux->tcol);
+      }
+    }
+    else{
+      error_conflicting_types(type_new,symbol_->type_,aux->tline,aux->tcol);
+    }
   }
 }
 
