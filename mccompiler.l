@@ -170,14 +170,14 @@ int main(int argc, char *argv[]){
 	  symbol_tables->to_print = 1;
 	  current_table = symbol_tables;
 	  add_predefined_functions(symbol_tables);
-	  handle_tree(syntax_tree);
-
-		if(strcmp(argv[1],"-s") == 0){
-			print_tables();
-		  toprint = 1;
-		}
-		print_and_free(syntax_tree,0);
-  }
+          handle_tree(syntax_tree);
+          if(strcmp(argv[1],"-s") == 0){
+	    print_tables();
+	    toprint = 1;
+          }
+          print_and_free(syntax_tree,0);
+          
+}
 
 	return 0;
 }

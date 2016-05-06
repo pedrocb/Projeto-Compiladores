@@ -189,18 +189,22 @@ void handle_tree(node current_node){
     int type_1_pointers = (type_1->array == -1)?type_1->pointers:type_1->pointers+1;
     type type_2 = current_node->child->brother->type_;
     int type_2_pointers = (type_2->array == -1)?type_2->pointers:type_2->pointers+1;
-    if(type_1_pointers == 0 &&  type_2_pointers == 0){
-      current_node->type_ = new_type(0,"int",NULL);
-    }
-    else if(type_1_pointers > 0 && type_2_pointers == 0){
-      current_node->type_ = new_type(type_1_pointers,type_1->type,NULL);
-    }
-    else if(type_1_pointers == 0 &&  type_2_pointers > 0){
-      current_node->type_ = new_type(type_2_pointers,type_2->type,NULL);
-    }
-    else{
-      error_operator_types(current_node, current_node->child->type_, current_node->child->brother->type_);
+    if(strcmp(type_1->type,"undef") == 0 || strcmp(type_1->type,"undef") == 0){
       current_node->type_ = new_type(0,"undef",NULL);
+    }else{
+      if(type_1_pointers == 0 &&  type_2_pointers == 0 ){
+	current_node->type_ = new_type(0,"int",NULL);
+      }
+      else if(type_1_pointers > 0 && type_2_pointers == 0){
+	current_node->type_ = new_type(type_1_pointers,type_1->type,NULL);
+      }
+      else if(type_1_pointers == 0 &&  type_2_pointers > 0){
+	current_node->type_ = new_type(type_2_pointers,type_2->type,NULL);
+      }
+      else{
+	error_operator_types(current_node, current_node->child->type_, current_node->child->brother->type_);
+	current_node->type_ = new_type(0,"undef",NULL);
+      }
     }
   }
   else if(strcmp(current_node->label, "Eq") == 0 || strcmp(current_node->label, "Ne") == 0 || strcmp(current_node->label, "Lt") == 0 || strcmp(current_node->label, "Gt") == 0 || strcmp(current_node->label, "Le") == 0 || strcmp(current_node->label, "Ge") == 0){
@@ -235,7 +239,7 @@ void handle_tree(node current_node){
 	current_node->type_ = symbol_->type_;
       }
       else{
-	print_unknown_symbol(current_node->value);
+	print_unknown_symbol(current_node->value,current_node->tline,current_node->tcol);
 	current_node->type_ = new_type(0,"undef",NULL);
       }
     }
