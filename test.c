@@ -17,9 +17,7 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
 
 int ola(char a);
 
-int ola(char a){
-  return 1;
-  }
+char ola(char a);
 
 int main(){
   void a;

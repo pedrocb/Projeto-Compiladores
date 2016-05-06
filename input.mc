@@ -1,5 +1,5 @@
-int a(int);
-int a;
+int a[2];
+char a(int);
 void main(void){
-    a(1,2);
+     a(2);
 }

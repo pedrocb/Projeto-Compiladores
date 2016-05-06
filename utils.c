@@ -111,7 +111,8 @@ void print_void_error(){
   printf("Invalid use of void type in declaration\n");
 }
 
-void print_unknown_symbol(char *symbol){
+void print_unknown_symbol(char *symbol, int line, int col){
+  generic_error(line,col);
   printf("Unknown symbol %s\n",symbol);
 }
 

@@ -5,7 +5,8 @@ void print_and_free(node n, int depth){
     for(int i = 0; i < depth; i++)
       printf("..");
 
-    if(n->value != NULL) printf("%s(%s)", n->label,n->value);
+    
+    if(n->value != NULL && (strcmp(n->label,"Id") == 0 || strcmp(n->label,"ChrLit") == 0 || strcmp(n->label,"StrLit") == 0 || strcmp(n->label,"IntLit") == 0)) printf("%s(%s)", n->label,n->value);
     else printf("%s", n->label);
     if(n->type_ != NULL){
       printf(" - ");
