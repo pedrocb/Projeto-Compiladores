@@ -165,8 +165,8 @@ int main(int argc, char *argv[]){
 	if(strcmp(argv[1],"-3") == 0 || strcmp(argv[1],"-s") == 0){
 
 
-          yyparse();
-          symbol_tables = create_table("Global");
+    yyparse();
+    symbol_tables = create_table("Global");
 	  symbol_tables->to_print = 1;
 	  current_table = symbol_tables;
 	  add_predefined_functions(symbol_tables);
