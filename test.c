@@ -20,7 +20,6 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
 
 //int a(char w,void);
 
-void *a[1];
 
 int main(void){
   int a;

@@ -27,6 +27,10 @@ type handle_param_list(node no, int flag){
       pointers++;
       var = var->brother;
     }
+    if(strcmp(type_,"Void") == 0 && (typelist != NULL || aux->brother != NULL || var!=NULL)){
+      print_void_error(aux->child->tline,aux->child->tcol);
+      return NULL;
+    }
     type type_new = new_type(pointers,type_,NULL); //Cria o tipo para a declaraçao da função na tabela global
     if(flag == 0 && var!=NULL)
       add_symbol(current_table,var->value,new_type(pointers,type_,NULL),1); //Adiciona o simbolo a funçao,
@@ -57,13 +61,17 @@ void handle_function_definition(node no){
     current_table = create_table(aux->value); //current table vai ter a tabela da função que estamos a tratar, para mais tarde sabermos em que tabela inserir os simbolos
     current_table->function = 1;
   }
+  type typelist = handle_param_list(aux->brother,0); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
+  if(typelist == NULL){
+    return;
+  }
   if(current_table->to_print == 1){
     print_already_defined_error(aux->value,aux->tline,aux->tcol);
     return;
   }
   current_table->to_print = 1;
   add_symbol(current_table,"return", new_type(pointers,type_,NULL),0);
-  type typelist = handle_param_list(aux->brother,0); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
+
   symbol symbol_ = get_symbol(symbol_tables,aux->value);
   type type_new = new_type(pointers,type_,typelist);
   if(symbol_ == NULL){
@@ -87,6 +95,9 @@ void handle_function_declaration(node no){
     aux = aux->brother;
   }
   type typelist = handle_param_list(aux->brother,1); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
+  if(typelist == NULL){
+    return;
+  }
   type type_new = new_type(pointers,type_,typelist);
   current_table = get_table(aux->value);
   if(current_table == NULL){
@@ -286,6 +297,8 @@ void handle_tree(node current_node){
   }
   else if(strcmp(current_node->label, "Call") == 0){
     handle_tree(current_node->child);
+    current_node->type_ = new_type(current_node->child->type_->pointers,current_node->child->type_->type,NULL);
+
     int n_parameters = 0;
     int n_arguments = 0;;
     if(strcmp(current_node->child->type_->type,"undef") != 0){

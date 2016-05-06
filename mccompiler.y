@@ -87,6 +87,8 @@ Declaration: TypeSpec Declarator Declarator_ SEMI{
       node t = $2;
       while(t != NULL){
     	  node no = add_to_tree($1->label,NULL,0);
+	  no->tline = $1->tline;
+	  no->tcol = $1->tcol;
     	  no = add_brother(no,t->child);
     	  t->child = no;
     	  t = t->brother;

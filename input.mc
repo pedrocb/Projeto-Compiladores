@@ -1,12 +1,4 @@
-int a;
-void a;
-
-void main(void){
-     char a;
-     char a;
-}
-
-void main(void){
+void main(void , int){
      char a;
      char a;
 }
