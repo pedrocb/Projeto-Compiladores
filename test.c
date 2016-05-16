@@ -18,11 +18,8 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
 //int a;
 //char a;
 
-//int a(char w,void);
 
 
 int main(void){
-  int a;
-  char a;
   return 1;
 }

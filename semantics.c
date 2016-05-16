@@ -56,15 +56,14 @@ void handle_function_definition(node no){
     pointers++;
     aux = aux->brother;
   }
+  type typelist = handle_param_list(aux->brother,1); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
   current_table = get_table(aux->value);
   if(current_table == NULL){
     current_table = create_table(aux->value); //current table vai ter a tabela da função que estamos a tratar, para mais tarde sabermos em que tabela inserir os simbolos
     current_table->function = 1;
   }
-  type typelist = handle_param_list(aux->brother,0); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
-  if(typelist == NULL){
-    return;
-  }
+  if(typelist == NULL) current_table->to_print = 0;
+  typelist = handle_param_list(aux->brother,0);
   if(current_table->to_print == 1){
     print_already_defined_error(aux->value,aux->tline,aux->tcol);
     return;
@@ -79,6 +78,7 @@ void handle_function_definition(node no){
   }
   else{
     if(!compare_types(symbol_->type_,type_new)){
+      current_table->to_print = 0;
       error_conflicting_types(type_new,symbol_->type_,aux->tline,aux->tcol);
     }
   }

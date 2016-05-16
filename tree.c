@@ -4,7 +4,6 @@ void print_and_free(node n, int depth){
   if(toprint == 1){
     for(int i = 0; i < depth; i++)
       printf("..");
-
     if(n->value != NULL && n->lit == 1) printf("%s(%s)", n->label,n->value);
     else printf("%s", n->label);
     if(n->type_ != NULL){

@@ -1,10 +1,10 @@
-void main(void , int){
-     char a;
-     char a;
+int main(int);
+int main(int, char);
+int main(int);
+int main(int a, int c){
+    int b; int b;
 }
-int main;
 
-
-int b[2];
-int *c;
-int *d[010];
+int main(void, void){
+    int b; int b;
+}
