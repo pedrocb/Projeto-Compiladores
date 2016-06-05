@@ -27,10 +27,6 @@ type handle_param_list(node no, int flag){
       pointers++;
       var = var->brother;
     }
-    if(strcmp(type_,"Void") == 0 && pointers == 0 && (typelist != NULL || aux->brother != NULL || var!=NULL)){
-      print_void_error(aux->child->tline,aux->child->tcol);
-      return NULL;
-    }
     type type_new = new_type(pointers,type_,NULL); //Cria o tipo para a declaraçao da função na tabela global
     if(flag == 0 && var!=NULL)
       add_symbol(current_table,var->value,new_type(pointers,type_,NULL),1); //Adiciona o simbolo a funçao,
@@ -56,31 +52,19 @@ void handle_function_definition(node no){
     pointers++;
     aux = aux->brother;
   }
-  type typelist = handle_param_list(aux->brother,1); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
   current_table = get_table(aux->value);
   if(current_table == NULL){
     current_table = create_table(aux->value); //current table vai ter a tabela da função que estamos a tratar, para mais tarde sabermos em que tabela inserir os simbolos
     current_table->function = 1;
   }
-  if(typelist == NULL) current_table->to_print = 0;
-  typelist = handle_param_list(aux->brother,0);
-  if(current_table->to_print == 1){
-    print_already_defined_error(aux->value,aux->tline,aux->tcol);
-    return;
-  }
   current_table->to_print = 1;
   add_symbol(current_table,"return", new_type(pointers,type_,NULL),0);
-
-  symbol symbol_ = get_symbol(symbol_tables,aux->value);
-  type type_new = new_type(pointers,type_,typelist);
-  if(symbol_ == NULL){
-    add_symbol(symbol_tables,aux->value,type_new,0); //Depois vem o id da função
+  type typelist = handle_param_list(aux->brother,0); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
+  if(get_symbol(symbol_tables,aux->value)==NULL){
+    add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função
   }
   else{
-    if(!compare_types(symbol_->type_,type_new)){
-      current_table->to_print = 0;
-      error_conflicting_types(type_new,symbol_->type_,aux->tline,aux->tcol);
-    }
+    print_already_defined_error(aux->value);
   }
   handle_tree(aux->brother->brother);
 }
@@ -94,32 +78,21 @@ void handle_function_declaration(node no){
     pointers++;
     aux = aux->brother;
   }
-  type typelist = handle_param_list(aux->brother,1); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
-  if(typelist == NULL){
-    return;
-  }
-  type type_new = new_type(pointers,type_,typelist);
   current_table = get_table(aux->value);
   if(current_table == NULL){
     current_table = create_table(aux->value);
     current_table->function = 1;
-    symbol symbol_ = get_symbol(symbol_tables,aux->value);
-    
+    type typelist = handle_param_list(aux->brother,1); //O type list vai ter os tipos dos parametros para poder criar o simbolo na tabela geral
     if(get_symbol(symbol_tables,aux->value)==NULL){
-      add_symbol(symbol_tables,aux->value,type_new,0); //Depois vem o id da função
+      add_symbol(symbol_tables,aux->value,new_type(pointers,type_,typelist),0); //Depois vem o id da função
     }
     else{
-      if(!compare_types(symbol_->type_,type_new)){
-	error_conflicting_types(type_new,symbol_->type_,aux->tline,aux->tcol);
-      }      
+      print_already_defined_error(aux->value);
     }
     current_table = symbol_tables;
   }
   else{
-    symbol symbol_ = get_symbol(symbol_tables,aux->value);
-    if(!compare_types(symbol_->type_,type_new)){
-      error_conflicting_types(type_new,symbol_->type_,aux->tline,aux->tcol);
-    }
+    print_already_defined_error(aux->value);
   }
 }
 
@@ -132,24 +105,15 @@ void handle_declaration(node no){
     pointers++;
     aux = aux->brother;
   }
-  if(strcmp(type_,"Void") == 0 && pointers == 0){
-    print_void_error(no->child->tline,no->child->tcol);
+  /*if(strcmp(type_,"Void") == 0 && pointers == 0){
+    print_void_error();
     return;
-  }
-  symbol symbol_ = get_symbol(current_table,aux->value);
-  type type_new = new_type(pointers,type_,NULL);
-  if(symbol_==NULL){
-    add_symbol(current_table,aux->value,type_new,0); //Depois vem o id da função
+    }*/
+  if(get_symbol(current_table,aux->value)==NULL){
+    add_symbol(current_table,aux->value,new_type(pointers,type_,NULL),0); //Depois vem o id da função
   }
   else{
-    if(compare_types(symbol_->type_,type_new)){
-      if(current_table != symbol_tables){
-	print_already_defined_error(aux->value,aux->tline,aux->tcol);
-      }
-    }
-    else{
-      error_conflicting_types(type_new,symbol_->type_,aux->tline,aux->tcol);
-    }
+    print_already_defined_error(aux->value);
   }
 }
 
@@ -162,28 +126,20 @@ void handle_array_declaration(node no){
     pointers++;
     aux = aux->brother;
   }
-  if(strcmp(type_,"Void") == 0 && pointers == 0){
-    print_void_error(no->child->tline,no->child->tcol);
+  /*if(strcmp(type_,"Void") == 0 && pointers == 0){
+    print_void_error();
     return;
-  }
+    }*/
   type type_new = new_type(pointers,type_,NULL);
   if(aux->brother->value[0] == '0'){
     sscanf(aux->brother->value,"%o",&type_new->array);
   }else{
     sscanf(aux->brother->value,"%d",&type_new->array);
   }
-  symbol symbol_  = get_symbol(current_table, aux->value);
-  if(symbol_==NULL){
+  if(get_symbol(current_table, aux->value)==NULL){
     add_symbol(current_table,aux->value,type_new,0); //Depois vem o id da função
   }else{
-    if(compare_types(symbol_->type_,type_new)){
-      if(current_table != symbol_tables){
-	print_already_defined_error(aux->value,aux->tline,aux->tcol);
-      }
-    }
-    else{
-      error_conflicting_types(type_new,symbol_->type_,aux->tline,aux->tcol);
-    }
+    print_already_defined_error(aux->value);
   }
 }
 
@@ -223,7 +179,6 @@ void handle_tree(node current_node){
       current_node->type_ = new_type(0,"int",NULL);
     }
     else{
-      error_operator_types(current_node, current_node->child->type_, current_node->child->brother->type_);
       current_node->type_ = new_type(0,"undef",NULL);
     }
   }
@@ -233,22 +188,17 @@ void handle_tree(node current_node){
     int type_1_pointers = (type_1->array == -1)?type_1->pointers:type_1->pointers+1;
     type type_2 = current_node->child->brother->type_;
     int type_2_pointers = (type_2->array == -1)?type_2->pointers:type_2->pointers+1;
-    if(strcmp(type_1->type,"undef") == 0 || strcmp(type_1->type,"undef") == 0){
+    if(type_1_pointers == 0 &&  type_2_pointers == 0){
+      current_node->type_ = new_type(0,"int",NULL);
+    }
+    else if(type_1_pointers > 0 && type_2_pointers == 0){
+      current_node->type_ = new_type(type_1_pointers,type_1->type,NULL);
+    }
+    else if(type_1_pointers == 0 &&  type_2_pointers > 0){
+      current_node->type_ = new_type(type_2_pointers,type_2->type,NULL);
+    }
+    else{
       current_node->type_ = new_type(0,"undef",NULL);
-    }else{
-      if(type_1_pointers == 0 &&  type_2_pointers == 0 ){
-	current_node->type_ = new_type(0,"int",NULL);
-      }
-      else if(type_1_pointers > 0 && type_2_pointers == 0){
-	current_node->type_ = new_type(type_1_pointers,type_1->type,NULL);
-      }
-      else if(type_1_pointers == 0 &&  type_2_pointers > 0){
-	current_node->type_ = new_type(type_2_pointers,type_2->type,NULL);
-      }
-      else{
-	error_operator_types(current_node, current_node->child->type_, current_node->child->brother->type_);
-	current_node->type_ = new_type(0,"undef",NULL);
-      }
     }
   }
   else if(strcmp(current_node->label, "Eq") == 0 || strcmp(current_node->label, "Ne") == 0 || strcmp(current_node->label, "Lt") == 0 || strcmp(current_node->label, "Gt") == 0 || strcmp(current_node->label, "Le") == 0 || strcmp(current_node->label, "Ge") == 0){
@@ -265,7 +215,6 @@ void handle_tree(node current_node){
       current_node->type_ = new_type(0,"int",NULL);
     }
     else{
-      error_operator_types(current_node, current_node->child->type_, current_node->child->brother->type_);
       current_node->type_ = new_type(0,"undef",NULL);
     }
   }
@@ -283,7 +232,7 @@ void handle_tree(node current_node){
 	current_node->type_ = symbol_->type_;
       }
       else{
-	print_unknown_symbol(current_node->value,current_node->tline,current_node->tcol);
+	print_unknown_symbol(current_node->value);
 	current_node->type_ = new_type(0,"undef",NULL);
       }
     }
@@ -297,9 +246,7 @@ void handle_tree(node current_node){
   }
   else if(strcmp(current_node->label, "Call") == 0){
     handle_tree(current_node->child);
-    current_node->type_ = new_type(current_node->child->type_->pointers,current_node->child->type_->type,NULL);
-
-    int n_parameters = 0;
+    /*int n_parameters = 0;
     int n_arguments = 0;;
     if(strcmp(current_node->child->type_->type,"undef") != 0){
       if(current_node->child->type_->param != NULL){
@@ -307,45 +254,31 @@ void handle_tree(node current_node){
 	  n_parameters++;
 	}
 	for(type argument = current_node->child->type_->param; argument !=NULL ;argument = argument->param){
-	  if(strcmp(argument->type,"void") == 0 && argument->pointers == 0) continue;
 	  n_arguments++;
 	}
 	if(n_parameters != n_arguments){
-	  print_n_arguments_error(current_node->child->value,n_parameters,n_arguments,current_node->child->tline,current_node->child->tcol);
+	  print_n_arguments_error(current_node->child->value,n_arguments,n_parameters);
 	  current_node->type_ = new_type(0,"undef",NULL);
 	}
-	else{
-	  current_node->type_ = new_type(current_node->child->type_->pointers,current_node->child->type_->type,NULL);
+	else{*/
+	  current_node->type_ = new_type(current_node->child->type_->pointers,current_node->child->type_->type,NULL);/*
 	}
       }
       else{
-	print_not_function_error(current_node->child->value,current_node->child->tline,current_node->child->tcol);
-	current_node->type_ = new_type(0,"undef",NULL);
+	print_not_function_error(current_node->child->value);
       }
-    }
-    else{
-      current_node->type_ = new_type(0,"undef",NULL);
-    }
+      }*/
   }
   else if(strcmp(current_node->label, "Store") == 0){
     handle_tree(current_node->child);
-    if(strcmp(current_node->child->label,"Id") == 0){
-      int pointers = (current_node->child->type_->array == -1)?current_node->child->type_->pointers:current_node->child->type_->pointers+1;
-      current_node->type_ = new_type(pointers,current_node->child->type_->type,NULL);
-    }
-    else{
-      print_lvalue_error(current_node->tline,current_node->tcol);
-    }
+    int pointers = (current_node->child->type_->array == -1)?current_node->child->type_->pointers:current_node->child->type_->pointers+1;
+    current_node->type_ = new_type(pointers,current_node->child->type_->type,NULL);
   }
   else if(strcmp(current_node->label, "Deref") == 0){
     handle_tree(current_node->child);
     int pointers = (current_node->child->type_->array == -1)?current_node->child->type_->pointers:current_node->child->type_->pointers+1;
     if(pointers > 0){
       current_node->type_ = new_type(pointers - 1 , current_node->child->type_->type, NULL);
-    }
-    else{
-      error_operator_type(current_node, current_node->child->type_);
-      current_node->type_ = new_type(0,"undef",NULL);
     }
   }
   else if(strcmp(current_node->label, "Comma") == 0){
@@ -365,10 +298,6 @@ void handle_tree(node current_node){
     int pointers = (current_node->child->type_->array == -1)?current_node->child->type_->pointers:current_node->child->type_->pointers+1;
     if(pointers == 0){
       current_node->type_ = new_type(0,"int",NULL);
-    }
-    else{
-      error_operator_type(current_node, current_node->child->type_);
-      current_node->type_ = new_type(0,"undef",NULL);
     }
   }
   else if(strcmp(current_node->label, "Not") == 0){

@@ -7,10 +7,10 @@
 
   int yylex(void);
   void yyerror(const char *s);
-
 %}
 
-%token INT LBRACE LPAR LSQ RBRACE RETURN RPAR RSQ SEMI
+%token AMP AND ASSIGN AST CHAR COMMA DIV ELSE EQ FOR GE GT IF
+%token INT LBRACE LE LPAR LSQ LT MINUS MOD NE NOT OR PLUS RBRACE RETURN RPAR RSQ SEMI
 %token VOID RESERVED
 
 
@@ -20,7 +20,7 @@
   node n;
 }
 
-%token <string> ID STRLIT CHRLIT INTLIT AMP AND ASSIGN AST CHAR COMMA DIV ELSE EQ FOR GE GT IF LE LT MINUS MOD NE NOT OR PLUS
+%token <string> ID STRLIT CHRLIT INTLIT
 
 %type <n> TypeSpec Subfactor Expr Start Block Block_ AssignExpr Factor Term ComparationExpr BinaryExpr SingleExpr ExprOptional ListExprOptional Expr_without_comma Expr_without_comma_ IfElseStatement Ast_ ParameterDeclaration IdOptional Declarator Declarator_ ArrayOptional FunctionBody ParameterList ParameterDeclaration_ FunctionDeclarator FunctionDeclaration FunctionDefinition TestExpr RelationExpr FunctionCall Terminator
 %type <n> Declaration Declaration_
@@ -59,17 +59,7 @@ FunctionBody: LBRACE Declaration Declaration_ GoodStatement Statement_ RBRACE {$
 FunctionDeclaration: TypeSpec FunctionDeclarator SEMI {$$ = add_to_tree("FuncDeclaration",NULL,2,$1,$2);}
     ;
 
-FunctionDeclarator: Ast_ ID LPAR ParameterList RPAR {
-
-    node n1 = add_to_tree("Id",$2,0);
-    n1->tline = @2.first_line;
-    n1->tcol = @2.first_column;
-    n1->lit = 1;
-
-    node no = add_brother(n1,$4);
-    $$ = add_brother($1,no);
-
-    }
+FunctionDeclarator: Ast_ ID LPAR ParameterList RPAR {node no = add_brother(add_to_tree("Id",$2,0),$4); $$ = add_brother($1,no);}
     ;
 
 ParameterList: ParameterDeclaration ParameterDeclaration_ {$$ = add_to_tree("ParamList",NULL,2,$1,$2);}
@@ -87,8 +77,6 @@ Declaration: TypeSpec Declarator Declarator_ SEMI{
       node t = $2;
       while(t != NULL){
     	  node no = add_to_tree($1->label,NULL,0);
-	  no->tline = $1->tline;
-	  no->tcol = $1->tcol;
     	  no = add_brother(no,t->child);
     	  t->child = no;
     	  t = t->brother;
@@ -107,14 +95,11 @@ Declaration_: Epsilon           {$$ = NULL;}
 
 TypeSpec: CHAR {$$ = add_to_tree("Char",NULL,0);}
     |     INT  {$$ = add_to_tree("Int",NULL,0);}
-    | 	  VOID {$$ = add_to_tree("Void",NULL,0); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
+    | 	  VOID {$$ = add_to_tree("Void",NULL,0);}
     ;
 
 Declarator: Ast_ ID ArrayOptional{
       node no = add_to_tree("Id",$2,0);
-      no->tline = @2.first_line;
-      no->tcol = @2.first_column;
-      no->lit = 1;
       node to_add;
       if($1!=NULL){
       	$1 = add_brother($1,no);
@@ -132,11 +117,11 @@ Declarator: Ast_ ID ArrayOptional{
 ;
 
 ArrayOptional: Epsilon  {$$ = NULL;}
-| LSQ INTLIT RSQ    {$$ = add_to_tree("IntLit",$2,0); $$->tline = @2.first_line; $$->tcol = @2.first_column; $$->lit = 1;}
+| LSQ INTLIT RSQ    {$$ = add_to_tree("IntLit",$2,0);}
     ;
 
 Declarator_: Epsilon                {$$ = NULL;}
-    | Declarator_ COMMA Declarator  {$$ = add_brother($1,$3); }
+    | Declarator_ COMMA Declarator  {$$ = add_brother($1,$3);}
     ;
 
 Statement_: Epsilon {$$ = NULL;}
@@ -178,7 +163,7 @@ IfElseStatement: IF LPAR Expr RPAR Statement %prec IFCENAS{
     }
     ;
 
-Expr: Expr COMMA AssignExpr {$$ = add_to_tree("Comma",$2,2,$1,$3); $$->tline = @2.first_line; $$->tcol = @2.first_column;}
+Expr: Expr COMMA AssignExpr {$$ = add_to_tree("Comma",NULL,2,$1,$3);/*print_tree($$,0)*/;}
     | Expr_without_comma    {$$ = $1;}
     ;
 
@@ -191,47 +176,47 @@ Expr_without_comma_: Epsilon                        {$$ = NULL;}
     | COMMA Expr_without_comma Expr_without_comma_  {$$ = add_brother($2,$3);}
     ;
 
-AssignExpr: SingleExpr ASSIGN AssignExpr  {$$ = add_to_tree("Store",$2,2,$1,$3); $$->tline = @2.first_line; $$->tcol = @2.first_column;}
+AssignExpr: SingleExpr ASSIGN AssignExpr  {$$ = add_to_tree("Store",NULL,2,$1,$3);}
     | SingleExpr                          {$$ = $1;}
     ;
 
-SingleExpr: SingleExpr OR TestExpr  {$$ = add_to_tree("Or",$2,2,$1,$3); $$->tline = @2.first_line; $$->tcol = @2.first_column;}
+SingleExpr: SingleExpr OR TestExpr  {$$ = add_to_tree("Or",NULL,2,$1,$3);}
     | TestExpr                      {$$ = $1;}
     ;
 
-TestExpr:TestExpr AND BinaryExpr  {$$ = add_to_tree("And",$2,2,$1,$3); $$->tline = @2.first_line; $$->tcol = @2.first_column;}
+TestExpr:TestExpr AND BinaryExpr  {$$ = add_to_tree("And",NULL,2,$1,$3);}
     | BinaryExpr                  {$$ = $1;}
     ;
 
-BinaryExpr: BinaryExpr EQ RelationExpr  {$$ = add_to_tree("Eq",$2,2,$1,$3); $$->tline = @2.first_line; $$->tcol = @2.first_column;}
-    | BinaryExpr NE RelationExpr        {$$ = add_to_tree("Ne",$2,2,$1,$3); $$->tline = @2.first_line; $$->tcol = @2.first_column;}
+BinaryExpr: BinaryExpr EQ RelationExpr  {$$ = add_to_tree("Eq",NULL,2,$1,$3);}
+    | BinaryExpr NE RelationExpr        {$$ = add_to_tree("Ne",NULL,2,$1,$3);}
     | RelationExpr                      {$$=$1;}
     ;
 
-RelationExpr: RelationExpr LT ComparationExpr {$$ = add_to_tree("Lt",$2,2,$1,$3); $$->tline = @2.first_line; $$->tcol = @2.first_column;}
-    | RelationExpr GT ComparationExpr         {$$ = add_to_tree("Gt",$2,2,$1,$3); $$->tline = @2.first_line; $$->tcol = @2.first_column;}
-    | RelationExpr LE ComparationExpr         {$$ = add_to_tree("Le",$2,2,$1,$3); $$->tline = @2.first_line; $$->tcol = @2.first_column;}
-    | RelationExpr GE ComparationExpr         {$$ = add_to_tree("Ge",$2,2,$1,$3); $$->tline = @2.first_line; $$->tcol = @2.first_column;}
+RelationExpr: RelationExpr LT ComparationExpr {$$ = add_to_tree("Lt",NULL,2,$1,$3);}
+    | RelationExpr GT ComparationExpr         {$$ = add_to_tree("Gt",NULL,2,$1,$3);}
+    | RelationExpr LE ComparationExpr         {$$ = add_to_tree("Le",NULL,2,$1,$3);}
+    | RelationExpr GE ComparationExpr         {$$ = add_to_tree("Ge",NULL,2,$1,$3);}
     | ComparationExpr                         {$$ = $1;}
     ;
 
 
-ComparationExpr : ComparationExpr PLUS Term {$$ = add_to_tree("Add",$2,2,$1,$3); $$->tline = @2.first_line; $$->tcol = @2.first_column;}
-    | ComparationExpr MINUS Term            {$$ = add_to_tree("Sub",$2,2,$1,$3); $$->tline = @2.first_line; $$->tcol = @2.first_column;}
+ComparationExpr : ComparationExpr PLUS Term {$$ = add_to_tree("Add",NULL,2,$1,$3);}
+    | ComparationExpr MINUS Term            {$$ = add_to_tree("Sub",NULL,2,$1,$3);}
     | Term                                  {$$ = $1;}
     ;
 
-Term: Term AST Factor {$$ = add_to_tree("Mul",$2,2,$1,$3); $$->tline = @2.first_line; $$->tcol = @2.first_column;}
-    | Term DIV Factor {$$ = add_to_tree("Div",$2,2,$1,$3); $$->tline = @2.first_line; $$->tcol = @2.first_column;}
-    | Term MOD Factor {$$ = add_to_tree("Mod",$2,2,$1,$3); $$->tline = @2.first_line; $$->tcol = @2.first_column;}
+Term: Term AST Factor {$$ = add_to_tree("Mul",NULL,2,$1,$3);}
+    | Term DIV Factor {$$ = add_to_tree("Div",NULL,2,$1,$3);}
+    | Term MOD Factor {$$ = add_to_tree("Mod",NULL,2,$1,$3);}
     | Factor          {$$ = $1;}
     ;
 
-Factor: AMP Factor  {$$ = add_to_tree("Addr",$1,1,$2); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
-    |  AST Factor   {$$ = add_to_tree("Deref",$1,1,$2); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
-    |  PLUS Factor  {$$ = add_to_tree("Plus",$1,1,$2); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
-    |  MINUS Factor {$$ = add_to_tree("Minus",$1,1,$2); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
-    |  NOT Factor   {$$ = add_to_tree("Not",$1,1,$2); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
+Factor: AMP Factor  {$$ = add_to_tree("Addr",NULL,1,$2);}
+    |  AST Factor   {$$ = add_to_tree("Deref",NULL,1,$2);}
+    |  PLUS Factor  {$$ = add_to_tree("Plus",NULL,1,$2);}
+    |  MINUS Factor {$$ = add_to_tree("Minus",NULL,1,$2);}
+    |  NOT Factor   {$$ = add_to_tree("Not",NULL,1,$2);}
     |  Subfactor    {$$ = $1;}
     ;
 
@@ -239,18 +224,14 @@ Subfactor:Subfactor LSQ Expr RSQ   {node no = add_to_tree("Add",NULL,2,$1,$3); $
     | FunctionCall                {$$ = $1;}
     ;
 
-FunctionCall: ID LPAR ListExprOptional RPAR {node no = add_to_tree("Id",$1,0);
-   no->tline = @1.first_line;
-   no->tcol = @1.first_column;
-   no->lit = 1;
-   $$ = add_to_tree("Call",NULL,2,no,$3); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
+FunctionCall: ID LPAR ListExprOptional RPAR {node no = add_to_tree("Id",$1,0);$$ = add_to_tree("Call",NULL,2,no,$3);}
     | Terminator                            {$$ = $1;}
     ;
 
-Terminator: ID        {$$ = add_to_tree("Id",$1,0); free($1); $$->tline = @1.first_line; $$->tcol = @1.first_column; $$->lit = 1;}
-    | INTLIT          {$$ = add_to_tree("IntLit",$1,0); free($1); $$->tline = @1.first_line; $$->tcol = @1.first_column; $$->lit = 1;}
-    | CHRLIT          {$$ = add_to_tree("ChrLit",$1,0); free($1); $$->tline = @1.first_line; $$->tcol = @1.first_column; $$->lit = 1;}
-    | STRLIT          {$$ = add_to_tree("StrLit",$1,0); free($1); $$->tline = @1.first_line; $$->tcol = @1.first_column; $$->lit = 1;}
+Terminator: ID        {$$ = add_to_tree("Id",$1,0); free($1);}
+    | INTLIT          {$$ = add_to_tree("IntLit",$1,0); free($1);}
+    | CHRLIT          {$$ = add_to_tree("ChrLit",$1,0); free($1);}
+    | STRLIT          {$$ = add_to_tree("StrLit",$1,0); free($1);}
     | LPAR Expr RPAR  {$$ = $2;}
     ;
 
@@ -263,11 +244,11 @@ ExprOptional: Epsilon {$$ = add_to_tree("Null",NULL,0);}
     ;
 
 IdOptional: Epsilon {$$ = NULL;}
-    | ID            {$$ = add_to_tree("Id",$1,0); $$->tline = @1.first_line; $$->tcol = @1.first_column; $$->lit = 1;}
+    | ID            {$$ = add_to_tree("Id",$1,0);}
     ;
 
 Ast_: Epsilon   {$$ = NULL;}
-    | AST Ast_  {node no = add_to_tree("Pointer",$1,0);$$ = add_brother(no,$2); $$->tline = @1.first_line; $$->tcol = @1.first_column;}
+    | AST Ast_  {node no = add_to_tree("Pointer",NULL,0);$$ = add_brother(no,$2);}
     ;
 
 %%

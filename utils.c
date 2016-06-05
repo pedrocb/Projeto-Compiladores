@@ -97,80 +97,22 @@ int strlit_len(char *str){
   return len;
 }
 
-void generic_error(int l, int c){
-  printf("Line %d, col %d: ", l, c);
+void print_n_arguments_error(char *function,int n_arguments,int n_parameters){
+  //printf("Wrong number of arguments to function %s (got %d, required %d)\n",function,n_arguments,n_parameters);
 }
 
-
-void print_n_arguments_error(char *function,int n_arguments,int n_parameters,int line,int col){
-  generic_error(line,col);
-  printf("Wrong number of arguments to function %s (got %d, required %d)\n",function,n_arguments,n_parameters);
+void print_void_error(){
+  //printf("Invalid use of void type in declaration\n");
 }
 
-void print_void_error(int line, int col){
-  generic_error(line,col);
-  printf("Invalid use of void type in declaration\n");
+void print_unknown_symbol(char *symbol){
+  //printf("Unknown symbol %s\n",symbol);
 }
 
-void print_unknown_symbol(char *symbol, int line, int col){
-  generic_error(line,col);
-  printf("Unknown symbol %s\n",symbol);
+void print_not_function_error(char *symbol){
+  //  printf("Symbol %s is not a function\n",symbol);
 }
 
-void print_not_function_error(char *symbol,int line,int col){
-  generic_error(line,col);
-  printf("Symbol %s is not a function\n",symbol);
-}
-
-void print_already_defined_error(char *symbol, int line, int col){
-  generic_error(line,col);
-  printf("Symbol %s already defined\n",symbol);
-}
-
-void print_lvalue_error(int line, int col){
-  generic_error(line,col);
-  printf("Lvalue required\n");
-}
-void error_operator_type(node n, type t){
-  generic_error(n->tline, n->tcol);
-  printf("Operator %s cannot be applied to type ", n->value);
-  print_single_type(t);
-  printf("\n");
-}
-
-void error_operator_types(node n, type t1, type t2){
-  generic_error(n->tline, n->tcol);
-  printf("Operator %s cannot be applied to types ", n->value);
-  print_single_type(t1);
-  printf(", ");
-  print_single_type(t2);
-  printf("\n");
-}
-
-int compare_types(type type_1, type type_2){
-  type aux_1 = type_1, aux_2 = type_2;
-  while(1){
-    if(aux_1 == NULL && aux_2 == NULL){
-      return 1;
-    }
-    else if(aux_1 == NULL || aux_2 == NULL){
-      return 0;
-    }
-    if(strcmp(aux_1->type, aux_2->type)==0 && aux_1->pointers == aux_2->pointers){
-      aux_1 = aux_1->param;
-      aux_2 = aux_2->param;
-    }
-    else{
-      return 0;
-    }
-  }
-}
-
-void error_conflicting_types(type t1, type t2, int line, int col){
-  generic_error(line,col);
-  printf("Conflicting types (got ");
-  print_type(t1);
-  printf(", expected ");
-  print_type(t2);
-  printf(")\n");
+void print_already_defined_error(char *symbol){
+  //  printf("Symbol %s already defined\n",symbol);
 }
