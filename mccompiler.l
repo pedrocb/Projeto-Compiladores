@@ -1,7 +1,8 @@
 %{
 	#include <string.h>
 	#include <stdio.h>
-  #include "semantics.h"
+
+	#include "generator.h"
 	#include "y.tab.h"
 
 	#define COL col += yyleng;
@@ -136,46 +137,63 @@ STRINV (\\(.*)|{STRANY})*
 int main(int argc, char *argv[]){
 	toprint = 0;
 
-	//Default Argument
-	if(argc != 2)
-	  argv[1] = "-3";
+	//Default Argument - Meta 4
+	if(argc == 1){
 
-	//Meta 1
-	if(strcmp(argv[1],"-1") == 0 || strcmp(argv[1],"-l") == 0){
+		yyparse();
+		symbol_tables = create_table("Global");
+		symbol_tables->to_print = 1;
+		current_table = symbol_tables;
+		add_predefined_functions(symbol_tables);
+		handle_tree(syntax_tree);
 
-	  if(strcmp(argv[1],"-l") == 0)
-	    flag = 1;
-
-	  meta1 = 1;
-	  yylex();
+		generate_code(syntax_tree);
+		//---
+		print_tables();
+		toprint = 1;
+		//---
+		print_and_free(syntax_tree,0);
 	}
 
-	//Meta 2
-	if(strcmp(argv[1],"-2") == 0 || strcmp(argv[1],"-t") == 0){
+	else if(argc == 2){
 
-	  if(strcmp(argv[1],"-t") == 0)
-	    toprint = 1;
+		//Meta 1
+		if(strcmp(argv[1],"-1") == 0 || strcmp(argv[1],"-l") == 0){
 
-          yyparse();
-	  print_and_free(syntax_tree,0);
+		  if(strcmp(argv[1],"-l") == 0)
+		    flag = 1;
+
+		  meta1 = 1;
+		  yylex();
+		}
+
+		//Meta 2
+		if(strcmp(argv[1],"-2") == 0 || strcmp(argv[1],"-t") == 0){
+
+		  if(strcmp(argv[1],"-t") == 0)
+		    toprint = 1;
+
+			yyparse();
+		  print_and_free(syntax_tree,0);
+		}
+
+		//Meta 3
+		if(strcmp(argv[1],"-3") == 0 || strcmp(argv[1],"-s") == 0){
+
+			yyparse();
+			symbol_tables = create_table("Global");
+			symbol_tables->to_print = 1;
+			current_table = symbol_tables;
+			add_predefined_functions(symbol_tables);
+			handle_tree(syntax_tree);
+
+			if(strcmp(argv[1],"-s") == 0){
+				print_tables();
+				toprint = 1;
+			}
+			print_and_free(syntax_tree,0);
+		}
 	}
-
-	//Meta 3
-	if(strcmp(argv[1],"-3") == 0 || strcmp(argv[1],"-s") == 0){
-
-	  if(strcmp(argv[1],"-s") == 0)
-	    ;
-
-          yyparse();
-          symbol_tables = create_table("Global");
-	  symbol_tables->to_print = 1;
-	  current_table = symbol_tables;
-	  add_predefined_functions(symbol_tables);
-	  handle_tree(syntax_tree);
-	  print_tables();
-	  toprint = 1;
-	  print_and_free(syntax_tree,0);
-        }
 
 	return 0;
 }
