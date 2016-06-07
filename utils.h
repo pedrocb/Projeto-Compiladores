@@ -1,4 +1,16 @@
 #include "tree.h"
+
+typedef struct str_list_{
+  char* val;
+  int size, real_size;
+  struct str_list_ *next;
+}*str_list;
+
+str_list sl;
+
+char* get_type(char* in);
+void save_string(char* str, int size, int real_size);
+
 void print_type(type type);
 void print_symbol(symbol symbol_);
 void print_table(table table_);

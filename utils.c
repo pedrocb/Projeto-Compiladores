@@ -1,5 +1,18 @@
 #include "utils.h"
 
+char* type_list[] = {"i32", "i8"};
+char* get_type(char* in){
+
+  if(strcmp(in, "Int") == 0)
+    return type_list[0];
+
+  if(strcmp(in, "Char") == 0)
+    return type_list[1];
+
+  return type_list[0];
+}
+
+
 void print_single_type(type type){
   printf("%s",type->type);
   for(int i=0;i<type->pointers;i++){
@@ -97,22 +110,21 @@ int strlit_len(char *str){
   return len;
 }
 
-void print_n_arguments_error(char *function,int n_arguments,int n_parameters){
-  //printf("Wrong number of arguments to function %s (got %d, required %d)\n",function,n_arguments,n_parameters);
-}
+void save_string(char* str, int size, int real_size){
+  str_list s;
+  s = (str_list)malloc(sizeof(struct str_list_));
+  s->val = str;
+  s->size = size;
+  s->real_size = real_size;
+  s->next = NULL;
 
-void print_void_error(){
-  //printf("Invalid use of void type in declaration\n");
-}
 
-void print_unknown_symbol(char *symbol){
-  //printf("Unknown symbol %s\n",symbol);
-}
-
-void print_not_function_error(char *symbol){
-  //  printf("Symbol %s is not a function\n",symbol);
-}
-
-void print_already_defined_error(char *symbol){
-  //  printf("Symbol %s already defined\n",symbol);
+  if(sl == NULL){
+    sl = s;
+  }
+  else{
+    str_list t;
+    for(t = sl; t->next != NULL; t = t->next);
+    t->next = s;
+  }
 }

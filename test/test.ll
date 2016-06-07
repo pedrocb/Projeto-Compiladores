@@ -2,13 +2,24 @@
 target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@.str = private unnamed_addr constant [6 x i8] c"cenas\00", align 1
+@.str1 = private unnamed_addr constant [12 x i8] c"mais_cenas\0A\00", align 1
+@.str2 = private unnamed_addr constant [1 x i8] zeroinitializer, align 1
+@.str3 = private unnamed_addr constant [3 x i8] c"yo\00", align 1
+
 ; Function Attrs: nounwind uwtable
-define i32 @cenas(i32 %a, i8 signext %b) #0 {
+define i8* @cenas(i32 %a, i8 signext %b) #0 {
   %1 = alloca i32, align 4
   %2 = alloca i8, align 1
+  %s = alloca i8*, align 8
+  %s2 = alloca i8*, align 8
+  %s3 = alloca i8*, align 8
   store i32 %a, i32* %1, align 4
   store i8 %b, i8* %2, align 1
-  ret i32 1
+  store i8* getelementptr inbounds ([6 x i8]* @.str, i32 0, i32 0), i8** %s, align 8
+  store i8* getelementptr inbounds ([12 x i8]* @.str1, i32 0, i32 0), i8** %s2, align 8
+  store i8* getelementptr inbounds ([1 x i8]* @.str2, i32 0, i32 0), i8** %s3, align 8
+  ret i8* getelementptr inbounds ([3 x i8]* @.str3, i32 0, i32 0)
 }
 
 ; Function Attrs: nounwind uwtable

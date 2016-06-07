@@ -1,23 +1,9 @@
 #include "generator.h"
 
-char* types[] = {"i32", "i8"};
-
-int get_type(char* in){
-
-  if(strcmp(in, "Int") == 0)
-    return 0;
-
-  if(strcmp(in, "Char") == 0)
-    return 1;
-
-  return 0;
-}
-
-
 void gen_funcdef(node current_node){
   char* t = current_node->child->label;
   char* id = current_node->child->brother->value;
-  printf("define %s @%s (", types[get_type(t)], id);
+  printf("define %s @%s (", get_type(t), id);
 
   //Params
   current_node = current_node->child->brother->brother;
@@ -46,4 +32,9 @@ void generate_code(node current_node){
   if(current_node->brother != NULL)
     generate_code(current_node->brother);
 
+}
+
+void generate_strings(){
+  for(str_list s = sl; s != NULL; s = s->next)
+    printf("STR: %s SIZE: %d REAL_SIZE: %d\n", s->val, s->size, s->real_size);
 }

@@ -1,5 +1,13 @@
-int cenas(int a, char b){
-  return 1;
+char* cenas(int a, char b){
+  char* s;
+  char* s2;
+  char* s3;
+
+  s = "cenas";
+  s2 = "mais_cenas\n";
+  s3 = "";
+
+  return "yo";
 }
 
 int main(void){
