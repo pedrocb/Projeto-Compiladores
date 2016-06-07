@@ -4,7 +4,7 @@ char* cenas(int a, char b){
   char* s3;
 
   s = "cenas";
-  s2 = "mais_cenas\n";
+  s2 = "\\000\\000";
   s3 = "";
 
   return "yo";

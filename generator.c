@@ -35,6 +35,13 @@ void generate_code(node current_node){
 }
 
 void generate_strings(){
-  for(str_list s = sl; s != NULL; s = s->next)
-    printf("STR: %s SIZE: %d REAL_SIZE: %d\n", s->val, s->size, s->real_size);
+  int i = 0;
+  for(str_list s = sl; s != NULL; s = s->next, i++){
+    printf("@.str");
+    if(i != 0)
+      printf("%d", i);
+
+    printf(" = private unnamed_addr constant [%d x i8] ", s->real_size);
+    printf(" c\"%s\\00\"\n", s->val);
+  }
 }
