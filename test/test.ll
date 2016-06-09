@@ -5,7 +5,6 @@ target triple = "x86_64-unknown-linux-gnu"
 @.str = private unnamed_addr constant [6 x i8] c"\7F \7F \FF\00", align 1
 @.str1 = private unnamed_addr constant [12 x i8] c"mais_cenas\0A\00", align 1
 @.str2 = private unnamed_addr constant [1 x i8] zeroinitializer, align 1
-@.str3 = private unnamed_addr constant [3 x i8] c"yo\00", align 1
 @a = common global i32 0, align 4
 @b = common global i32* null, align 8
 @vv = common global i32** null, align 8
@@ -17,18 +16,18 @@ target triple = "x86_64-unknown-linux-gnu"
 @g = common global i8* null, align 8
 
 ; Function Attrs: nounwind uwtable
-define i8* @cenas(i32 %a, i8 signext %b) #0 {
-  %1 = alloca i32, align 4
-  %2 = alloca i8, align 1
+define signext i8 @cenas(i32* %asasd, i8** %bda) #0 {
+  %1 = alloca i32*, align 8
+  %2 = alloca i8**, align 8
   %s = alloca i8*, align 8
   %s2 = alloca i8*, align 8
   %s3 = alloca i8*, align 8
-  store i32 %a, i32* %1, align 4
-  store i8 %b, i8* %2, align 1
+  store i32* %asasd, i32** %1, align 8
+  store i8** %bda, i8*** %2, align 8
   store i8* getelementptr inbounds ([6 x i8]* @.str, i32 0, i32 0), i8** %s, align 8
   store i8* getelementptr inbounds ([12 x i8]* @.str1, i32 0, i32 0), i8** %s2, align 8
   store i8* getelementptr inbounds ([1 x i8]* @.str2, i32 0, i32 0), i8** %s3, align 8
-  ret i8* getelementptr inbounds ([3 x i8]* @.str3, i32 0, i32 0)
+  ret i8 99
 }
 
 ; Function Attrs: nounwind uwtable

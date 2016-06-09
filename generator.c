@@ -1,12 +1,46 @@
 #include "generator.h"
 
 void gen_funcdef(node current_node){
-  char* t = current_node->child->label;
-  char* id = current_node->child->brother->value;
-  printf("define %s @%s (", get_type(t), id);
+
+  //Type
+  char* l = current_node->child->label;
+  printf("define %s", get_type(l));
+
+  //Pointers
+  current_node = current_node->child->brother;
+  while (strcmp(current_node->label, "Pointer") == 0) {
+    current_node = current_node->brother;
+    printf("*");
+  }
+
+  //ID
+  char* id = current_node->value;
+  printf(" @%s(", id);
 
   //Params
-  current_node = current_node->child->brother->brother;
+  current_node = current_node->brother;
+
+  table t;
+  for(t = symbol_tables; t != NULL; t = t->next){
+    if(strcmp(t->name, id) == 0)
+      break;
+  }
+
+  int first = 0;
+  for(symbol s = t->first; s != NULL; s = s->next){
+    if(s->param != 0){
+      if(first != 0) printf(", ");
+      else first = 1;
+
+      printf("%s", get_type(s->type_->type));
+
+      for(int i = 0; i < s->type_->pointers; i++)
+        printf("*");
+
+      printf(" %%%s", s->name);
+
+    }
+  }
 
 
   printf(") {\n");

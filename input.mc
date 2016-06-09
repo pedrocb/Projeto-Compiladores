@@ -11,8 +11,8 @@ char f[4];
 void *g;
 
 
-char* cenas(int a, char b){
-  char* s;
+char** cenas(int *asasd, char** bda){
+  char** s;
   char* s2;
   char* s3;
 
@@ -20,7 +20,7 @@ char* cenas(int a, char b){
   s2 = "mais_cenas\n";
   s3 = "";
 
-  return "yo";
+  return s;
 }
 
 int main(void){

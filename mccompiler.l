@@ -148,8 +148,11 @@ int main(int argc, char *argv[]){
 		handle_tree(syntax_tree);
 
 		generate_strings();
+		printf("\n");
 		generate_global_vars();
+		printf("\n");
 		generate_predefined_funcs();
+		printf("\n");
 		generate_code(syntax_tree);
 
 		//---
