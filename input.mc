@@ -1,15 +1,26 @@
 int a;
-char b;
+int *b;
+int **vv;
+int c[2];
+int *kk[2];
 
-char* cenas(int c, char d){
-  return "yo\17a";
-  return "yo\17";
-  return "yo\001a";
-  return "yo\777a";
-  return "yo\333a";
-  return "yo\150a";
-  return "yo\200a";
-  return "yo\nl";
+char d;
+char *e;
+char f[4];
+
+void *g;
+
+
+char* cenas(int a, char b){
+  char* s;
+  char* s2;
+  char* s3;
+
+  s = "\177 \177 \377";
+  s2 = "mais_cenas\n";
+  s3 = "";
+
+  return "yo";
 }
 
 int main(void){

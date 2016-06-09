@@ -148,6 +148,8 @@ int main(int argc, char *argv[]){
 		handle_tree(syntax_tree);
 
 		generate_strings();
+		generate_global_vars();
+		generate_predefined_funcs();
 		generate_code(syntax_tree);
 
 		//---

@@ -4,13 +4,13 @@
 char* type_list[] = {"i32", "i8"};
 char* get_type(char* in){
 
-  if(strcmp(in, "Int") == 0)
+  if(strcmp(in, "Int") == 0 || strcmp(in, "int") == 0)
     return type_list[0];
 
-  if(strcmp(in, "Char") == 0)
+  if(strcmp(in, "Char") == 0 || strcmp(in, "char") == 0)
     return type_list[1];
 
-  return type_list[0];
+  return type_list[1];
 }
 
 int power(int a, int b){

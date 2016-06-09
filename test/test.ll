@@ -7,7 +7,14 @@ target triple = "x86_64-unknown-linux-gnu"
 @.str2 = private unnamed_addr constant [1 x i8] zeroinitializer, align 1
 @.str3 = private unnamed_addr constant [3 x i8] c"yo\00", align 1
 @a = common global i32 0, align 4
-@b = common global i8 0, align 1
+@b = common global i32* null, align 8
+@vv = common global i32** null, align 8
+@c = common global [2 x i32] zeroinitializer, align 4
+@kk = common global [2 x i32*] zeroinitializer, align 16
+@d = common global i8 0, align 1
+@e = common global i8* null, align 8
+@f = common global [4 x i8] zeroinitializer, align 1
+@g = common global i8* null, align 8
 
 ; Function Attrs: nounwind uwtable
 define i8* @cenas(i32 %a, i8 signext %b) #0 {
