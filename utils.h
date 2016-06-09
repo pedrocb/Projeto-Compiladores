@@ -1,7 +1,7 @@
 #include "tree.h"
 
 typedef struct str_list_{
-  char* val;
+  char *val, *llvm_format;
   int size, real_size;
   struct str_list_ *next;
 }*str_list;
@@ -9,7 +9,7 @@ typedef struct str_list_{
 str_list sl;
 
 char* get_type(char* in);
-void save_string(char* str, int size, int real_size);
+str_list save_string(char* str);
 
 void print_type(type type);
 void print_symbol(symbol symbol_);

@@ -2,10 +2,12 @@
 target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [6 x i8] c"cenas\00", align 1
+@.str = private unnamed_addr constant [6 x i8] c"\7F \7F \FF\00", align 1
 @.str1 = private unnamed_addr constant [12 x i8] c"mais_cenas\0A\00", align 1
 @.str2 = private unnamed_addr constant [1 x i8] zeroinitializer, align 1
 @.str3 = private unnamed_addr constant [3 x i8] c"yo\00", align 1
+@a = common global i32 0, align 4
+@b = common global i8 0, align 1
 
 ; Function Attrs: nounwind uwtable
 define i8* @cenas(i32 %a, i8 signext %b) #0 {

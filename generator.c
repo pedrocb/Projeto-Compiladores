@@ -27,6 +27,8 @@ void generate_code(node current_node){
   if(strcmp(current_node->label, "FuncDefinition") == 0)
     gen_funcdef(current_node);
 
+
+
   if(current_node->child != NULL)
     generate_code(current_node->child);
   if(current_node->brother != NULL)
@@ -42,6 +44,6 @@ void generate_strings(){
       printf("%d", i);
 
     printf(" = private unnamed_addr constant [%d x i8] ", s->real_size);
-    printf(" c\"%s\\00\"\n", s->val);
+    printf(" c\"%s\\00\"\n", s->llvm_format);
   }
 }

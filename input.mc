@@ -1,13 +1,15 @@
-char* cenas(int a, char b){
-  char* s;
-  char* s2;
-  char* s3;
+int a;
+char b;
 
-  s = "cenas";
-  s2 = "\\000\\000";
-  s3 = "";
-
-  return "yo";
+char* cenas(int c, char d){
+  return "yo\17a";
+  return "yo\17";
+  return "yo\001a";
+  return "yo\777a";
+  return "yo\333a";
+  return "yo\150a";
+  return "yo\200a";
+  return "yo\nl";
 }
 
 int main(void){

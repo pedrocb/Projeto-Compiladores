@@ -238,10 +238,10 @@ void handle_tree(node current_node){
     }
   }
   else if(strcmp(current_node->label, "StrLit") == 0){
-    current_node->type_ = new_type(0,"char",NULL);
-    current_node->type_->array = strlit_len(current_node->value);
+    str_list s = save_string(current_node->value);
 
-    save_string(current_node->value, strlen(current_node->value) - 2, current_node->type_->array);
+    current_node->type_ = new_type(0,"char",NULL);
+    current_node->type_->array = s->real_size;
 
   }
   else if(strcmp(current_node->label, "ChrLit") == 0){
