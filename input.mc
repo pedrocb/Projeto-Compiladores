@@ -1,6 +1,8 @@
-int cenas(int a, char** c){
-  int b;
+int cenas(int k){
+  int a, b;
   a = 2;
+  b = a;
+
   return b;
 }
 

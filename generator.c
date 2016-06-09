@@ -1,12 +1,46 @@
 #include "generator.h"
 
-void gen_funcbody(table t, node current_node){
-  int registers = 1;
+int cur_register;
 
+void store_val(char *t, int a, char *b){
+  printf("store %s %d, %s* %%%s\n", t, a, t, b);
+}
+void store_register(char *t, char *a, char *b){
+  printf("store %s %%%s, %s* %%%s\n", t, a, t, b);
+}
+
+int get_register(table t, char *id){
+  int r = 0;
+  for(symbol s = t->first; s != NULL; s = s->next){
+    if(s->param != 0){
+      r++;
+
+      if(strcmp(s->name, id) != 0)
+        return r;
+    }
+  }
+  return 0;
+}
+
+void gen_store(node n){
+  if(strcmp(n->child->brother->label, "IntLit") == 0){
+    store_val("i32", atoi(n->child->brother->value), n->child->value);
+  }
+  if(strcmp(n->child->brother->label, "ChrLit") == 0){
+    store_val("i8", (int)n->child->brother->value[1], n->child->value);
+  }
+  /*if(strcmp(n->child->brother->label, "Id") == 0){
+    store_val("i8", (int)n->child->brother->value[1], n->child->value);
+  }*/
+
+}
+
+void gen_funcbody(table t, node current_node){
+  cur_register=1;
   //Param alloc
   for(symbol s = t->first; s != NULL; s = s->next){
     if(s->param != 0){
-      printf("%%%d = alloca %s", registers++, get_type(s->type_->type));
+      printf("%%%d = alloca %s", cur_register++, get_type(s->type_->type));
       for(int i = 0; i < s->type_->pointers; i++)
         printf("*");
       printf("\n");
@@ -24,7 +58,7 @@ void gen_funcbody(table t, node current_node){
   }
 
   //Param Store
-  int i = 1;
+  cur_register=1;
   for(symbol s = t->first; s != NULL; s = s->next){
     if(s->param != 0){
       printf("store %s", get_type(s->type_->type));
@@ -35,14 +69,14 @@ void gen_funcbody(table t, node current_node){
       printf("%s", get_type(s->type_->type));
       for(int i = 0; i <= s->type_->pointers; i++) //Mais 1
         printf("*");
-      printf(" %%%d\n", i++);
+      printf(" %%%d\n", cur_register++);
     }
   }
 
-
+  //Body
   for(node n = current_node->child; n != NULL; n = n->brother){
     if(strcmp(n->label, "Store") == 0)
-      gen_store(n)
+      gen_store(n);
     if(strcmp(n->label, "Return") == 0)
       printf("ret %s %d\n", "i32", 0);
   }
