@@ -1,5 +1,53 @@
 #include "generator.h"
 
+void gen_funcbody(table t, node current_node){
+  int registers = 1;
+
+  //Param alloc
+  for(symbol s = t->first; s != NULL; s = s->next){
+    if(s->param != 0){
+      printf("%%%d = alloca %s", registers++, get_type(s->type_->type));
+      for(int i = 0; i < s->type_->pointers; i++)
+        printf("*");
+      printf("\n");
+    }
+  }
+
+  //Var alloc
+  for(symbol s = t->first; s != NULL; s = s->next){
+    if(s->param == 0 && strcmp(s->name, "return") != 0){
+      printf("%%%s = alloca %s", s->name, get_type(s->type_->type));
+      for(int i = 0; i < s->type_->pointers; i++)
+        printf("*");
+      printf("\n");
+    }
+  }
+
+  //Param Store
+  int i = 1;
+  for(symbol s = t->first; s != NULL; s = s->next){
+    if(s->param != 0){
+      printf("store %s", get_type(s->type_->type));
+      for(int i = 0; i < s->type_->pointers; i++)
+        printf("*");
+      printf(" %%%s, ", s->name);
+
+      printf("%s", get_type(s->type_->type));
+      for(int i = 0; i <= s->type_->pointers; i++) //Mais 1
+        printf("*");
+      printf(" %%%d\n", i++);
+    }
+  }
+
+
+  for(node n = current_node->child; n != NULL; n = n->brother){
+    if(strcmp(n->label, "Store") == 0)
+      gen_store(n)
+    if(strcmp(n->label, "Return") == 0)
+      printf("ret %s %d\n", "i32", 0);
+  }
+}
+
 void gen_funcdef(node current_node){
 
   //Type
@@ -46,13 +94,7 @@ void gen_funcdef(node current_node){
   printf(") {\n");
 
   //Body
-  current_node = current_node->brother;
-  for(node n = current_node->child; n != NULL; n = n->brother){
-    if(strcmp(n->label, "Return") == 0)
-      printf("ret %s %d\n", "i32", 0);
-    //printf("yop\n");
-    //generate_code(n);
-  }
+  gen_funcbody(t, current_node->brother);
   printf("}\n");
 }
 

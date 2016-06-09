@@ -147,17 +147,18 @@ int main(int argc, char *argv[]){
 		add_predefined_functions(symbol_tables);
 		handle_tree(syntax_tree);
 
-		generate_strings();
+		/*generate_strings();
 		printf("\n");
 		generate_global_vars();
 		printf("\n");
 		generate_predefined_funcs();
 		printf("\n");
+		*/
 		generate_code(syntax_tree);
 
 		//---
-		//print_tables();
-		//toprint = 1;
+		print_tables();
+		toprint = 1;
 		//---
 
 		print_and_free(syntax_tree,0);
