@@ -48,7 +48,9 @@ void gen_funcdef(node current_node){
   //Body
   current_node = current_node->brother;
   for(node n = current_node->child; n != NULL; n = n->brother){
-    printf("yop\n");
+    if(strcmp(n->label, "Return") == 0)
+      printf("ret %s %d\n", "i32", 0);
+    //printf("yop\n");
     //generate_code(n);
   }
   printf("}\n");
