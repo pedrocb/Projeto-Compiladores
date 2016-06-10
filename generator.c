@@ -37,6 +37,67 @@ void gen_store(node n){
   n->n_register = n->child->brother->n_register;
 }
 
+void gen_id(node n){
+  printf("%%%d = load ",cur_register++);
+  symbol symbol_ = get_symbol(current_table, n->value);
+  if(symbol_ == NULL){
+    symbol_ = get_symbol(symbol_tables, n->value);
+    symbol_->type_->pointers++;
+    print_type_llvm(symbol_->type_);
+    symbol_->type_->pointers--;
+
+    printf(" @");
+    printf("%s",n->value);
+    printf("\n");
+  }
+  else{
+    symbol_->type_->pointers++;
+    print_type_llvm(symbol_->type_);
+    symbol_->type_->pointers--;
+    if(symbol_->param == 1){
+      printf(" %%%d",get_register(current_table, n->value));
+    }
+    else{
+      printf(" %%%s",n->value);
+    }
+    printf("\n");
+  }
+  n->n_register = cur_register;
+}
+
+void gen_call(node current_node){
+  printf("yo\n");
+  for(node n = current_node->child->brother; n != NULL; n = n->brother)
+    gen_statements(n);
+
+  printf("%%%d = call ", cur_register++);
+  print_type_llvm(current_node->child->type_);
+  printf(" @%s(", current_node->child->value);
+
+  int i = 0;
+  for(node n = current_node->child->brother; n != NULL; n = n->brother){
+    if(i != 0) printf(", ");
+    else i = 1;
+
+    print_type_llvm(n->type_);
+    printf(" reg");
+  }
+
+  printf(")\n");
+}
+
+void gen_minus(node current_node){
+  gen_statements(current_node->child);
+  printf("%%%d = sub nsw i32 0, reg\n", cur_register++);
+}
+
+void gen_return(node current_node){
+  gen_statements(current_node->child);
+  printf("ret ");
+  print_type_llvm(current_node->child->type_);
+  printf(" reg\n");//current_node->child->)//%s %d\n", "i32", 0);
+}
+
 void gen_funcbody(table t, node current_node){
   cur_register=1;
   //Param alloc
@@ -47,7 +108,7 @@ void gen_funcbody(table t, node current_node){
       printf("\n");
     }
   }
-  
+
   //Var alloc
   for(symbol s = t->first; s != NULL; s = s->next){
     if(s->param == 0 && strcmp(s->name, "return") != 0){
@@ -56,7 +117,7 @@ void gen_funcbody(table t, node current_node){
       printf("\n");
     }
   }
-  
+
   //Param Store
   cur_register=1;
   for(symbol s = t->first; s != NULL; s = s->next){
@@ -71,67 +132,34 @@ void gen_funcbody(table t, node current_node){
       printf(" %%%d\n", cur_register++);
     }
   }
-  
+
   //Body
   node n = current_node->child;
   while(strcmp(n->label,"Declaration") == 0){
     n = n->brother;
   }
-  
-  gen_statements(n);
+
+  for(node n = current_node->child; n != NULL; n = n->brother)
+    gen_statements(n);
 }
 
 void gen_statements(node current_node){
-  for(node n = current_node; n != NULL; n = n->brother){
-    if(strcmp(n->label, "Store") == 0){
-      gen_statements(n->child->brother); //lado esquerdo do store não interessa aprofundar
-      gen_store(n);
-    }
-    if(strcmp(n->label, "Return") == 0)
-      printf("ret %s %d\n", "i32", 0);
-    if(strcmp(n->label, "Call") == 0){
-      if(n->child != NULL)
-	gen_statements(n->child);
-      gen_call(n);
-    }
-    if(strcmp(n->label, "Id") == 0)
-      gen_id(n);
-  }
-}
 
-void gen_id(node n){
-  printf("%%%d = load ",cur_register++);
-  symbol symbol_ = get_symbol(current_table, n->value);
-  if(symbol_ == NULL){
-    symbol_ = get_symbol(symbol_tables, n->value);
-    symbol_->type_->pointers++;
-    print_type_llvm(symbol_->type_);
-    symbol_->type_->pointers--;
-        
-    printf(" @");
-    printf("%s",n->value);
-    printf("\n");
-  }
-  else{
-    symbol_->type_->pointers++;
-    print_type_llvm(symbol_->type_);
-    symbol_->type_->pointers--;
-    if(symbol_->param == 1){
-      printf(" %%%d",get_register(current_table, n->value));
-    } 
-    else{
-      printf(" %%%s",n->value);
+    if(strcmp(current_node->label, "Store") == 0){
+      //gen_statements(n->child->brother); //lado esquerdo do store não interessa aprofundar
+      gen_store(current_node);
     }
-    printf("\n");
-  }
-  n->n_register = cur_register;
-}
+    if(strcmp(current_node->label, "Return") == 0)
+      gen_return(current_node);
 
-void gen_call(node call_node){
-  printf("call ");
-  table function_table = get_table(call_node->child->value);
-  print_type_llvm(function_table->first->type_);
-  printf(" @%s(",call_node->child->value);
+    if(strcmp(current_node->label, "Call") == 0)
+      gen_call(current_node);
+
+    if(strcmp(current_node->label, "Id") == 0)
+      gen_id(current_node);
+
+    if(strcmp(current_node->label, "Minus") == 0)
+      gen_minus(current_node);
 }
 
 void gen_funcdef(node current_node){
@@ -139,7 +167,7 @@ void gen_funcdef(node current_node){
   //Type
   char* l = current_node->child->label;
   printf("define ");
-  
+
   //Pointers
   current_node = current_node->child->brother;
   int pointers = 0;
@@ -150,7 +178,7 @@ void gen_funcdef(node current_node){
   type aux_type = new_type(pointers,l,NULL);
   print_type_llvm(aux_type);
   free(aux_type);
-  
+
   //ID
   char* id = current_node->value;
   current_table = get_table(id);
@@ -196,7 +224,7 @@ void generate_code(node current_node){
     generate_code(current_node->child);
   if(current_node->brother != NULL)
     generate_code(current_node->brother);
-  
+
 }
 
 void generate_strings(){
@@ -247,7 +275,7 @@ void generate_global_vars(){
 	print_type_llvm(s->type_);
         for(int i = 0; i < s->type_->pointers; i++)
           printf("*");
-	
+
         if(s->type_->pointers > 0) printf(" null\n");
         else printf(" 0\n");
       }

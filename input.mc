@@ -1,11 +1,9 @@
-int cenas(int k){
-  int a, b;
-  a = 2;
-  b = a;
-
-  return b;
+int cenas(int a, int b){
+  return a;
 }
 
 int main(void){
+  int a;
+  a = -a;
   return 0;
 }
