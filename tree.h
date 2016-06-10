@@ -6,6 +6,7 @@ typedef struct node_{
   struct node_ *brother;
   char *value;
   type type_;
+  int n_register;
 }*node;
 
 int toprint;
