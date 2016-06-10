@@ -28,9 +28,13 @@ void gen_store(node n){
   if(strcmp(n->child->brother->label, "ChrLit") == 0){
     store_val("i8", (int)n->child->brother->value[1], n->child->value);
   }
-  if(strcmp(n->child->brother->label, "Id") == 0){
-    store_val("i8", (int)n->child->brother->value[1], n->child->value);
-    }*/
+  /*if(strcmp(n->child->brother->label, "Id") == 0){
+      store_val("i8", n->child->brother->n_register, n->child->value
+      }*/
+  else{
+    printf("store %s %%%d, %s* %%%s\n", "i32", n->child->brother->n_register, "i32", n->child->value ); //TODO: Não sei como fazer o utlimo argumento
+  }
+  n->n_register = n->child->brother->n_register;
 }
 
 void gen_funcbody(table t, node current_node){
