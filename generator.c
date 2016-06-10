@@ -14,7 +14,6 @@ int get_register(table t, char *id){
   for(symbol s = t->first; s != NULL; s = s->next){
     if(s->param != 0){
       r++;
-
       if(strcmp(s->name, id) != 0)
         return r;
     }
@@ -40,9 +39,8 @@ void gen_funcbody(table t, node current_node){
   //Param alloc
   for(symbol s = t->first; s != NULL; s = s->next){
     if(s->param != 0){
-      printf("%%%d = alloca %s", cur_register++, get_type(s->type_->type));
-      for(int i = 0; i < s->type_->pointers; i++)
-        printf("*");
+      printf("%%%d = alloca ", cur_register++);
+      print_type_llvm(s->type_);
       printf("\n");
     }
   }
@@ -50,9 +48,8 @@ void gen_funcbody(table t, node current_node){
   //Var alloc
   for(symbol s = t->first; s != NULL; s = s->next){
     if(s->param == 0 && strcmp(s->name, "return") != 0){
-      printf("%%%s = alloca %s", s->name, get_type(s->type_->type));
-      for(int i = 0; i < s->type_->pointers; i++)
-        printf("*");
+      printf("%%%s = alloca ", s->name);
+      print_type_llvm(s->type_);
       printf("\n");
     }
   }
@@ -61,14 +58,13 @@ void gen_funcbody(table t, node current_node){
   cur_register=1;
   for(symbol s = t->first; s != NULL; s = s->next){
     if(s->param != 0){
-      printf("store %s", get_type(s->type_->type));
-      for(int i = 0; i < s->type_->pointers; i++)
-        printf("*");
+      printf("store ");
+      print_type_llvm(s->type_);
       printf(" %%%s, ", s->name);
 
-      printf("%s", get_type(s->type_->type));
-      for(int i = 0; i <= s->type_->pointers; i++) //Mais 1
-        printf("*");
+      s->type_->pointers++;
+      print_type_llvm(s->type_);
+      s->type_->pointers--;
       printf(" %%%d\n", cur_register++);
     }
   }
@@ -79,22 +75,35 @@ void gen_funcbody(table t, node current_node){
       gen_store(n);
     if(strcmp(n->label, "Return") == 0)
       printf("ret %s %d\n", "i32", 0);
+    if(strcmp(n->label, "Call") == 0)
+      gen_call(n);
   }
+}
+
+void gen_call(node call_node){
+  printf("call ");
+  table function_table = get_table(call_node->child->value);
+  print_type_llvm(function_table->first->type_);
+  printf(" @%s(\n",call_node->child->value);
 }
 
 void gen_funcdef(node current_node){
 
   //Type
   char* l = current_node->child->label;
-  printf("define %s", get_type(l));
-
+  printf("define ");
+  
   //Pointers
   current_node = current_node->child->brother;
+  int pointers = 0;
   while (strcmp(current_node->label, "Pointer") == 0) {
     current_node = current_node->brother;
-    printf("*");
+    pointers++;
   }
-
+  type aux_type = new_type(pointers,l,NULL);
+  print_type_llvm(aux_type);
+  free(aux_type);
+  
   //ID
   char* id = current_node->value;
   printf(" @%s(", id);
@@ -114,10 +123,7 @@ void gen_funcdef(node current_node){
       if(first != 0) printf(", ");
       else first = 1;
 
-      printf("%s", get_type(s->type_->type));
-
-      for(int i = 0; i < s->type_->pointers; i++)
-        printf("*");
+      print_type_llvm(s->type_);
 
       printf(" %%%s", s->name);
 
@@ -138,14 +144,11 @@ void generate_code(node current_node){
 
   if(strcmp(current_node->label, "FuncDefinition") == 0)
     gen_funcdef(current_node);
-
-
-
   if(current_node->child != NULL)
     generate_code(current_node->child);
   if(current_node->brother != NULL)
     generate_code(current_node->brother);
-
+  
 }
 
 void generate_strings(){
@@ -184,7 +187,8 @@ void generate_global_vars(){
       printf("@%s = common global ", s->name);
 
       if(s->type_->array != -1){
-        printf("[%d x %s",s->type_->array, get_type(s->type_->type));
+        printf("[%d x ",s->type_->array);
+	print_type_llvm(s->type_);
 
         for(int i = 0; i < s->type_->pointers; i++)
           printf("*");
@@ -192,11 +196,10 @@ void generate_global_vars(){
         printf("] zeroinitializer\n");
       }
       else{
-        printf("%s", get_type(s->type_->type));
-
+	print_type_llvm(s->type_);
         for(int i = 0; i < s->type_->pointers; i++)
           printf("*");
-
+	
         if(s->type_->pointers > 0) printf(" null\n");
         else printf(" 0\n");
       }

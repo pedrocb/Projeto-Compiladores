@@ -1,16 +1,20 @@
 #include "utils.h"
 
 
-char* type_list[] = {"i32", "i8"};
-char* get_type(char* in){
 
-  if(strcmp(in, "Int") == 0 || strcmp(in, "int") == 0)
-    return type_list[0];
-
-  if(strcmp(in, "Char") == 0 || strcmp(in, "char") == 0)
-    return type_list[1];
-
-  return type_list[1];
+void print_type_llvm(type in){  
+  if(strcmp(in->type, "Int") == 0 || strcmp(in->type, "int") == 0){
+    printf("i32");
+  }
+  else if((strcmp(in->type, "Void") == 0 || strcmp(in->type, "void") == 0) && in->pointers == 0){
+    printf("void");
+  }
+  else{
+    printf("i8");
+  }
+  for(int i=0;i<in->pointers;i++){
+    printf("*");
+  }
 }
 
 int power(int a, int b){

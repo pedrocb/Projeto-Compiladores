@@ -8,7 +8,7 @@ typedef struct str_list_{
 
 str_list sl;
 
-char* get_type(char* in);
+void print_type_llvm(type in);
 str_list save_string(char* str);
 
 void print_type(type type);
