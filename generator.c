@@ -21,20 +21,35 @@ int get_register(table t, char *id){
   return 0;
 }
 
-void gen_store(node n){
-  if(strcmp(n->child->brother->label, "IntLit") == 0){
-    store_val("i32", atoi(n->child->brother->value), n->child->value);
+char *get_register_from_table(char *function_id){
+  symbol symbol_ = get_symbol(current_table, function_id);
+  char *aux = "";
+  if(symbol_ == NULL){
+    aux = append_strings("@",function_id);
   }
-  if(strcmp(n->child->brother->label, "ChrLit") == 0){
-    store_val("i8", (int)n->child->brother->value[1], n->child->value);
-  }
-  /*if(strcmp(n->child->brother->label, "Id") == 0){
-      store_val("i8", n->child->brother->n_register, n->child->value
-      }*/
   else{
-    printf("store %s %%%d, %s* %%%s\n", "i32", n->child->brother->n_register, "i32", n->child->value ); //TODO: Não sei como fazer o utlimo argumento
+    if(symbol_->param == 1){
+      char param_pos[5];
+      sprintf(param_pos,"%d",get_register(current_table, function_id));
+      aux = append_strings("%", param_pos);
+    }
+    else{
+      aux = append_strings("%",function_id);
+    }
   }
-  n->n_register = n->child->brother->n_register;
+  return aux;
+}
+
+void gen_store(node n){
+  printf("store ");
+  print_type_llvm(n->child->type_);
+  printf(" %s, ",n->child->brother->reg);
+  print_type_llvm(n->child->type_);
+  if(n->child->reg == NULL){
+    n->child->reg = get_register_from_table(n->child->value);
+  }
+  printf("* %s\n", n->child->reg); //TODO: Não sei como fazer o utlimo argumento
+  n->reg = n->child->brother->reg;
 }
 
 void gen_funcbody(table t, node current_node){
@@ -90,41 +105,32 @@ void gen_statements(node current_node){
     if(strcmp(n->label, "Return") == 0)
       printf("ret %s %d\n", "i32", 0);
     if(strcmp(n->label, "Call") == 0){
-      if(n->child != NULL)
-	gen_statements(n->child);
+      gen_statements(n->child);
       gen_call(n);
     }
     if(strcmp(n->label, "Id") == 0)
       gen_id(n);
+    if(strcmp(n->label, "ChrLit") == 0){
+      n->reg = (char *)malloc(5);
+      sprintf(n->reg,"%d",(int)n->value[1]);
+    }
+    if(strcmp(n->label, "StrLit") == 0)
+      n->reg = "Aquela cena toda";
+    if(strcmp(n->label, "IntLit") == 0)
+      n->reg = n->value;
   }
 }
 
 void gen_id(node n){
   printf("%%%d = load ",cur_register++);
-  symbol symbol_ = get_symbol(current_table, n->value);
-  if(symbol_ == NULL){
-    symbol_ = get_symbol(symbol_tables, n->value);
-    symbol_->type_->pointers++;
-    print_type_llvm(symbol_->type_);
-    symbol_->type_->pointers--;
-        
-    printf(" @");
-    printf("%s",n->value);
-    printf("\n");
-  }
-  else{
-    symbol_->type_->pointers++;
-    print_type_llvm(symbol_->type_);
-    symbol_->type_->pointers--;
-    if(symbol_->param == 1){
-      printf(" %%%d",get_register(current_table, n->value));
-    } 
-    else{
-      printf(" %%%s",n->value);
-    }
-    printf("\n");
-  }
-  n->n_register = cur_register;
+  char *reg;
+  n->type_->pointers++;
+  print_type_llvm(n->type_);
+  n->type_->pointers--;
+  reg = get_register_from_table(n->value);
+  printf(" %s\n",reg);
+  n->reg = (char *)malloc(5);
+  sprintf(n->reg,"%%%d",cur_register-1);
 }
 
 void gen_call(node call_node){
@@ -245,8 +251,6 @@ void generate_global_vars(){
       }
       else{
 	print_type_llvm(s->type_);
-        for(int i = 0; i < s->type_->pointers; i++)
-          printf("*");
 	
         if(s->type_->pointers > 0) printf(" null\n");
         else printf(" 0\n");
