@@ -1,9 +1,14 @@
-int cenas(int a, int b){
-  return a;
+int c;
+
+int coiso(int a){
+  int b;
+  b = 2;
+  a = -b;
+  coiso(a);
+  return 1;
 }
 
 int main(void){
-  int a;
-  a = -a;
+  coiso(c);
   return 0;
 }

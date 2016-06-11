@@ -177,3 +177,14 @@ str_list save_string(char* str){
   }
   return s;
 }
+
+char * append_strings(const char * old, const char * new)
+{
+  size_t len = strlen(old) + strlen(new) + 1;
+
+    char *out = malloc(len);
+
+    sprintf(out, "%s%s", old, new);
+
+    return out;
+}

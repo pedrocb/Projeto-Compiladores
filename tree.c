@@ -36,13 +36,14 @@ node add_to_tree(char *label, char *value, int n_children, ...){
   n->child = NULL;
   n->brother = NULL;
   n->type_ = NULL;
+  n->reg = NULL;
   if(value == NULL) n->value = value;
   else n->value = strdup(value);
 
   node t;
   for(int i = 0; i < n_children; i++){
     node b = va_arg(args, node);
-
+    
     //Discard NULL children
     if(b == NULL)
       continue;
