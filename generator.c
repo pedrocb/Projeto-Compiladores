@@ -166,8 +166,16 @@ void gen_statements(node current_node){
       sprintf(current_node->reg,"%d",(int)current_node->value[1]);
     }
 
-    if(strcmp(current_node->label, "StrLit") == 0)
-      current_node->reg = "Aquela cena toda";
+    if(strcmp(current_node->label, "StrLit") == 0){
+      current_node->reg = (char*)malloc(sizeof(char) * 100);
+      str_list s = get_string(current_node->value);
+
+      if(s->pos == 0)
+        sprintf(current_node->reg, "getelementptr inbounds ([%d x i8]* @.str, i32 0, i32 0)", s->real_size);
+      else
+        sprintf(current_node->reg, "getelementptr inbounds ([%d x i8]* @.str%d, i32 0, i32 0)", s->real_size, s->pos);
+
+    }
 
     if(strcmp(current_node->label, "IntLit") == 0)
       current_node->reg = current_node->value;
@@ -242,6 +250,7 @@ void generate_strings(){
   printf("@.str = private unnamed_addr constant [3 x i8] c\"%%d\\00\"\n");
   int i = 0;
   for(str_list s = sl; s != NULL; s = s->next, i++){
+    s->pos = i+1;
     printf("@.str%d", i+1);
     printf(" = private unnamed_addr constant [%d x i8] ", s->real_size);
     if(s->real_size == 1)

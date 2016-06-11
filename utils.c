@@ -2,7 +2,7 @@
 
 
 
-void print_type_llvm(type in){  
+void print_type_llvm(type in){
   if(strcmp(in->type, "Int") == 0 || strcmp(in->type, "int") == 0){
     printf("i32");
   }
@@ -89,6 +89,15 @@ void print_tables(){
     table_ = table_->next;
   }
 }
+
+str_list get_string(char* str){
+  for(str_list s = sl; s != NULL; s = s->next){
+    if(strcmp(s->val, str) == 0)
+      return s;
+  }
+  return NULL;
+}
+
 
 str_list save_string(char* str){
   str_list s;

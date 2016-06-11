@@ -4,12 +4,14 @@ typedef struct str_list_{
   char *val, *llvm_format;
   int size, real_size;
   struct str_list_ *next;
+  int pos;
 }*str_list;
 
 str_list sl;
 
 void print_type_llvm(type in);
 str_list save_string(char* str);
+str_list get_string(char* str);
 
 void print_type(type type);
 void print_symbol(symbol symbol_);

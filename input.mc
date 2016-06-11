@@ -1,10 +1,11 @@
 int c;
 
 int coiso(int a){
-  int b;
-  b = 2;
-  a = -b;
-  coiso(a);
+  char *s, *p;
+  s = "yippiekayemotherfucker";
+  p = "";
+
+  puts(s);
   return 1;
 }
 
