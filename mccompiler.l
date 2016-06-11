@@ -155,8 +155,8 @@ int main(int argc, char *argv[]){
 		printf("\n");
 		generate_code(syntax_tree);
 
-		//---
-		//print_tables();
+//--- 
+                //print_tables();
 		//toprint = 1;
 		//---
 

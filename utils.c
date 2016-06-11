@@ -12,7 +12,8 @@ void print_type_llvm(type in){
   else{
     printf("i8");
   }
-  for(int i=0;i<in->pointers;i++){
+  int pointers = (in->array == -1)?in->pointers:in->pointers+1;
+  for(int i=0;i<pointers;i++){
     printf("*");
   }
 }

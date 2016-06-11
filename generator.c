@@ -56,10 +56,15 @@ void gen_call(node current_node){
   for(node n = current_node->child->brother; n != NULL; n = n->brother)
     gen_statements(n);
 
-  printf("%%%d = call ", cur_register++);
-  print_type_llvm(current_node->child->type_);
-  printf(" @%s(", current_node->child->value);
-
+  if(strcmp(current_node->child->type_->type, "void")== 0 && current_node->child->type_->pointers == 0){
+    printf("call void ");
+    printf(" @%s(", current_node->child->value);
+  }
+  else{
+    printf("%%%d = call ", cur_register++);
+    print_type_llvm(current_node->child->type_);
+    printf(" @%s(", current_node->child->value);
+  }
   int i = 0;
   for(node n = current_node->child->brother; n != NULL; n = n->brother){
     if(i != 0) printf(", ");
@@ -77,7 +82,7 @@ void gen_call(node current_node){
 void gen_minus(node current_node){
   gen_statements(current_node->child);
   printf("%%%d = sub nsw i32 0, %s\n", cur_register++, current_node->child->reg);
-
+  
   set_register(current_node);
 }
 
@@ -113,8 +118,17 @@ void gen_funcbody(table t, node current_node){
   //Var alloc
   for(symbol s = t->first; s != NULL; s = s->next){
     if(s->param == 0 && strcmp(s->name, "return") != 0){
-      printf("%%%s = alloca ", s->name);
-      print_type_llvm(s->type_);
+      if(s->type_->array == -1){
+	printf("%%%s = alloca ", s->name);
+	print_type_llvm(s->type_);
+      }
+      else{
+	printf("%%%s = alloca [%d x ", s->name,s->type_->array);
+	type type_aux = new_type(0,s->type_->type,NULL);
+	print_type_llvm(type_aux);
+	free(type_aux);
+	printf("]");
+      }
       printf("\n");
     }
   }
@@ -136,10 +150,10 @@ void gen_funcbody(table t, node current_node){
 
   //Body
   node n = current_node->child;
-  while(strcmp(n->label,"Declaration") == 0){
+  while(strcmp(n->label,"Declaration") == 0 || strcmp(n->label,"ArrayDeclaration") == 0){
     n = n->brother;
   }
-
+  
   for(node n = current_node->child; n != NULL; n = n->brother)
     gen_statements(n);
 }
@@ -163,6 +177,7 @@ void gen_statements(node current_node){
 
     if(strcmp(current_node->label, "ChrLit") == 0){
       current_node->reg = (char *)malloc(5);
+      current_node->type_->type = "Char";
       sprintf(current_node->reg,"%d",(int)current_node->value[1]);
     }
 
@@ -233,17 +248,58 @@ void gen_funcdef(node current_node){
   printf("}\n");
 }
 
+void gen_funcdecl(node current_node){
+  char* l = current_node->child->label;
+  printf("declare ");
+
+  //Pointers
+  current_node = current_node->child->brother;
+  int pointers = 0;
+  while (strcmp(current_node->label, "Pointer") == 0) {
+    current_node = current_node->brother;
+    pointers++;
+  }
+  type aux_type = new_type(pointers,l,NULL);
+  print_type_llvm(aux_type);
+  free(aux_type);
+
+  //ID
+  char* id = current_node->value;
+  printf(" @%s(", id);
+  
+  //Params
+  current_node = current_node->brother;
+  
+
+  int first = 0;
+  for(symbol s = symbol_tables->first; s != NULL; s = s->next){
+    if(strcmp(s->name, id) == 0){
+      for(type param = s->type_->param; param != NULL; param = param->param){
+	if(first != 0) printf(", ");
+	else first = 1;
+      
+	print_type_llvm(param);
+	
+	printf(" signext" );
+      }
+    }
+  }
+  printf(")\n");
+
+}
 
 void generate_code(node current_node){
   if(current_node == NULL) return;
 
   if(strcmp(current_node->label, "FuncDefinition") == 0)
     gen_funcdef(current_node);
+  if(strcmp(current_node->label, "FuncDeclaration") == 0)
+    gen_funcdecl(current_node);
   if(current_node->child != NULL)
     generate_code(current_node->child);
   if(current_node->brother != NULL)
     generate_code(current_node->brother);
-
+  
 }
 
 void generate_strings(){
@@ -284,15 +340,14 @@ void generate_global_vars(){
 
       if(s->type_->array != -1){
         printf("[%d x ",s->type_->array);
-        print_type_llvm(s->type_);
-
-        for(int i = 0; i < s->type_->pointers; i++)
-          printf("*");
+	type type_aux = new_type(0,s->type_->type,NULL);
+	print_type_llvm(type_aux);
+	free(type_aux);
 
         printf("] zeroinitializer\n");
       }
       else{
-	      print_type_llvm(s->type_);
+	print_type_llvm(s->type_);
         if(s->type_->pointers > 0) printf(" null\n");
         else printf(" 0\n");
       }
