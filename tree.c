@@ -4,7 +4,7 @@ void print_and_free(node n, int depth){
   if(toprint == 1){
     for(int i = 0; i < depth; i++)
       printf("..");
-    
+
     if(n->value != NULL) printf("%s(%s)", n->label,n->value);
     else printf("%s", n->label);
     if(n->type_ != NULL){
@@ -43,7 +43,7 @@ node add_to_tree(char *label, char *value, int n_children, ...){
   node t;
   for(int i = 0; i < n_children; i++){
     node b = va_arg(args, node);
-    
+
     //Discard NULL children
     if(b == NULL)
       continue;

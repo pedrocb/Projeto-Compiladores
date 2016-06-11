@@ -81,6 +81,30 @@ void gen_minus(node current_node){
   set_register(current_node);
 }
 
+void gen_deref(node current_node){
+  char *id;
+  char *pos;
+
+  if(strcmp(current_node->child->label, "Add") == 0){
+    id = current_node->child->child->value;
+    pos = current_node->child->child->brother->value;
+  }
+  else{
+    id = current_node->child->value;
+    pos = "0";
+  }
+
+  printf("%%%d = load ",cur_register++);
+  print_type_llvm(current_node->type_);
+  printf("* %s\n",get_register_from_table(id));
+
+  printf("%%%d = getelementptr inbounds ",cur_register++);
+  print_type_llvm(current_node->type_);
+  printf("%%%d, i64 %s\n", cur_register-2, pos);
+
+  set_register(current_node);
+}
+
 void gen_return(node current_node){
   gen_statements(current_node->child);
   printf("ret ");
@@ -88,15 +112,11 @@ void gen_return(node current_node){
   printf(" %s\n", current_node->child->reg);//current_node->child->)//%s %d\n", "i32", 0);
 }
 
-void gen_id(node n){
+void gen_id(node current_node){
   printf("%%%d = load ",cur_register++);
-  char *reg;
-  n->type_->pointers++;
-  print_type_llvm(n->type_);
-  n->type_->pointers--;
-  reg = get_register_from_table(n->value);
-  printf(" %s\n",reg);
-  set_register(n);
+  print_type_llvm(current_node->type_);
+  printf("* %s\n",get_register_from_table(current_node->value));
+  set_register(current_node);
 }
 
 void gen_funcbody(table t, node current_node){
@@ -160,6 +180,9 @@ void gen_statements(node current_node){
 
     if(strcmp(current_node->label, "Store") == 0)
       gen_store(current_node);
+
+    if(strcmp(current_node->label, "Deref") == 0)
+      gen_deref(current_node);
 
     if(strcmp(current_node->label, "ChrLit") == 0){
       current_node->reg = (char *)malloc(5);

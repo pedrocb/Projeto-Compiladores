@@ -1,15 +1,14 @@
-int c;
-
 int coiso(int a){
-  char *s, *p;
-  s = "yippiekayemotherfucker";
-  p = "";
+  int *b;
+  int c;
 
-  puts(s);
+  c = 1;
+  b[1] = 1;
+  b[0] = c;
+
   return 1;
 }
 
 int main(void){
-  coiso(c);
   return 0;
 }
